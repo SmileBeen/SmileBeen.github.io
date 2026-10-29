@@ -25,15 +25,15 @@
 
 {# 작은 프로젝트 카드 (목록 · 홈의 나머지) #}
 {% macro card(p, big=false) -%}
-<article class="hb-card{% if p.status_key == 'wip' %} hb-card--hot{% endif %}" data-status="{{ p.status_key }}">
+<article class="hb-card{% if p.status_key == 'wip' %} hb-card--hot{% endif %}" data-status="{{ p.status_key }}" data-kind="{{ p.kind }}">
   {% if p.has_page %}<a class="hb-card__img" href="{{ project_link(p) }}" aria-label="{{ p.name }} 열기">{{ image(p) }}</a>
   {% else %}<div class="hb-card__img">{{ image(p) }}</div>{% endif %}
   <div class="hb-card__body">
-    {{ pill(p.status, p.status_key) }}
+    <span class="hb-card__pills">{{ pill(p.status, p.status_key) }}{% if p.kind == "side" %}<span class="hb-kind">사이드</span>{% endif %}</span>
     <h3 class="hb-card__title">{% if p.has_page %}<a href="{{ project_link(p) }}">{{ p.name }}</a>{% else %}{{ p.name }}{% endif %}</h3>
     <p class="hb-muted">{{ p.summary }}</p>
     {% if p.tags %}<p class="hb-mono hb-muted">{{ p.tags | join(" · ") }}</p>{% endif %}
-    <div class="hb-card__foot hb-mono"><span>{% if p.updated_str != "—" %}{{ p.updated_str }} 업데이트{% else %}—{% endif %}</span><span>{{ p.eps | length }}화</span></div>
+    <div class="hb-card__foot hb-mono"><span>{% if p.updated_str != "—" %}{{ p.updated_str }} 업데이트{% else %}—{% endif %}</span><span>{% if p.eps %}{{ p.eps | length }}화{% endif %}</span></div>
   </div>
 </article>
 {%- endmacro %}

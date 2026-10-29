@@ -1,0 +1,41 @@
+{% extends "main.html" %}
+{% import "partials/hb.html" as ui with context %}
+{% set x = hb_x %}
+{% block content %}
+<div class="hb hb-postpage">
+  {{ ui.crumbs([["홈", ""], ["예제", "examples/"], ["예제 " ~ ("%02d" | format(x.n)), none]]) }}
+  {% if x.video %}
+  <a class="hb-video" href="{{ x.video }}">{{ ui.play_icon(40) }}<span>유튜브에서 보기</span></a>
+  {% else %}
+  <div class="hb-video hb-video--off hb-video--slim">{{ ui.play_icon(22) }}<span>영상 공개 전 · 올리면 여기에 들어가요</span></div>
+  {% endif %}
+
+  <p class="hb-mono hb-muted hb-small hb-mt">예제 {{ "%02d" | format(x.n) }} · {{ x.status }}{% if x.time %} · {{ x.time }}{% endif %}</p>
+  <h1 class="hb-h1 hb-h1--ep">{{ x.title }}</h1>
+  <p class="hb-lead hb-lead--page">{{ x.summary }}</p>
+  <div class="hb-chips">{% for t in x.tags %}<a class="hb-chip hb-chip--round" href="{{ base_url }}/tags/#{{ t | urlencode }}">{{ t }}</a>{% endfor %}</div>
+
+  <dl class="hb-facts">
+    {% if x.board %}<div><dt>보드</dt><dd>{{ x.board }}</dd></div>{% endif %}
+    {% if x.tools %}<div><dt>도구</dt><dd>{{ x.tools | join(" · ") }}</dd></div>{% endif %}
+    {% if x.dir and hb.user %}<div><dt>코드</dt><dd><a class="hb-copper hb-b" href="https://github.com/{{ hb.user }}/embedded-examples/tree/main/{{ x.dir }}">embedded-examples/{{ x.dir }}</a></dd></div>{% endif %}
+  </dl>
+
+  <div class="hb-prose md-typeset">{{ page.content }}</div>
+
+  {% if x.related_project %}
+  <div class="hb-related">
+    <p class="hb-xs hb-muted hb-b">이 예제가 쓰이는 곳</p>
+    {% if x.related_ep_obj %}<a class="hb-copper hb-b" href="{{ ui.project_link(x.related_project) }}{{ x.related_ep_obj.id }}/">{{ x.related_project.name }} · {{ x.related_ep_obj.n }}화 {{ x.related_ep_obj.title }} →</a>
+    {% else %}<a class="hb-copper hb-b" href="{{ ui.project_link(x.related_project) }}">{{ x.related_project.name }} →</a>{% endif %}
+  </div>
+  {% endif %}
+
+  <div class="hb-pager">
+    {% if x.prev %}<a class="hb-btn" href="../{{ x.prev.id }}/">← 이전 예제</a>{% else %}<span class="hb-btn hb-btn--off">← 이전 예제</span>{% endif %}
+    {% if x.next %}<a class="hb-btn" href="../{{ x.next.id }}/">다음 예제 →</a>{% else %}<span class="hb-btn hb-btn--off">다음 예제 →</span>{% endif %}
+  </div>
+
+  {{ ui.footer_links() }}
+</div>
+{% endblock %}

@@ -17,6 +17,13 @@
       <h1 class="hb-h1 hb-h1--ep">{{ e.title }}</h1>
       <div class="hb-chips">{% for t in e.tags %}<a class="hb-chip hb-chip--round" href="{{ base_url }}/tags/#{{ t | urlencode }}">{{ t }}</a>{% endfor %}</div>
 
+      {% if e.examples %}
+      <div class="hb-related">
+        <p class="hb-xs hb-muted hb-b">먼저 해 보면 좋은 예제</p>
+        <span>{% for x in e.examples %}<a class="hb-copper hb-b" href="{{ base_url }}/examples/{{ x.id }}/">예제 {{ "%02d" | format(x.n) }} {{ x.title }}</a>{% if not loop.last %} · {% endif %}{% endfor %}</span>
+      </div>
+      {% endif %}
+
       <div class="hb-prose md-typeset">{{ page.content }}</div>
 
       <section class="hb-prose" aria-labelledby="h-code">

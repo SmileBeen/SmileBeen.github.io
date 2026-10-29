@@ -1,0 +1,30 @@
+{% extends "main.html" %}
+{% import "partials/hb.html" as ui with context %}
+{% block content %}
+<div class="hb">
+  {{ ui.crumbs([["홈", ""], ["예제", none]]) }}
+  <h1 class="hb-h1 hb-h1--page">예제</h1>
+  <p class="hb-lead hb-lead--page">보드 하나로 30분 안에 끝나는 짧은 실습이에요. 프로젝트 회차에 들어가기 전 몸풀기로 쓰거나, 필요한 것만 골라 보세요.</p>
+
+  <div class="hb-filter" role="group" aria-label="상태로 거르기" data-filter="status" data-target="#hb-xlist">
+    <button type="button" aria-pressed="true" data-v="all">전체 <span class="hb-mono">{{ hb.examples | length }}</span></button>
+    <button type="button" aria-pressed="false" data-v="on">공개</button>
+    <button type="button" aria-pressed="false" data-v="wip">만드는 중</button>
+    <button type="button" aria-pressed="false" data-v="todo">준비 중</button>
+  </div>
+
+  <div id="hb-xlist" class="hb-postlist">
+    {% for x in hb.examples %}
+    <a class="hb-postcard" href="{{ base_url }}/examples/{{ x.id }}/" data-status="{{ x.status_key }}">
+      <span class="hb-postcard__meta"><span class="hb-mono hb-copper hb-xs">예제 {{ "%02d" | format(x.n) }}</span>{{ ui.pill(x.status, x.status_key) }}{% if x.time %}<span class="hb-mono hb-muted hb-xs">{{ x.time }}</span>{% endif %}</span>
+      <b>{{ x.title }}</b>
+      <span class="hb-muted hb-small">{{ x.summary }}</span>
+      <span class="hb-mono hb-muted hb-xs">{{ x.board }}{% if x.tags %} · {{ x.tags | join(" · ") }}{% endif %}</span>
+    </a>
+    {% endfor %}
+  </div>
+  <div class="hb-empty" {% if hb.examples %}hidden{% endif %}>아직 예제가 없어요.</div>
+
+  {{ ui.footer_links() }}
+</div>
+{% endblock %}

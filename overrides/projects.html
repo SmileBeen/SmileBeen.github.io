@@ -4,8 +4,13 @@
 <div class="hb">
   {{ ui.crumbs([["홈", ""], ["프로젝트", none]]) }}
   <h1 class="hb-h1 hb-h1--page">모든 프로젝트</h1>
-  <p class="hb-lead hb-lead--page">프로젝트마다 영상 여러 편과 회차별 문서·코드가 묶여 있어요.</p>
+  <p class="hb-lead hb-lead--page">메인은 영상 여러 편이 이어지는 큰 프로젝트, 사이드는 한두 편으로 끝나는 작은 만들기예요. 짧은 실습은 <a class="hb-copper hb-b" href="{{ base_url }}/examples/">예제</a>에 따로 모아요.</p>
 
+  <div class="hb-filter" role="group" aria-label="종류로 거르기" data-filter="kind" data-target="#hb-plist">
+    <button type="button" aria-pressed="true" data-v="all">모든 종류</button>
+    <button type="button" aria-pressed="false" data-v="main">메인 <span class="hb-mono">{{ hb.kind_counts.main }}</span></button>
+    <button type="button" aria-pressed="false" data-v="side">사이드 <span class="hb-mono">{{ hb.kind_counts.side }}</span></button>
+  </div>
   <div class="hb-filter" role="group" aria-label="상태로 거르기" data-filter="status" data-target="#hb-plist">
     <button type="button" aria-pressed="true" data-v="all">전체 <span class="hb-mono">{{ hb.projects | length }}</span></button>
     <button type="button" aria-pressed="false" data-v="wip">진행 중 <span class="hb-mono">{{ hb.counts.wip }}</span></button>

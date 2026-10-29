@@ -1,9 +1,12 @@
 # 프로젝트 목록. 새 프로젝트를 시작하면 항목을 하나 추가하세요.
+# kind:   main (영상 여러 편 · 회차 · 부품 표) | side (한두 편으로 끝나는 작은 만들기)
 # status: 진행 중 | 준비 중 | 완료
+# 짧은 실습은 프로젝트가 아니라 data/examples/exNN.md 로 따로 둬요.
 # 회차는 data/<slug>/episodes/epNN.md, 부품은 data/<slug>/parts.yml 에 둬요.
 
 - slug: stm32-ota-bench
   name: STM32 서명 OTA 시험대
+  kind: main
   status: 진행 중
   featured: true
   updated: 2026-10-29
@@ -21,6 +24,7 @@
     - { label: 시험 · 자동화, items: [HIL, Python, pytest] }
 
 - slug: next
-  name: 다음 프로젝트
+  name: 다음 사이드 프로젝트
+  kind: side
   status: 준비 중
   summary: projects.yml에 항목을 추가하면 이 자리에 카드가 생겨요.

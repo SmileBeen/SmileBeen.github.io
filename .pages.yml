@@ -32,3 +32,21 @@ content:
       - { name: length, label: 영상 길이, type: string }
       - { name: doc, label: 프로젝트 사이트 문서 경로, type: string }
       - { name: body, label: 본문, type: rich-text }
+  - name: examples
+    label: 예제
+    type: collection
+    path: data/examples
+    filename: "ex{primary}.md"
+    fields:
+      - { name: n, label: 예제 번호, type: number }
+      - { name: title, label: 제목, type: string }
+      - { name: summary, label: 한 줄 설명, type: string }
+      - { name: board, label: 보드, type: string }
+      - { name: tools, label: 도구, type: string, list: true }
+      - { name: time, label: 걸리는 시간, type: string }
+      - { name: tags, label: 태그, type: string, list: true }
+      - { name: dir, label: embedded-examples 폴더 이름, type: string }
+      - { name: status, label: 상태, type: select, options: { values: [공개, 편집 중, 촬영 준비, 준비 중] } }
+      - { name: video, label: 유튜브 주소, type: string }
+      - { name: related, label: 이어지는 회차, type: object, fields: [ { name: project, label: 프로젝트 slug, type: string }, { name: ep, label: 회차 번호, type: number } ] }
+      - { name: body, label: 본문, type: rich-text }

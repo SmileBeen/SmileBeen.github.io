@@ -254,3 +254,14 @@
 .md-typeset .hb .hb-focus:hover { text-decoration: none; border-color: var(--hb-edge); }
 .hb-focus b { font-size: 16px; line-height: 1.5; }
 .hb-aboutpage .hb-sec--flat { padding-top: 12px; }
+
+/* 종류 표시 · 예제 */
+.hb-card__pills { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.hb-kind { display: inline-flex; align-items: center; height: 24px; padding: 0 10px; border-radius: 999px; font-size: 12px; font-weight: 700; color: var(--hb-muted); border: 1px dashed var(--hb-line); }
+.md-typeset .hb .hb-filter + .hb-filter { margin-top: -6px; }
+.md-typeset .hb .hb-facts { display: flex; flex-wrap: wrap; gap: 10px 28px; margin: 18px 0 8px; padding: 14px 18px; border-radius: 12px; background: var(--hb-surface); border: 1px solid var(--hb-line); }
+.md-typeset .hb .hb-facts > div { display: flex; flex-direction: column; gap: 2px; margin: 0; }
+.md-typeset .hb .hb-facts dt { font-size: 12px; color: var(--hb-muted); font-weight: 700; margin: 0; }
+.md-typeset .hb .hb-facts dd { margin: 0; font-size: 15px; }
+.md-typeset .hb .hb-related > span { display: flex; flex-wrap: wrap; gap: 4px 8px; }
+.md-typeset .hb .hb-video--slim { aspect-ratio: auto; height: 72px; flex-direction: row; }

@@ -8,12 +8,15 @@ docs/blog/posts/*.md 를 읽어서
   /projects/<slug>/epNN/          회차            (overrides/episode.html)
   /tags/                          다루는 것       (overrides/tags.html)
   /parts/                         부품 전체 BOM   (overrides/parts.html)
+  /examples/                      예제 목록       (overrides/examples.html)
+  /examples/exNN/                 예제 하나       (overrides/example.html)
 
 페이지를 빌드할 때 만들고, 모든 템플릿에 `hb` 변수로 데이터를 넘겨요.
 """
 from __future__ import annotations
 
 import datetime as dt
+import re
 from pathlib import Path
 
 import yaml
@@ -25,6 +28,8 @@ DATA = ROOT / "data"
 
 PROJ_STATUS = {"진행 중": "wip", "준비 중": "todo", "완료": "done"}
 EP_STATUS = {"공개": "on", "편집 중": "wip", "촬영 준비": "wip", "준비 중": "todo"}
+KIND = {"main": "메인", "side": "사이드"}
+EX_STATUS = {"공개": "on", "편집 중": "wip", "촬영 준비": "wip", "준비 중": "todo"}
 PART_STATUS = {"보유": "have", "구매 예정": "buy", "나중": "later"}
 PART_STATUS_ORDER = ["보유", "구매 예정", "나중"]
 PART_CAT_ORDER = ["MCU · 보드", "통신 모듈", "전원 · 제어", "센서", "계측 장비", "기타"]
@@ -89,6 +94,37 @@ def _load_episodes(slug: str) -> list[dict]:
     return eps
 
 
+def _load_examples() -> list[dict]:
+    exs = []
+    for p in sorted((DATA / "examples").glob("ex*.md")):
+        body, meta = get_data(p.read_text(encoding="utf-8"))
+        n = int(meta.get("n") or re.sub(r"\D", "", p.stem)[:2] or 0)
+        st = meta.get("status") or "준비 중"
+        rel = meta.get("related") or {}
+        exs.append({
+            "n": n,
+            "id": f"ex{n:02d}",
+            "title": meta.get("title", f"예제 {n}"),
+            "summary": meta.get("summary", ""),
+            "board": meta.get("board", ""),
+            "time": meta.get("time", ""),
+            "tools": list(meta.get("tools") or []),
+            "tags": list(meta.get("tags") or []),
+            "dir": meta.get("dir") or "",
+            "status": st,
+            "status_key": EX_STATUS.get(st, "todo"),
+            "video": meta.get("video") or "",
+            "related_slug": rel.get("project") or "",
+            "related_ep": rel.get("ep"),
+            "body": body,
+        })
+    exs.sort(key=lambda e: e["n"])
+    for i, x in enumerate(exs):
+        x["prev"] = exs[i - 1] if i > 0 else None
+        x["next"] = exs[i + 1] if i + 1 < len(exs) else None
+    return exs
+
+
 def _load_posts(docs_dir: Path) -> list[dict]:
     posts = []
     for p in sorted((docs_dir / "blog" / "posts").glob("*.md")):
@@ -124,12 +160,15 @@ def _build(config) -> dict:
     projects = _yaml(ROOT / "projects.yml", [])
     groups = _yaml(DATA / "tags.yml", [])
     posts = _load_posts(Path(config["docs_dir"]))
+    examples = _load_examples()
 
     all_parts: dict[str, dict] = {}
     for p in projects:
         slug = p["slug"]
         p["status"] = p.get("status") or "준비 중"
         p["status_key"] = PROJ_STATUS.get(p["status"], "todo")
+        p["kind"] = p.get("kind") if p.get("kind") in KIND else "main"
+        p["kind_label"] = KIND[p["kind"]]
         p["tags"] = list(p.get("tags") or [t for g in p.get("tech") or [] for t in g.get("items", [])])
         p["tech"] = p.get("tech") or []
         p["updated_str"] = _fmt(_date(p.get("updated")))
@@ -160,8 +199,10 @@ def _build(config) -> dict:
         videos = [{"project": p, "ep": e} for p in projects for e in p["eps"] if name in e["tags"]]
         tposts = [x for x in posts if name in x["tags"]]
         tprojects = [p for p in projects if name in p["tags"]]
+        texs = [x for x in examples if name in x["tags"]]
         return {"name": name, "group": label, "videos": videos, "posts": tposts,
-                "projects": tprojects, "count": len(videos) + len(tposts) + len(tprojects)}
+                "projects": tprojects, "examples": texs,
+                "count": len(videos) + len(tposts) + len(tprojects) + len(texs)}
 
     tags = [tag_entry(n, g["label"]) for g in groups for n in g.get("items", [])]
 
@@ -171,9 +212,18 @@ def _build(config) -> dict:
             cats_all.append(it["cat"])
     parts_all = list(all_parts.values())
 
-    # 홈 대표 카드: featured: true 가 있으면 그것, 없으면 첫 번째 진행 중 프로젝트 (1개)
+    # 예제 ↔ 메인 프로젝트 회차 연결
+    for x in examples:
+        rp = next((p for p in projects if p["slug"] == x["related_slug"]), None)
+        x["related_project"] = rp
+        x["related_ep_obj"] = next((e for e in rp["eps"] if e["n"] == x["related_ep"]), None) if rp else None
+    for p in projects:
+        for e in p["eps"]:
+            e["examples"] = [x for x in examples if x["related_project"] is p and x["related_ep"] == e["n"]]
+
+    # 홈 대표 카드: featured: true 가 있으면 그것, 없으면 첫 번째 진행 중 메인 프로젝트 (1개)
     featured = [p for p in projects if p.get("featured")][:1] or \
-        [p for p in projects if p["status_key"] == "wip"][:1]
+        [p for p in projects if p["status_key"] == "wip" and p["kind"] == "main"][:1]
     for p in projects:
         p["proj_posts"] = p["posts"]
     for x in posts:
@@ -193,6 +243,8 @@ def _build(config) -> dict:
         "others": [p for p in projects if p not in featured],
         "post_cats": post_cats,
         "counts": {k: sum(1 for p in projects if p["status_key"] == k) for k in ("wip", "todo", "done")},
+        "kind_counts": {k: sum(1 for p in projects if p["kind"] == k) for k in KIND},
+        "examples": examples,
         "groups": groups,
         "posts": posts,
         "tags": tags,
@@ -222,6 +274,12 @@ def on_files(files, config):
                        {"title": "다루는 것", "template": "tags.html", "hide": hide}))
     files.append(_page(config, "parts/index.md",
                        {"title": "부품", "template": "parts.html", "hide": hide}))
+    files.append(_page(config, "examples/index.md",
+                       {"title": "예제", "template": "examples.html", "hide": hide}))
+    for x in HB["examples"]:
+        files.append(_page(config, f"examples/{x['id']}.md",
+                           {"title": f"예제 {x['n']:02d} {x['title']}", "template": "example.html",
+                            "hide": hide, "hb_ex": x["n"]}, x["body"]))
     for p in HB["projects"]:
         if not p.get("eps") and not p.get("parts") and not p.get("repo"):
             continue  # 자리만 잡아 둔 프로젝트는 상세 페이지를 만들지 않아요
@@ -242,6 +300,9 @@ def on_page_context(context, page, config, nav):
     src = Path(page.file.src_uri).name if page.file else ""
     if page.file and page.file.src_uri.startswith("blog/posts/"):
         context["hb_post"] = next((x for x in HB["posts"] if x["src"] == src), None)
+    xn = page.meta.get("hb_ex")
+    if xn:
+        context["hb_x"] = next(x for x in HB["examples"] if x["n"] == xn)
     slug = page.meta.get("hb_slug")
     if slug:
         proj = next(p for p in HB["projects"] if p["slug"] == slug)
