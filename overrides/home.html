@@ -1,5 +1,6 @@
 {% extends "main.html" %}
 {% import "partials/hb.html" as ui with context %}
+{% import "partials/map.html" as mp with context %}
 {% block content %}
 <div class="hb">
 
@@ -13,6 +14,16 @@
     <a class="hb-btn" href="{{ base_url }}/about/">소개</a>
   </div>
 </section>
+
+{% if hb.map %}
+<section class="hb-sec" aria-labelledby="h-map">
+  <div class="hb-sec__head">
+    <h2 id="h-map" class="hb-h2">다루는 영역</h2>
+    <a class="hb-more" href="{{ base_url }}/map/">항목별 회차 · 직군 보기 →</a>
+  </div>
+  {{ mp.grid(hb.map) }}
+</section>
+{% endif %}
 
 <section class="hb-sec" aria-labelledby="h-stack">
   <div class="hb-sec__head">

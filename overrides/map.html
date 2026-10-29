@@ -1,0 +1,46 @@
+{% extends "main.html" %}
+{% import "partials/hb.html" as ui with context %}
+{% import "partials/map.html" as mp with context %}
+{% block content %}
+{% set m = hb.map %}
+<div class="hb">
+  {{ ui.crumbs([["홈", ""], ["다루는 영역", none]]) }}
+  <h1 class="hb-h1 hb-h1--page">다루는 영역</h1>
+  <p class="hb-lead hb-lead--page">임베디드 엔지니어링 로드맵 위에 지금 업무와 이 프로젝트가 다루는 항목을 표시한다. 리눅스 애플리케이션에서 출발해 마이크로컨트롤러 · 부트로더 · 보안 · 시험 자동화로 넓힌다.</p>
+
+  {{ mp.grid(m) }}
+
+  <section class="hb-sec hb-sec--flat" aria-labelledby="h-sel">
+    <h2 id="h-sel" class="hb-h3">프로젝트 고르는 기준</h2>
+    {{ mp.selection(m) }}
+    {% set nx = (m.coverage | selectattr("key", "equalto", "req") | first).next %}
+    {% if nx %}<p class="hb-small hb-muted">필수 중 아직 안 다룬 것: {% for it in nx %}<b>{{ it.ko }}</b>{% if not loop.last %} · {% endif %}{% endfor %}</p>{% endif %}
+  </section>
+
+  <section class="hb-sec hb-sec--flat" aria-labelledby="h-proj-items">
+    <h2 id="h-proj-items" class="hb-h3">이 프로젝트에서 다루는 항목</h2>
+    <div class="rm-list">
+      {% for it in m.proj_items %}
+      <div class="rm-list__row">
+        <b>{{ it.ko }}</b>
+        <span>{% for r in it.refs %}<a class="hb-map__ref hb-map__ref--{{ r.kind }}" href="{{ base_url }}/{{ r.url }}" title="{{ r.title }}">{{ r.label }}</a>{% endfor %}</span>
+      </div>
+      {% endfor %}
+    </div>
+  </section>
+
+  <section class="hb-sec hb-sec--flat" aria-labelledby="h-roles">
+    <h2 id="h-roles" class="hb-h3">직군으로 보면</h2>
+    <div class="hb-roles">
+      {% for r in m.roles %}
+      <div class="hb-role{% if r.mark %} hb-role--on{% endif %}">
+        <span><b>{{ r.name }}</b><span class="hb-muted hb-small">{{ r.covers }}</span></span>
+        {% if r.mark %}<span class="hb-pill hb-pill--{{ 'on' if r.mark == '지금' else 'wip' }}">{{ r.mark }}</span>{% endif %}
+      </div>
+      {% endfor %}
+    </div>
+  </section>
+
+  {{ ui.footer_links() }}
+</div>
+{% endblock %}

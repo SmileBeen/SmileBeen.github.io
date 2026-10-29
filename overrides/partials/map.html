@@ -1,0 +1,117 @@
+{#- 임베디드 로드맵 지도. 배치는 원본(Embedded Systems Engineering Roadmap, CC BY-SA 4.0)과 같다. -#}
+{% macro t(o) -%}
+{% if o.ko == o.en %}{{ o.en }}{% else %}<span class="rm-ko">{{ o.ko }}</span><span class="rm-en" lang="en">{{ o.en }}</span>{% endif %}
+{%- endmacro %}
+
+{% macro item(it) -%}
+{% set cls = "rm-item rm-item--" ~ it.p ~ (" is-now" if it.now else "") ~ (" is-proj" if it.proj else "") ~ (" is-gap" if it.gap else "") ~ (" is-done" if it.done else "") %}
+{% if it.proj %}<a class="{{ cls }}" href="{{ base_url }}/{{ it.refs[0].url }}" title="{{ it.tip }}">{{ t(it) }}</a>{% else %}<span class="{{ cls }}">{{ t(it) }}</span>{% endif %}
+{%- endmacro %}
+
+{% macro grp(m, gid, label=false) -%}
+{% set g = m.groups[gid] %}
+<div class="rm-group{% if label %} rm-group--label{% endif %}">
+  {% if g.en %}<p class="rm-group__t">{{ t(g) }}</p>{% endif %}
+  <div class="rm-items rm-cols-{{ g.cols or 1 }}">{% for it in g["items"] %}{{ item(it) }}{% endfor %}</div>
+</div>
+{%- endmacro %}
+
+{% macro cell(area, cls="") -%}<div class="rm-c {{ cls }}" style="grid-area: {{ area }};">{%- endmacro %}
+
+{% macro selection(m) -%}
+<ol class="rm-sel">
+  {% for x in m.selection %}<li><span class="hb-num">{{ loop.index }}</span><span><b>{{ x.k }}</b><span class="hb-muted hb-small">{{ x.v }}</span></span></li>{% endfor %}
+</ol>
+{%- endmacro %}
+
+{% macro grid(m) -%}
+{% set R = m.regions %}{% set B = m.boxes %}
+<div class="rm" data-lang="ko" data-view="all">
+  <div class="rm-bar">
+    <div class="rm-seg" role="group" aria-label="표시">
+      <button type="button" data-rm-view="all" aria-pressed="true"><span class="rm-ko">전체</span><span class="rm-en" lang="en">All</span></button>
+      <button type="button" data-rm-view="now" aria-pressed="false"><i class="rm-mk rm-mk--now"></i><span class="rm-ko">지금 업무</span><span class="rm-en" lang="en">Current work</span> <span class="hb-mono">{{ m.counts.now }}</span></button>
+      <button type="button" data-rm-view="proj" aria-pressed="false"><i class="rm-mk rm-mk--proj"></i><span class="rm-ko">이 프로젝트</span><span class="rm-en" lang="en">This project</span> <span class="hb-mono">{{ m.counts.proj }}</span></button>
+      <button type="button" data-rm-view="gap" aria-pressed="false"><i class="rm-mk rm-mk--gap"></i><span class="rm-ko">다음 후보</span><span class="rm-en" lang="en">Next up</span> <span class="hb-mono">{{ m.counts.gap }}</span></button>
+    </div>
+    <div class="rm-seg rm-seg--lang" role="group" aria-label="언어 Language">
+      <button type="button" data-rm-lang="ko" aria-pressed="true">한글</button>
+      <button type="button" data-rm-lang="en" aria-pressed="false">EN</button>
+    </div>
+  </div>
+  <p class="rm-legend">
+    <span><i class="rm-sw rm-item--req"></i><span class="rm-ko">필수</span><span class="rm-en" lang="en">Required</span></span>
+    <span><i class="rm-sw rm-item--rec"></i><span class="rm-ko">권장</span><span class="rm-en" lang="en">Recommended</span></span>
+    <span><i class="rm-sw rm-item--opt"></i><span class="rm-ko">선택</span><span class="rm-en" lang="en">Optional</span></span>
+    <span><i class="rm-mk rm-mk--now"></i><span class="rm-ko">지금 업무</span><span class="rm-en" lang="en">Current work</span></span>
+    <span><i class="rm-mk rm-mk--proj"></i><span class="rm-ko">이 프로젝트에서 다룸 — 점선 예정 · 실선 영상 공개 (누르면 회차로)</span><span class="rm-en" lang="en">Covered here — dashed planned · solid published (click to open)</span></span>
+    <span><i class="rm-mk rm-mk--gap"></i><span class="rm-ko">다음 후보 = 필수 · 권장 중 아직 안 다룬 것</span><span class="rm-en" lang="en">Next up = required/recommended not yet covered</span></span>
+  </p>
+
+  <div class="rm-cov">
+    {% for c in m.coverage %}
+    <div class="rm-cov__row">
+      <span class="rm-cov__k"><i class="rm-sw rm-item--{{ c.key }}"></i><span class="rm-ko">{{ c.ko }}</span><span class="rm-en" lang="en">{{ c.en }}</span></span>
+      <span class="rm-cov__bar"><span class="rm-cov__fill rm-item--{{ c.key }}" style="width: {{ c.pct }}%;"></span></span>
+      <span class="rm-cov__n hb-mono">{{ c.done }} / {{ c.total }}</span>
+    </div>
+    {% endfor %}
+  </div>
+
+  <div class="rm-map">
+    {# 바탕: 영역 · 박스 #}
+    <div class="rm-bg rm-bg--sw" style="grid-area: 1 / 1 / 10 / -1;"></div>
+    <div class="rm-bg rm-bg--hatch" style="grid-area: 5 / 1 / 10 / -1;"></div>
+    <div class="rm-bg rm-bg--hw" style="grid-area: 5 / 1 / 12 / -1;"></div>
+    <div class="rm-bg rm-bg--soft" style="grid-area: 13 / 1 / 16 / -1;"></div>
+    <div class="rm-box rm-box--os" style="grid-area: 3 / 2 / 6 / 4;"><span class="rm-box__title">{{ t(B.os) }}</span></div>
+    <div class="rm-box rm-box--if" style="grid-area: 5 / 4 / 10 / 6;"><span class="rm-box__title">{{ t(B["if"]) }}</span></div>
+
+    {# 세로 영역 이름 #}
+    <p class="rm-vl rm-vl--sw" style="grid-area: 2 / 1 / 5 / 2;">{{ t(R.sw) }}</p>
+    <p class="rm-vl rm-vl--swhw" style="grid-area: 6 / 1 / 9 / 2;">{{ t(R.swhw) }}</p>
+    <p class="rm-vl rm-vl--hw" style="grid-area: 10 / 1 / 11 / 2;">{{ t(R.hw) }}</p>
+    <p class="rm-vl rm-vl--soft" style="grid-area: 14 / 1 / 15 / 2;">{{ t(R.soft) }}</p>
+
+    {# 소프트웨어 #}
+    <p class="rm-mh rm-mh--sw">{{ t(R.sw) }}</p>
+    {{ cell("2 / 2 / 3 / 3") }}{{ grp(m, "lang") }}</div>
+    {{ cell("2 / 3 / 3 / 4") }}{{ grp(m, "fund") }}</div>
+    {{ cell("2 / 4 / 5 / 5") }}{{ grp(m, "debug") }}{{ grp(m, "sdlc") }}{{ grp(m, "vcs") }}</div>
+    {{ cell("2 / 5 / 5 / 6") }}{{ grp(m, "build") }}{{ grp(m, "test") }}</div>
+    {{ cell("2 / 6 / 5 / 7") }}{{ grp(m, "spec", true) }}</div>
+    <p class="rm-mh rm-mh--box">{{ t(B.os) }}</p>
+    {{ cell("4 / 2 / 5 / 4", "rm-c--os") }}{{ grp(m, "osfund") }}{{ grp(m, "linux") }}</div>
+
+    {# 소프트웨어 ∩ 하드웨어 #}
+    <p class="rm-mh rm-mh--hw">{{ t(R.swhw) }}</p>
+    <p class="rm-mh rm-mh--box">{{ t(B.mcu) }}</p>
+    {{ cell("6 / 2 / 9 / 4", "rm-c--mcu rm-box--mcu") }}<span class="rm-box__title">{{ t(B.mcu) }}</span><div class="rm-rtos">{{ grp(m, "rtos") }}</div>{{ grp(m, "periph") }}</div>
+    <p class="rm-mh rm-mh--box">{{ t(B["if"]) }}</p>
+    {{ cell("6 / 4 / 9 / 6", "rm-c--if") }}
+      <div class="rm-ifcol">{{ grp(m, "basic") }}{{ grp(m, "wireless") }}</div>
+      <div class="rm-ifcol">{{ grp(m, "highspeed") }}{{ grp(m, "industrial") }}{{ grp(m, "cellular") }}</div>
+      <div class="rm-ifcol">{{ grp(m, "network") }}{{ grp(m, "automotive") }}{{ grp(m, "display") }}</div>
+    </div>
+    {{ cell("6 / 6 / 9 / 7") }}{{ grp(m, "hwsw", true) }}</div>
+
+    {# 하드웨어 #}
+    <p class="rm-mh rm-mh--hw">{{ t(R.hw) }}</p>
+    {{ cell("10 / 2 / 11 / 4", "rm-c--hwrow") }}{{ grp(m, "electronics") }}</div>
+    {{ cell("10 / 4 / 11 / 5", "rm-c--hwrow") }}{{ grp(m, "testeq") }}</div>
+    {{ cell("10 / 5 / 11 / 6", "rm-c--hwrow") }}{{ grp(m, "proto") }}</div>
+    {{ cell("10 / 6 / 11 / 7", "rm-c--fpga rm-c--hwrow") }}{{ grp(m, "fpga") }}</div>
+
+    {# 소프트 스킬 #}
+    <p class="rm-mh rm-mh--soft">{{ t(R.soft) }}</p>
+    {{ cell("14 / 2 / 15 / 7") }}{{ grp(m, "soft") }}</div>
+  </div>
+
+  <p class="rm-credit">
+    <span class="rm-ko">원본</span><span class="rm-en" lang="en">Based on</span>
+    <a href="{{ m.source.url }}">{{ m.source.title }}</a> · {{ m.source.author }} ·
+    <a href="{{ m.source.license_url }}">{{ m.source.license }}</a>
+    <span class="rm-ko">— 한국어 번역 · "지금 업무" · "이 프로젝트" 표시를 더함 (같은 라이선스)</span><span class="rm-en" lang="en">— Korean translation and markers added (same license)</span>
+  </p>
+</div>
+{%- endmacro %}

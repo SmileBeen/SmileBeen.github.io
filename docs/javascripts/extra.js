@@ -63,3 +63,33 @@
   }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", setup); else setup();
 })();
+
+/* 로드맵 지도: 한글/EN 전환(기본 한글, 브라우저에 기억) · 표시 거르기 */
+(function () {
+  function setup() {
+    var saved = null;
+    try { saved = localStorage.getItem("hb-rm-lang"); } catch (e) {}
+    document.querySelectorAll(".rm").forEach(function (rm) {
+      function lang(v) {
+        rm.setAttribute("data-lang", v);
+        rm.querySelectorAll("[data-rm-lang]").forEach(function (b) { b.setAttribute("aria-pressed", b.getAttribute("data-rm-lang") === v ? "true" : "false"); });
+      }
+      if (saved === "en") lang("en");
+      rm.addEventListener("click", function (ev) {
+        var b = ev.target.closest("[data-rm-lang]");
+        if (b) {
+          var v = b.getAttribute("data-rm-lang");
+          lang(v);
+          try { localStorage.setItem("hb-rm-lang", v); } catch (e) {}
+          return;
+        }
+        var w = ev.target.closest("[data-rm-view]");
+        if (w) {
+          rm.setAttribute("data-view", w.getAttribute("data-rm-view"));
+          rm.querySelectorAll("[data-rm-view]").forEach(function (x) { x.setAttribute("aria-pressed", x === w ? "true" : "false"); });
+        }
+      });
+    });
+  }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", setup); else setup();
+})();

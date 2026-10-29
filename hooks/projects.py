@@ -175,6 +175,61 @@ def _load_setup() -> list[dict]:
     return groups
 
 
+MAP_LEVEL = {"core": "직접 다룸", "part": "일부", "none": "다루지 않음"}
+
+
+def _build_map(projects, examples, setups) -> dict:
+    m = _yaml(DATA / "map.yml", {})
+    if not m:
+        return {}
+
+    def ref(r: str):
+        kind, _, rest = r.partition(":")
+        if kind == "ep":
+            slug, _, n = rest.rpartition(":")
+            p = next((x for x in projects if x["slug"] == slug), None)
+            e = next((x for x in p["eps"] if x["n"] == int(n)), None) if p else None
+            if e:
+                return {"label": f"{e['n']}화", "title": e["title"], "url": f"projects/{slug}/{e['id']}/", "kind": "ep", "on": e["status_key"] == "on"}
+        elif kind == "ex":
+            x = next((x for x in examples if x["id"] == rest), None)
+            if x:
+                return {"label": x["label"], "title": x["title"], "url": f"examples/{x['id']}/", "kind": "ex", "on": x["status_key"] == "on"}
+        elif kind == "setup":
+            x = setups.get(rest)
+            if x and x["has_page"]:
+                return {"label": x["num"], "title": x["title"], "url": f"setup/{x['slug']}/", "kind": "setup", "on": x["status_key"] == "on"}
+        return None
+
+    counts = {"now": 0, "proj": 0, "all": 0}
+    allitems = []
+    for gid, g in (m.get("groups") or {}).items():
+        g["id"] = gid
+        for it in g.get("items") or []:
+            it["refs"] = [r for r in (ref(x) for x in it.get("links") or []) if r]
+            it["proj"] = bool(it["refs"])
+            it["done"] = any(r["on"] for r in it["refs"])
+            it["now"] = bool(it.get("now"))
+            it["tip"] = " · ".join(f"{r['label']} {r['title']}" for r in it["refs"])
+            it["gap"] = it.get("p") in ("req", "rec") and not it["now"] and not it["proj"]
+            counts["all"] += 1
+            counts["now"] += it["now"]
+            counts["proj"] += it["proj"]
+            counts["gap"] = counts.get("gap", 0) + it["gap"]
+            allitems.append(it)
+    m["counts"] = counts
+    m["proj_items"] = [it for it in allitems if it["proj"]]
+    pri = [("req", "필수", "Required"), ("rec", "권장", "Recommended"), ("opt", "선택", "Optional")]
+    m["coverage"] = []
+    for key, ko, en in pri:
+        xs = [it for it in allitems if it.get("p") == key]
+        done = [it for it in xs if it["now"] or it["proj"]]
+        m["coverage"].append({"key": key, "ko": ko, "en": en, "total": len(xs), "done": len(done),
+                              "pct": round(100 * len(done) / len(xs)) if xs else 0,
+                              "next": [it for it in xs if it["gap"]]})
+    return m
+
+
 def _load_posts(docs_dir: Path) -> list[dict]:
     posts = []
     for p in sorted((docs_dir / "blog" / "posts").glob("*.md")):
@@ -301,6 +356,7 @@ def _build(config) -> dict:
         "kind_counts": {k: sum(1 for p in projects if p["kind"] == k) for k in KIND},
         "examples": examples,
         "setup_groups": setup_groups,
+        "map": _build_map(projects, examples, setups),
         "setup_count": sum(1 for x in setups.values() if x["has_page"]),
         "groups": groups,
         "posts": posts,
@@ -333,6 +389,9 @@ def on_files(files, config):
                        {"title": "부품", "template": "parts.html", "hide": hide}))
     files.append(_page(config, "examples/index.md",
                        {"title": "예제", "template": "examples.html", "hide": hide}))
+    if HB.get("map"):
+        files.append(_page(config, "map/index.md",
+                           {"title": "다루는 영역", "template": "map.html", "hide": hide}))
     files.append(_page(config, "setup/index.md",
                        {"title": "개발 환경", "template": "setup.html", "hide": hide}))
     for g in HB["setup_groups"]:
