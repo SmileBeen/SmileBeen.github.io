@@ -314,3 +314,11 @@ def on_page_context(context, page, config, nav):
             context["hb_prev"] = proj["eps"][i - 1] if i > 0 else None
             context["hb_next"] = proj["eps"][i + 1] if i + 1 < len(proj["eps"]) else None
     return context
+
+
+_IMG = re.compile(r"<img(?![^>]*\bloading=)")
+
+
+def on_page_content(html, page, config, files):
+    """본문 사진은 화면에 가까워질 때만 내려받게(lazy) 해요."""
+    return _IMG.sub('<img loading="lazy" decoding="async"', html)
