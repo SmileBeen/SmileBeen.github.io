@@ -1,0 +1,34 @@
+media:
+  input: docs/images
+  output: /images
+content:
+  - name: blog
+    label: 블로그
+    type: collection
+    path: docs/blog/posts
+    filename: "{year}-{month}-{day}-{primary}.md"
+    fields:
+      - { name: title, label: 제목, type: string, required: true }
+      - { name: date, label: 날짜, type: date, required: true }
+      - { name: slug, label: 주소 이름 (영문 소문자·하이픈. 예 lighting-setup), type: string, required: true }
+      - { name: category, label: 분류, type: select, options: { values: [작업실, 프로젝트 기록] } }
+      - { name: tags, label: 태그 (다루는 것), type: string, list: true }
+      - { name: project, label: 이어지는 프로젝트 slug (예 stm32-ota-bench), type: string }
+      - { name: description, label: 목록에 보일 한 줄 요약, type: string }
+      - { name: body, label: 본문, type: rich-text }
+  - name: episodes
+    label: 회차 (STM32 서명 OTA 시험대)
+    type: collection
+    path: data/stm32-ota-bench/episodes
+    fields:
+      - { name: n, label: 회차 번호, type: number }
+      - { name: title, label: 제목, type: string }
+      - { name: short, label: 목록용 짧은 이름, type: string }
+      - { name: summary, label: 한 줄 설명, type: string }
+      - { name: tags, label: 태그, type: string, list: true }
+      - { name: code_tag, label: 코드 태그, type: string }
+      - { name: status, label: 상태, type: select, options: { values: [공개, 편집 중, 촬영 준비, 준비 중] } }
+      - { name: video, label: 유튜브 주소, type: string }
+      - { name: length, label: 영상 길이, type: string }
+      - { name: doc, label: 프로젝트 사이트 문서 경로, type: string }
+      - { name: body, label: 본문, type: rich-text }

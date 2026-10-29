@@ -1,0 +1,100 @@
+{% extends "main.html" %}
+{% import "partials/hb.html" as ui with context %}
+{% block content %}
+<div class="hb">
+
+<section class="hb-hero">
+  <p class="hb-eyebrow">EMBEDDED FIRMWARE · 통신 · OTA · 디바이스 보안</p>
+  <h1 class="hb-h1">펌웨어 작업실</h1>
+  <p class="hb-lead">현장 장비 펌웨어를 만드는 임베디드 개발자예요. 통신, 원격 업데이트(OTA), 디바이스 보안을 직접 만들어 보면서 과정을 영상과 문서로 남겨요.</p>
+  <div class="hb-btns">
+    {% if hb.youtube %}<a class="hb-btn hb-btn--copper" href="{{ hb.youtube }}">{{ ui.play_icon(18) }}유튜브</a>{% endif %}
+    {% if hb.user %}<a class="hb-btn" href="https://github.com/{{ hb.user }}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M8 7l-5 5 5 5M16 7l5 5-5 5"/></svg>GitHub</a>{% endif %}
+    <a class="hb-btn" href="{{ base_url }}/about/">소개</a>
+  </div>
+</section>
+
+<section class="hb-sec" aria-labelledby="h-stack">
+  <div class="hb-sec__head">
+    <h2 id="h-stack" class="hb-h2">다루는 것</h2>
+    <a class="hb-more" href="{{ base_url }}/tags/">기술별 영상 · 글 보기 →</a>
+  </div>
+  <div class="hb-grid hb-grid--240">
+    {% for g in hb.groups %}{% if g.label != "작업실" %}
+    <div class="hb-box">
+      <p class="hb-mono hb-muted hb-label">{{ g.label }}</p>
+      <div class="hb-chips">
+        {% for it in g["items"] %}<a class="hb-chip" href="{{ base_url }}/tags/#{{ it | urlencode }}"><span class="hb-dot"></span>{{ it }}</a>{% endfor %}
+      </div>
+    </div>
+    {% endif %}{% endfor %}
+  </div>
+</section>
+
+<section id="projects" class="hb-sec" aria-labelledby="h-proj">
+  <div class="hb-sec__head">
+    <div>
+      <h2 id="h-proj" class="hb-h2">프로젝트</h2>
+      <p class="hb-mono hb-muted hb-small">진행 중 <b class="hb-copper">{{ hb.counts.wip }}</b> · 준비 중 <b>{{ hb.counts.todo }}</b> · 완료 <b>{{ hb.counts.done }}</b></p>
+    </div>
+    <a class="hb-more" href="{{ base_url }}/projects/">모든 프로젝트 {{ hb.projects | length }}개 →</a>
+  </div>
+
+  {% for p in hb.featured %}
+  <article class="hb-feature">
+    <a class="hb-feature__img" href="{{ ui.project_link(p) }}" aria-label="{{ p.name }} 열기">{{ ui.image(p) }}</a>
+    <div class="hb-feature__body">
+      {{ ui.pill(p.status, p.status_key) }}
+      <h3 class="hb-card__title"><a href="{{ ui.project_link(p) }}">{{ p.name }}</a></h3>
+      <p class="hb-muted">{{ p.summary }}</p>
+      <p class="hb-mono hb-muted">{{ p.tags | join(" · ") }}</p>
+      <div class="hb-actions">
+        <a class="hb-tag hb-tag--site" href="{{ ui.project_link(p) }}">회차 · 부품</a>
+        {% if p.site %}<a class="hb-tag hb-tag--code" href="{{ p.site }}">따라 하기 문서</a>{% endif %}
+        {% if p.repo_url %}<a class="hb-tag hb-tag--code" href="{{ p.repo_url }}">코드</a>{% endif %}
+        {% if p.playlist %}<a class="hb-tag hb-tag--code" href="{{ p.playlist }}">재생목록</a>{% else %}<span class="hb-tag hb-tag--dash">영상 준비 중</span>{% endif %}
+      </div>
+      <div class="hb-card__foot hb-mono"><span>{{ p.updated_str }} 업데이트</span><span>{{ p.eps | length }}화</span></div>
+    </div>
+  </article>
+  {% endfor %}
+
+  {% if hb.others %}
+  <div class="hb-grid hb-grid--300 hb-mt">
+    {% for p in hb.others[:3] %}{{ ui.card(p) }}{% endfor %}
+  </div>
+  {% if hb.others | length > 3 %}<a class="hb-dashlink" href="{{ base_url }}/projects/">프로젝트 {{ hb.others | length - 3 }}개 더 보기 →</a>{% endif %}
+  {% endif %}
+</section>
+
+<div class="hb-grid hb-grid--320 hb-pb">
+  <section id="posts" class="hb-box hb-box--pad" aria-labelledby="h-posts">
+    <div class="hb-sec__head hb-sec__head--tight">
+      <h2 id="h-posts" class="hb-h3">최근 글</h2>
+      <a class="hb-more" href="{{ base_url }}/blog/">전체 →</a>
+    </div>
+    {% for x in hb.posts[:3] %}
+    <a class="hb-post" href="{{ base_url }}/{{ x.url }}">
+      <span class="hb-mono hb-muted hb-small">{{ x.date_str }}</span>
+      <b>{{ x.title }}</b>
+      <span class="hb-muted hb-small">{{ x.excerpt }}</span>
+    </a>
+    {% else %}<p class="hb-muted">아직 글이 없어요.</p>{% endfor %}
+  </section>
+
+  <section class="hb-box hb-box--pad" aria-labelledby="h-follow">
+    <h2 id="h-follow" class="hb-h3">따라 하는 법</h2>
+    <p class="hb-muted hb-small">막히면 프로젝트 레포의 질문 게시판에 남겨 주세요.</p>
+    <ol class="hb-steps">
+      <li><span class="hb-num">1</span><span><b>영상 보기</b><span class="hb-muted hb-small">회차마다 한 단계씩 만들어요</span></span></li>
+      <li><span class="hb-num">2</span><span><b>회차 문서 열기</b><span class="hb-muted hb-small">영상에 나온 명령과 설정을 그대로 정리해 뒀어요</span></span></li>
+      <li><span class="hb-num">3</span><span><b>코드 태그 받기</b><span class="hb-muted hb-small">회차별 태그로 그 시점 코드를 받아요</span></span></li>
+    </ol>
+    {% set fp = hb.featured[0] if hb.featured else none %}
+    {% if fp and fp.eps %}<a class="hb-more" href="{{ ui.project_link(fp) }}{{ fp.eps[0].id }}/">1화부터 따라 하기 →</a>{% endif %}
+  </section>
+</div>
+
+{{ ui.footer_links() }}
+</div>
+{% endblock %}

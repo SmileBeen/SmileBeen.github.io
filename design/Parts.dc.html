@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>부품 — 전체 BOM</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&amp;family=Noto+Sans+KR:wght@400;500;700;800&amp;display=swap">
+<style>
+body{margin:0}
+a{color:inherit;text-decoration:none}
+a:hover{text-decoration:underline;text-underline-offset:3px}
+button{font:inherit}
+</style>
+</helmet>
+<div style="min-height: 100vh; background: {{t.bg}}; color: {{t.text}}; font-family: 'Noto Sans KR', system-ui, sans-serif; font-size: 16px; line-height: 1.6">
+
+<header style="border-bottom: 1px solid {{t.line}}">
+<div style="max-width: 1120px; margin: 0 auto; padding: 0 24px; min-height: 64px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 24px">
+<a href="Gallery.dc.html" style="display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 16px"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="{{t.copper}}" stroke-width="1.8" aria-hidden="true"><rect x="6" y="6" width="12" height="12" rx="1.5"></rect><path d="M9 2v4M15 2v4M9 18v4M15 18v4M2 9h4M2 15h4M18 9h4M18 15h4"></path></svg><span>펌웨어 작업실</span></a>
+<nav aria-label="주 메뉴" style="display: flex; flex-wrap: wrap; gap: 2px; font-size: 15px; font-weight: 500; color: {{t.muted}}">
+<a href="Projects.dc.html" style="padding: 10px 12px">프로젝트</a>
+<a href="Tags.dc.html" style="padding: 10px 12px">다루는 것</a>
+<a href="Parts.dc.html" aria-current="page" style="padding: 10px 12px; color: {{t.text}}; font-weight: 700">부품</a>
+<a href="Blog.dc.html" style="padding: 10px 12px">블로그</a>
+<a href="About.dc.html" style="padding: 10px 12px">소개</a>
+</nav>
+</div>
+</header>
+
+<main style="max-width: 1120px; margin: 0 auto; padding: 56px 24px 72px">
+<p style="margin: 0 0 8px; font-size: 14px; color: {{t.muted}}"><a href="Gallery.dc.html">홈</a> / 부품</p>
+<h1 style="margin: 0 0 6px; font-size: 40px; line-height: 1.2; font-weight: 800; letter-spacing: -0.02em">부품</h1>
+<p style="margin: 0 0 28px; font-size: 17px; color: {{t.muted}}">모든 프로젝트에 쓴 보드 · 모듈 · 장비를 종류별로 모았어요. 부품마다 쓰인 프로젝트가 보여요.</p>
+
+<div style="display: flex; flex-wrap: wrap; gap: 20px 32px; margin-bottom: 36px; padding: 18px 20px; border-radius: 14px; background: {{t.surface}}; border: 1px solid {{t.line}}">
+<div role="group" aria-label="프로젝트로 거르기" style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px">
+<span style="font-size: 13px; font-weight: 700; color: {{t.muted}}; margin-right: 4px">프로젝트</span>
+<sc-for list="{{projF}}" as="f" hint-placeholder-count="2">
+<button type="button" onClick="{{f.pick}}" aria-pressed="{{f.on}}" style="{{f.style}}">{{f.label}}</button>
+</sc-for>
+</div>
+<div role="group" aria-label="상태로 거르기" style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px">
+<span style="font-size: 13px; font-weight: 700; color: {{t.muted}}; margin-right: 4px">상태</span>
+<sc-for list="{{statF}}" as="f" hint-placeholder-count="4">
+<button type="button" onClick="{{f.pick}}" aria-pressed="{{f.on}}" style="{{f.style}}">{{f.label}} <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; opacity: 0.8">{{f.count}}</span></button>
+</sc-for>
+</div>
+</div>
+
+<sc-if value="{{empty}}" hint-placeholder-val="{{ false }}">
+<div style="padding: 48px 24px; border-radius: 14px; border: 1.5px dashed {{t.line}}; text-align: center; color: {{t.muted}}">조건에 맞는 부품이 없어요.</div>
+</sc-if>
+
+<div style="display: flex; flex-direction: column; gap: 40px">
+<sc-for list="{{groups}}" as="g" hint-placeholder-count="5">
+<section>
+<div style="display: flex; align-items: baseline; gap: 12px; margin-bottom: 14px">
+<h2 style="margin: 0; font-size: 22px; font-weight: 800">{{g.label}}</h2>
+<span style="font-family: 'JetBrains Mono', monospace; font-size: 13px; color: {{t.muted}}">{{g.count}}</span>
+</div>
+<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr)); gap: 14px">
+<sc-for list="{{g.items}}" as="p" hint-placeholder-count="3">
+<article style="display: flex; flex-direction: column; gap: 10px; padding: 18px 20px; border-radius: 14px; background: {{t.surface}}; border: 1px solid {{t.line}}">
+<div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 10px">
+<b style="font-size: 17px; line-height: 1.4">{{p.name}}</b>
+<span style="{{p.pill}}">{{p.status}}</span>
+</div>
+<p style="margin: 0; font-size: 14px; color: {{t.muted}}">{{p.use}}</p>
+<div style="display: flex; flex-direction: column; gap: 6px; padding-top: 10px; border-top: 1px solid {{t.line}}">
+<span style="font-size: 12px; font-weight: 700; color: {{t.muted}}">쓰인 프로젝트</span>
+<sc-for list="{{p.used}}" as="u" hint-placeholder-count="1">
+<a href="Project.dc.html" style="display: flex; justify-content: space-between; align-items: center; gap: 8px; min-height: 36px; padding: 0 12px; border-radius: 8px; background: {{t.chipBg}}; color: {{t.chipFg}}; font-size: 14px; font-weight: 500"><span>{{u.name}}</span><span aria-hidden="true">→</span></a>
+</sc-for>
+</div>
+<div style="display: flex; flex-wrap: wrap; gap: 8px">
+<sc-if value="{{p.hasBuy}}" hint-placeholder-val="{{ false }}"><a href="{{p.buy}}" style="display: inline-flex; align-items: center; min-height: 36px; padding: 0 14px; border-radius: 999px; background: {{t.wipBg}}; color: {{t.wipFg}}; font-size: 13px; font-weight: 700">구매 ↗</a></sc-if>
+<sc-if value="{{p.noBuy}}" hint-placeholder-val="{{ true }}"><span style="display: inline-flex; align-items: center; min-height: 36px; padding: 0 14px; border-radius: 999px; border: 1px dashed {{t.line}}; color: {{t.muted}}; font-size: 13px">[구매 링크]</span></sc-if>
+<sc-if value="{{p.hasDoc}}" hint-placeholder-val="{{ false }}"><a href="{{p.doc}}" style="display: inline-flex; align-items: center; min-height: 36px; padding: 0 14px; border-radius: 999px; background: {{t.codeBg}}; color: {{t.codeFg}}; font-size: 13px; font-weight: 700">제품 자료 ↗</a></sc-if>
+<sc-if value="{{p.noDoc}}" hint-placeholder-val="{{ true }}"><span style="display: inline-flex; align-items: center; min-height: 36px; padding: 0 14px; border-radius: 999px; border: 1px dashed {{t.line}}; color: {{t.muted}}; font-size: 13px">[자료 링크]</span></sc-if>
+</div>
+</article>
+</sc-for>
+</div>
+</section>
+</sc-for>
+</div>
+</main>
+
+<footer style="border-top: 1px solid {{t.line}}">
+<div style="max-width: 1120px; margin: 0 auto; padding: 8px 24px; display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 0 4px; font-size: 13px; color: {{t.muted}}">
+<a href="https://github.com/USERNAME" style="display: inline-flex; align-items: center; gap: 6px; min-height: 44px; padding: 0 10px"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M8 7l-5 5 5 5M16 7l5 5-5 5"></path></svg>GitHub</a>
+<a href="https://www.youtube.com/" style="display: inline-flex; align-items: center; gap: 6px; min-height: 44px; padding: 0 10px"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M7 4l13 8-13 8z"></path></svg>유튜브</a>
+<a href="mailto:" style="display: inline-flex; align-items: center; gap: 6px; min-height: 44px; padding: 0 10px"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"></rect><path d="M3 7l9 6 9-6"></path></svg>이메일</a>
+</div>
+</footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"dark":{"editor":"boolean","default":true},"$preview":{"width":1280,"height":2600}}'>
+class Component extends DCLogic {
+constructor(props) { super(props); this.state = { proj: 'all', st: 'all' }; }
+renderVals() {
+const dark = this.props.dark ?? true;
+const t = dark ? {
+bg: '#0E182B', surface: '#15223A', line: '#283A5A', text: '#ECEFF5', muted: '#A4B1C7', copper: '#D08A52',
+chipBg: '#1D2E4D', chipFg: '#C9D4E6', wipBg: '#3A2716', wipFg: '#F0B47F', codeBg: '#22324F', codeFg: '#D3DCEB', onBg: '#D08A52', onFg: '#1C1107'
+} : {
+bg: '#F4F5F7', surface: '#FFFFFF', line: '#DCE0E7', text: '#13213D', muted: '#535E76', copper: '#C8834D',
+chipBg: '#E7EBF2', chipFg: '#2A3858', wipBg: '#F6E8DA', wipFg: '#874716', codeBg: '#E7EBF2', codeFg: '#1D2C4A', onBg: '#C8834D', onFg: '#1C1107'
+};
+const P = 'STM32 서명 OTA 시험대';
+const parts = [
+{ cat: 'MCU · 보드', name: 'STM32H743I-EVAL', use: '레거시 설비 역할 · RS-485 장치 에뮬레이터', status: '보유', used: [{ name: P, qty: '×2' }], buy: '', doc: 'https://www.st.com/en/evaluation-tools/stm32h743i-eval.html' },
+{ cat: 'MCU · 보드', name: 'NUCLEO-G474RE', use: 'CAN 장치 에뮬레이터 · 보드팜 컨트롤러', status: '구매 예정', used: [{ name: P, qty: '×2' }], buy: '', doc: 'https://www.st.com/en/evaluation-tools/nucleo-g474re.html' },
+{ cat: 'MCU · 보드', name: 'STM32F746G-DISCO', use: '이더넷 UDP 장치 에뮬레이터', status: '보유', used: [{ name: P, qty: '×1' }], buy: '', doc: 'https://www.st.com/en/evaluation-tools/32f746gdiscovery.html' },
+{ cat: 'MCU · 보드', name: 'FRDM-IMX93', use: '감시 박스 · NPU (주문 전 양산 여부 확인)', status: '나중', used: [{ name: P, qty: '×1' }], buy: '', doc: '' },
+{ cat: '통신 모듈', name: 'CAN 트랜시버 (3.3V)', use: '노드 간 CAN 연결', status: '구매 예정', used: [{ name: P, qty: '[수량]' }], buy: '', doc: '' },
+{ cat: '통신 모듈', name: 'RS-485 모듈', use: 'RS-485 장치 연결', status: '구매 예정', used: [{ name: P, qty: '[수량]' }], buy: '', doc: '' },
+{ cat: '통신 모듈', name: 'USB-RS485 변환기', use: 'PC에서 RS-485 수신', status: '구매 예정', used: [{ name: P, qty: '×1' }], buy: '', doc: '' },
+{ cat: '통신 모듈', name: 'USB-CAN-FD 어댑터', use: 'PC에서 CAN-FD 감시', status: '나중', used: [{ name: P, qty: '×1' }], buy: '', doc: '' },
+{ cat: '통신 모듈', name: '포트 미러링 스위치', use: '이더넷 무개조 감시', status: '구매 예정', used: [{ name: P, qty: '×1' }], buy: '', doc: '' },
+{ cat: '전원 · 제어', name: '전류 제한 가변 전원', use: '보드 전원 · 과전류 보호', status: '구매 예정', used: [{ name: P, qty: '×1' }], buy: '', doc: '' },
+{ cat: '전원 · 제어', name: '포트별 전원 제어 USB 허브', use: 'ST-LINK 전원 · 굽기 · 콘솔 원격 제어 (uhubctl 호환 확인)', status: '구매 예정', used: [{ name: P, qty: '×1' }], buy: '', doc: '' },
+{ cat: '전원 · 제어', name: '릴레이 4ch (DC)', use: '보드팜 전원 · RESET/BOOT 제어', status: '나중', used: [{ name: P, qty: '×1' }], buy: '', doc: '' },
+{ cat: '센서', name: 'INA226 전류 센서', use: '보드별 전류 측정', status: '나중', used: [{ name: P, qty: '×4' }], buy: '', doc: '' },
+{ cat: '센서', name: 'ADXL345 가속도 센서', use: '모터 진동 측정', status: '나중', used: [{ name: P, qty: '×1' }], buy: '', doc: '' },
+{ cat: '계측 장비', name: '로직 분석기', use: 'UART · CAN 신호 확인', status: '구매 예정', used: [{ name: P, qty: '×1' }], buy: '', doc: '' },
+{ cat: '계측 장비', name: '멀티미터', use: '전압 · 도통 확인', status: '구매 예정', used: [{ name: P, qty: '×1' }], buy: '', doc: '' }
+];
+const cats = ['MCU · 보드', '통신 모듈', '전원 · 제어', '센서', '계측 장비'];
+const { proj, st } = this.state;
+const btn = (on) => 'cursor: pointer; min-height: 36px; padding: 0 14px; border-radius: 999px; font-size: 13px; font-weight: 700; border: 1px solid ' + (on ? t.onBg : t.line) + '; background: ' + (on ? t.onBg : 'transparent') + '; color: ' + (on ? t.onFg : t.text);
+const projF = [['all', '전체'], [P, P]].map(([k, label]) => ({ label, on: proj === k, pick: () => this.setState({ proj: k }), style: btn(proj === k) }));
+const byProj = parts.filter(p => proj === 'all' || p.used.some(u => u.name === proj));
+const statF = ['전체', '보유', '구매 예정', '나중'].map((label) => {
+const k = label === '전체' ? 'all' : label;
+return { label, on: st === k, count: k === 'all' ? byProj.length : byProj.filter(p => p.status === k).length, pick: () => this.setState({ st: k }), style: btn(st === k) };
+});
+const pillBase = 'flex: none; font-size: 12px; font-weight: 700; padding: 2px 10px; border-radius: 999px; ';
+const pill = (s) => pillBase + (s === '보유' ? 'background: ' + t.codeBg + '; color: ' + t.codeFg : s === '구매 예정' ? 'background: ' + t.wipBg + '; color: ' + t.wipFg : 'border: 1px dashed ' + t.line + '; color: ' + t.muted);
+const shown = byProj.filter(p => st === 'all' || p.status === st);
+const groups = cats.map(c => {
+const items = shown.filter(p => p.cat === c).map(p => ({ ...p, pill: pill(p.status), hasBuy: !!p.buy, noBuy: !p.buy, hasDoc: !!p.doc, noDoc: !p.doc }));
+return { label: c, count: items.length, items };
+}).filter(g => g.items.length > 0);
+return { t, projF, statF, groups, empty: groups.length === 0 };
+}
+}
+</script>
+</body>
+</html>

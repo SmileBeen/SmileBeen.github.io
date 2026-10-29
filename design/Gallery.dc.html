@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>펌웨어 작업실 — 갤러리 구조</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&amp;family=Noto+Sans+KR:wght@400;500;700;800&amp;display=swap">
+<style>
+body{margin:0}
+a{color:inherit;text-decoration:none}
+a:hover{text-decoration:underline;text-underline-offset:3px}
+</style>
+</helmet>
+<div style="min-height: 100vh; background: {{t.bg}}; color: {{t.text}}; font-family: 'Noto Sans KR', system-ui, sans-serif; font-size: 16px; line-height: 1.6">
+
+<header style="border-bottom: 1px solid {{t.line}}">
+<div style="max-width: 1120px; margin: 0 auto; padding: 0 24px; min-height: 64px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 24px">
+<a href="#top" style="display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 16px">
+<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="{{t.copper}}" stroke-width="1.8" aria-hidden="true"><rect x="6" y="6" width="12" height="12" rx="1.5"></rect><path d="M9 2v4M15 2v4M9 18v4M15 18v4M2 9h4M2 15h4M18 9h4M18 15h4"></path></svg>
+<span>펌웨어 작업실</span>
+</a>
+<nav aria-label="주 메뉴" style="display: flex; flex-wrap: wrap; gap: 2px; font-size: 15px; font-weight: 500; color: {{t.muted}}">
+<a href="Projects.dc.html" style="padding: 10px 12px">프로젝트</a>
+<a href="Tags.dc.html" style="padding: 10px 12px">다루는 것</a>
+<a href="Parts.dc.html" style="padding: 10px 12px">부품</a>
+<a href="Blog.dc.html" style="padding: 10px 12px">블로그</a>
+<a href="About.dc.html" style="padding: 10px 12px">소개</a>
+</nav>
+</div>
+</header>
+
+<main id="top" style="max-width: 1120px; margin: 0 auto; padding: 0 24px">
+
+<section style="padding: 72px 0 56px">
+<p style="margin: 0 0 18px; font-family: 'JetBrains Mono', monospace; font-size: 13px; letter-spacing: 0.06em; color: {{t.copperText}}">EMBEDDED FIRMWARE · 통신 · OTA · 디바이스 보안</p>
+<h1 style="margin: 0 0 18px; font-size: clamp(40px, 6vw, 64px); line-height: 1.15; font-weight: 800; letter-spacing: -0.03em">펌웨어 작업실</h1>
+<p style="margin: 0 0 30px; max-width: 36em; font-size: 18px; color: {{t.muted}}">현장 장비 펌웨어를 만드는 임베디드 개발자예요. 통신, 원격 업데이트(OTA), 디바이스 보안을 직접 만들어 보면서 과정을 영상과 문서로 남겨요.</p>
+<div style="display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 26px">
+<a href="https://www.youtube.com/" style="display: inline-flex; align-items: center; gap: 8px; min-height: 48px; padding: 0 22px; border-radius: 999px; background: {{t.copper}}; color: #1C1107; font-weight: 700">
+<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M7 4l13 8-13 8z"></path></svg>유튜브</a>
+<a href="https://github.com/USERNAME" style="display: inline-flex; align-items: center; gap: 8px; min-height: 48px; padding: 0 22px; border-radius: 999px; border: 1px solid {{t.line}}; background: {{t.surface}}; font-weight: 700">
+<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M8 7l-5 5 5 5M16 7l5 5-5 5"></path></svg>GitHub</a>
+<a href="About.dc.html" style="display: inline-flex; align-items: center; min-height: 48px; padding: 0 22px; border-radius: 999px; border: 1px solid {{t.line}}; background: {{t.surface}}; font-weight: 700">소개</a>
+</div>
+</section>
+
+<section aria-labelledby="h-stack" style="padding: 40px 0 48px; border-top: 1px solid {{t.line}}">
+<div style="display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 12px; margin-bottom: 20px">
+<h2 id="h-stack" style="margin: 0; font-size: 30px; font-weight: 800; letter-spacing: -0.02em">다루는 것</h2>
+<a href="Tags.dc.html" style="display: inline-flex; align-items: center; min-height: 44px; font-weight: 700; font-size: 15px; color: {{t.copperText}}">기술별 영상 · 글 보기 →</a>
+</div>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr)); gap: 14px">
+<sc-for list="{{tech}}" as="g" hint-placeholder-count="4">
+<div style="padding: 20px; border-radius: 14px; background: {{t.surface}}; border: 1px solid {{t.line}}">
+<p style="margin: 0 0 12px; font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: 0.05em; color: {{t.muted}}">{{g.label}}</p>
+<div style="display: flex; flex-wrap: wrap; gap: 8px">
+<sc-for list="{{g.items}}" as="it" hint-placeholder-count="3">
+<a href="Tags.dc.html" style="display: inline-flex; align-items: center; gap: 8px; min-height: 36px; padding: 0 12px; border-radius: 8px; background: {{t.chipBg}}; color: {{t.chipFg}}; font-size: 14px; font-weight: 500"><span style="width: 7px; height: 7px; border-radius: 2px; background: {{t.copper}}"></span>{{it}}</a>
+</sc-for>
+</div>
+</div>
+</sc-for>
+</div>
+</section>
+
+<section id="projects" aria-labelledby="h-proj" style="padding: 40px 0 56px; border-top: 1px solid {{t.line}}">
+<div style="display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 12px; margin-bottom: 22px">
+<div>
+<h2 id="h-proj" style="margin: 0; font-size: 30px; font-weight: 800; letter-spacing: -0.02em">프로젝트</h2>
+<p style="margin: 4px 0 0; font-family: 'JetBrains Mono', monospace; font-size: 13px; color: {{t.muted}}">진행 중 <b style="color: {{t.copperText}}">{{cWip}}</b> · 준비 중 <b style="color: {{t.text}}">{{cTodo}}</b> · 완료 <b style="color: {{t.text}}">{{cDone}}</b></p>
+</div>
+<a href="Projects.dc.html" style="display: inline-flex; align-items: center; min-height: 44px; font-weight: 700; font-size: 15px; color: {{t.copperText}}">모든 프로젝트 {{total}}개 →</a>
+</div>
+
+<article style="display: flex; flex-wrap: wrap; border-radius: 16px; overflow: hidden; background: {{t.surface}}; border: 1px solid {{t.cardEdge}}; box-shadow: {{t.shadow}}">
+<a href="Project.dc.html" aria-label="STM32 서명 OTA 시험대 열기" style="display: block; flex: 1 1 560px; min-width: 0">
+<img src="/_blob/4cad174a4bc1549ab2bc7355b354505c" alt="STM32 시험대 두 장을 나란히 놓은 배선도 렌더링" style="display: block; width: 100%; height: 100%; min-height: 260px; aspect-ratio: 16 / 10; object-fit: cover; background: #E9ECEF">
+</a>
+<div style="flex: 1 1 340px; min-width: 0; padding: 28px 30px 22px; display: flex; flex-direction: column; gap: 14px">
+<span style="align-self: flex-start; font-size: 12px; font-weight: 700; padding: 3px 11px; border-radius: 999px; background: {{t.wipBg}}; color: {{t.wipFg}}">진행 중</span>
+<h3 style="margin: 0; font-size: 21px; line-height: 1.35; font-weight: 800; letter-spacing: -0.01em">STM32 서명 OTA 시험대</h3>
+<p style="margin: 0; font-size: 15px; color: {{t.muted}}">현장 로그 → 연구소 재현 → 서명 OTA까지, 영상 보며 따라 하는 펌웨어 보안 프로젝트</p>
+<p style="margin: 0; font-family: 'JetBrains Mono', monospace; font-size: 12px; color: {{t.muted}}">STM32 · CAN · OTA · 보안 · HIL</p>
+<div style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: auto; padding-top: 4px">
+<a href="Project.dc.html" style="display: inline-flex; align-items: center; min-height: 40px; padding: 0 16px; border-radius: 999px; background: {{t.siteBg}}; color: {{t.siteFg}}; font-size: 14px; font-weight: 700">사이트</a>
+<a href="https://github.com/USERNAME/stm32-ota-bench" style="display: inline-flex; align-items: center; min-height: 40px; padding: 0 16px; border-radius: 999px; background: {{t.codeBg}}; color: {{t.codeFg}}; font-size: 14px; font-weight: 700">코드</a>
+<span style="display: inline-flex; align-items: center; min-height: 40px; padding: 0 16px; border-radius: 999px; border: 1px dashed {{t.line}}; color: {{t.muted}}; font-size: 14px">영상 준비 중</span>
+</div>
+<div style="display: flex; justify-content: space-between; gap: 12px; padding-top: 14px; border-top: 1px solid {{t.line}}; font-family: 'JetBrains Mono', monospace; font-size: 12px; color: {{t.muted}}">
+<span>2026.10.29 업데이트</span>
+<span>[회차 수]화</span>
+</div>
+</div>
+</article>
+
+<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr)); gap: 18px; margin-top: 18px">
+<sc-for list="{{others}}" as="p" hint-placeholder-count="1">
+<article style="display: flex; flex-direction: column; border-radius: 14px; overflow: hidden; background: {{t.surface}}; border: 1px solid {{t.line}}">
+<a href="{{p.href}}" aria-label="{{p.name}} 열기" style="aspect-ratio: 16 / 10; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; background: {{t.ph}}; color: {{t.muted}}; font-size: 13px; text-decoration: none">
+<svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><rect x="6" y="6" width="12" height="12" rx="1.5"></rect><path d="M9 2v4M15 2v4M9 18v4M15 18v4M2 9h4M2 15h4M18 9h4M18 15h4"></path></svg>
+<span>사진 준비 중</span>
+</a>
+<div style="padding: 18px 20px 16px; display: flex; flex-direction: column; gap: 10px; flex: 1">
+<span style="{{p.pill}}">{{p.status}}</span>
+<h3 style="margin: 0; font-size: 18px; line-height: 1.35; font-weight: 800">{{p.name}}</h3>
+<p style="margin: 0; font-size: 14px; color: {{t.muted}}">{{p.summary}}</p>
+<div style="display: flex; justify-content: space-between; gap: 12px; margin-top: auto; padding-top: 12px; border-top: 1px solid {{t.line}}; font-family: 'JetBrains Mono', monospace; font-size: 12px; color: {{t.muted}}">
+<span>{{p.updated}}</span><span>{{p.eps}}</span>
+</div>
+</div>
+</article>
+</sc-for>
+</div>
+
+<sc-if value="{{hasMore}}" hint-placeholder-val="{{ false }}">
+<a href="Projects.dc.html" style="margin-top: 18px; display: flex; align-items: center; justify-content: center; min-height: 56px; border-radius: 14px; border: 1.5px dashed {{t.line}}; font-weight: 700; font-size: 15px; color: {{t.copperText}}">프로젝트 {{moreCount}}개 더 보기 →</a>
+</sc-if>
+</section>
+
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr)); gap: 22px; padding: 0 0 72px">
+<section id="posts" aria-labelledby="h-posts" style="border-radius: 14px; background: {{t.surface}}; border: 1px solid {{t.line}}; padding: 26px">
+<div style="display: flex; justify-content: space-between; align-items: baseline; gap: 12px; margin-bottom: 8px">
+<h2 id="h-posts" style="margin: 0; font-size: 22px; font-weight: 800">최근 글</h2>
+<a href="Blog.dc.html" style="display: inline-flex; align-items: center; min-height: 44px; font-size: 14px; font-weight: 700; color: {{t.copperText}}">전체 →</a>
+</div>
+<a href="Post.dc.html" style="display: flex; flex-direction: column; gap: 4px; padding: 16px 0 4px; border-top: 1px solid {{t.line}}">
+<span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: {{t.muted}}">2026.10.29</span>
+<b style="font-size: 17px">작업실을 꾸렸어요</b>
+<span style="font-size: 14px; color: {{t.muted}}">2.4m 방에 흰 책상 하나를 벽에 붙이고, 가운데를 시험대 자리로 비웠어요.</span>
+</a>
+</section>
+
+<section aria-labelledby="h-follow" style="border-radius: 14px; background: {{t.surface}}; border: 1px solid {{t.line}}; padding: 26px">
+<h2 id="h-follow" style="margin: 0 0 6px; font-size: 22px; font-weight: 800">따라 하는 법</h2>
+<p style="margin: 0 0 18px; font-size: 14px; color: {{t.muted}}">막히면 프로젝트 레포의 질문 게시판에 남겨 주세요.</p>
+<ol style="margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 12px">
+<sc-for list="{{steps}}" as="s" hint-placeholder-count="3">
+<li style="display: flex; align-items: center; gap: 14px">
+<span style="flex: none; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 700; background: {{t.wipBg}}; color: {{t.wipFg}}">{{s.n}}</span>
+<span style="display: flex; flex-direction: column"><b style="font-size: 15px">{{s.title}}</b><span style="font-size: 13px; color: {{t.muted}}">{{s.desc}}</span></span>
+</li>
+</sc-for>
+</ol>
+<a href="Episode.dc.html" style="display: inline-flex; align-items: center; min-height: 44px; margin-top: 10px; font-size: 14px; font-weight: 700; color: {{t.copperText}}">1화부터 따라 하기 →</a>
+</section>
+</div>
+</main>
+
+<footer id="contact" style="border-top: 1px solid {{t.line}}">
+<div style="max-width: 1120px; margin: 0 auto; padding: 8px 24px; display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 0 4px; font-size: 13px; color: {{t.muted}}">
+<a href="https://github.com/USERNAME" style="display: inline-flex; align-items: center; gap: 6px; min-height: 44px; padding: 0 10px"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M8 7l-5 5 5 5M16 7l5 5-5 5"></path></svg>GitHub</a>
+<a href="https://www.youtube.com/" style="display: inline-flex; align-items: center; gap: 6px; min-height: 44px; padding: 0 10px"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M7 4l13 8-13 8z"></path></svg>유튜브</a>
+<a href="mailto:" style="display: inline-flex; align-items: center; gap: 6px; min-height: 44px; padding: 0 10px"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"></rect><path d="M3 7l9 6 9-6"></path></svg>이메일</a>
+</div>
+</footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"dark":{"editor":"boolean","default":true},"demoCount":{"editor":"enum","options":["2","3","4","6","8"],"default":"2"},"$preview":{"width":1280,"height":1950}}'>
+class Component extends DCLogic {
+renderVals() {
+const dark = this.props.dark ?? true;
+const t = dark ? {
+bg: '#0E182B', surface: '#15223A', line: '#283A5A', cardEdge: 'rgba(208,138,82,0.45)', shadow: '0 10px 30px rgba(0,0,0,0.25)',
+text: '#ECEFF5', muted: '#A4B1C7', copper: '#D08A52', copperText: '#E5A36E', ph: '#1B2B48',
+chipBg: '#1D2E4D', chipFg: '#C9D4E6', wipBg: '#3A2716', wipFg: '#F0B47F', todoBg: '#22324F', todoFg: '#B4C2D9',
+siteBg: '#3A2716', siteFg: '#F0B47F', codeBg: '#22324F', codeFg: '#D3DCEB'
+} : {
+bg: '#F4F5F7', surface: '#FFFFFF', line: '#DCE0E7', cardEdge: 'rgba(181,103,47,0.45)', shadow: '0 8px 24px rgba(19,33,61,0.08)',
+text: '#13213D', muted: '#535E76', copper: '#C8834D', copperText: '#93501E', ph: '#E9ECF1',
+chipBg: '#E7EBF2', chipFg: '#2A3858', wipBg: '#F6E8DA', wipFg: '#874716', todoBg: '#E7EBF2', todoFg: '#445069',
+siteBg: '#F6E8DA', siteFg: '#874716', codeBg: '#E7EBF2', codeFg: '#1D2C4A'
+};
+const n = parseInt(this.props.demoCount ?? '2', 10) || 2;
+const pool = [
+{ name: '[다음 프로젝트 이름]', status: '준비 중', summary: 'projects.yml에 항목을 추가하면 이 자리에 카드가 생겨요.', updated: '—', eps: '0화' },
+{ name: '[예시 프로젝트 3]', status: '완료', summary: '[한 줄 설명]', updated: '[날짜]', eps: '[회차 수]화' },
+{ name: '[예시 프로젝트 4]', status: '준비 중', summary: '[한 줄 설명]', updated: '[날짜]', eps: '0화' },
+{ name: '[예시 프로젝트 5]', status: '완료', summary: '[한 줄 설명]', updated: '[날짜]', eps: '[회차 수]화' },
+{ name: '[예시 프로젝트 6]', status: '완료', summary: '[한 줄 설명]', updated: '[날짜]', eps: '[회차 수]화' },
+{ name: '[예시 프로젝트 7]', status: '준비 중', summary: '[한 줄 설명]', updated: '[날짜]', eps: '0화' },
+{ name: '[예시 프로젝트 8]', status: '완료', summary: '[한 줄 설명]', updated: '[날짜]', eps: '[회차 수]화' }
+];
+const rest = pool.slice(0, Math.max(0, n - 1));
+const pillBase = 'align-self: flex-start; font-size: 12px; font-weight: 700; padding: 3px 11px; border-radius: 999px; ';
+const pill = (s) => pillBase + (s === '완료' ? 'border: 1px solid ' + t.line + '; color: ' + t.text : 'background: ' + t.todoBg + '; color: ' + t.todoFg);
+const others = rest.slice(0, 3).map(p => ({ ...p, href: 'Projects.dc.html', pill: pill(p.status) }));
+const total = n;
+return {
+t, others, total,
+hasMore: total > 4, moreCount: total - 4,
+cWip: 1, cTodo: rest.filter(p => p.status === '준비 중').length, cDone: rest.filter(p => p.status === '완료').length,
+tech: [
+{ label: '펌웨어', items: ['C/C++', 'STM32', '부트로더', 'mbedTLS'] },
+{ label: '통신', items: ['CAN/FDCAN', 'RS-232', 'LTE 모뎀'] },
+{ label: '업데이트 · 보안', items: ['OTA', '서명 · TLS'] },
+{ label: '시험 · 자동화', items: ['HIL', 'Python', 'pytest', 'GitHub Actions'] }
+],
+steps: [
+{ n: 1, title: '영상 보기', desc: '회차마다 한 단계씩 만들어요' },
+{ n: 2, title: '회차 문서 열기', desc: '영상에 나온 명령과 설정을 그대로 정리해 뒀어요' },
+{ n: 3, title: '코드 태그 받기', desc: '회차별 태그로 그 시점 코드를 받아요' }
+]
+};
+}
+}
+</script>
+</body>
+</html>

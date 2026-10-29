@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>작업실을 꾸렸어요</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&amp;family=Noto+Sans+KR:wght@400;500;700;800&amp;display=swap">
+<style>
+body{margin:0}
+a{color:inherit;text-decoration:none}
+a:hover{text-decoration:underline;text-underline-offset:3px}
+</style>
+</helmet>
+<div style="min-height: 100vh; background: {{t.bg}}; color: {{t.text}}; font-family: 'Noto Sans KR', system-ui, sans-serif; font-size: 17px; line-height: 1.8">
+
+<header style="border-bottom: 1px solid {{t.line}}">
+<div style="max-width: 1120px; margin: 0 auto; padding: 0 24px; min-height: 64px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 24px; font-size: 16px; line-height: 1.6">
+<a href="Gallery.dc.html" style="display: flex; align-items: center; gap: 10px; font-weight: 800"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="{{t.copper}}" stroke-width="1.8" aria-hidden="true"><rect x="6" y="6" width="12" height="12" rx="1.5"></rect><path d="M9 2v4M15 2v4M9 18v4M15 18v4M2 9h4M2 15h4M18 9h4M18 15h4"></path></svg><span>펌웨어 작업실</span></a>
+<nav aria-label="주 메뉴" style="display: flex; flex-wrap: wrap; gap: 2px; font-size: 15px; font-weight: 500; color: {{t.muted}}">
+<a href="Projects.dc.html" style="padding: 10px 12px">프로젝트</a>
+<a href="Tags.dc.html" style="padding: 10px 12px">다루는 것</a>
+<a href="Parts.dc.html" style="padding: 10px 12px">부품</a>
+<a href="Blog.dc.html" style="padding: 10px 12px; color: {{t.text}}; font-weight: 700">블로그</a>
+<a href="About.dc.html" style="padding: 10px 12px">소개</a>
+</nav>
+</div>
+</header>
+
+<main style="max-width: 720px; margin: 0 auto; padding: 48px 24px 72px">
+<p style="margin: 0 0 24px; font-size: 14px; line-height: 1.6; color: {{t.muted}}"><a href="Blog.dc.html">← 블로그 전체</a></p>
+<p style="margin: 0 0 10px; display: flex; flex-wrap: wrap; gap: 8px 12px; align-items: center; font-size: 13px; line-height: 1.6">
+<span style="font-family: 'JetBrains Mono', monospace; color: {{t.muted}}">2026.10.29</span>
+<span style="font-weight: 700; padding: 2px 10px; border-radius: 999px; background: {{t.chipBg}}; color: {{t.chipFg}}">작업실</span>
+</p>
+<h1 style="margin: 0 0 32px; font-size: clamp(30px, 5vw, 42px); line-height: 1.25; font-weight: 800; letter-spacing: -0.02em">작업실을 꾸렸어요</h1>
+
+<div style="aspect-ratio: 16 / 9; border-radius: 12px; margin-bottom: 32px; display: flex; align-items: center; justify-content: center; background: {{t.ph}}; color: {{t.muted}}; font-size: 14px">[작업실 사진]</div>
+
+<p style="margin: 0 0 20px">2.4m 방에 흰 책상 하나를 벽에 붙이고, 가운데를 시험대 자리로 비웠어요.</p>
+<p style="margin: 0 0 40px">다음 글에서 조명, 매트, 오버헤드 카메라 세팅을 정리할게요.</p>
+
+<div style="padding: 20px 22px; border-radius: 12px; background: {{t.surface}}; border: 1px solid {{t.edge}}; font-size: 15px; line-height: 1.6; margin-bottom: 32px">
+<p style="margin: 0 0 4px; font-size: 13px; font-weight: 700; color: {{t.copperText}}">이 글과 이어지는 프로젝트</p>
+<a href="Project.dc.html" style="font-weight: 700">STM32 서명 OTA 시험대 →</a>
+</div>
+
+<nav aria-label="이전·다음 글" style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; padding-top: 24px; border-top: 1px solid {{t.line}}; font-size: 15px; line-height: 1.6">
+<span style="color: {{t.muted}}">이전 글 없음</span>
+<span style="color: {{t.muted}}">다음 글: [조명 · 매트 · 오버헤드 카메라 세팅] (예정)</span>
+</nav>
+</main>
+
+<footer style="border-top: 1px solid {{t.line}}">
+<div style="max-width: 1120px; margin: 0 auto; padding: 8px 24px; display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 0 4px; font-size: 13px; line-height: 1.6; color: {{t.muted}}">
+<a href="https://github.com/USERNAME" style="display: inline-flex; align-items: center; gap: 6px; min-height: 44px; padding: 0 10px"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M8 7l-5 5 5 5M16 7l5 5-5 5"></path></svg>GitHub</a>
+<a href="https://www.youtube.com/" style="display: inline-flex; align-items: center; gap: 6px; min-height: 44px; padding: 0 10px"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M7 4l13 8-13 8z"></path></svg>유튜브</a>
+<a href="mailto:" style="display: inline-flex; align-items: center; gap: 6px; min-height: 44px; padding: 0 10px"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"></rect><path d="M3 7l9 6 9-6"></path></svg>이메일</a>
+</div>
+</footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"dark":{"editor":"boolean","default":true},"$preview":{"width":1280,"height":1500}}'>
+class Component extends DCLogic {
+renderVals() {
+const dark = this.props.dark ?? true;
+const t = dark ? {
+bg: '#0E182B', surface: '#15223A', line: '#283A5A', edge: 'rgba(208,138,82,0.45)', text: '#ECEFF5', muted: '#A4B1C7', copper: '#D08A52', copperText: '#E5A36E', ph: '#1B2B48', chipBg: '#1D2E4D', chipFg: '#C9D4E6'
+} : {
+bg: '#F4F5F7', surface: '#FFFFFF', line: '#DCE0E7', edge: 'rgba(181,103,47,0.45)', text: '#13213D', muted: '#535E76', copper: '#C8834D', copperText: '#93501E', ph: '#E9ECF1', chipBg: '#E7EBF2', chipFg: '#2A3858'
+};
+return { t };
+}
+}
+</script>
+</body>
+</html>

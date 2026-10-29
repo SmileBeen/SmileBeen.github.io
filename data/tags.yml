@@ -1,0 +1,11 @@
+# 홈 "다루는 것"과 /tags/ 페이지의 기술 묶음
+- label: 펌웨어
+  items: [C/C++, STM32, 부트로더, mbedTLS]
+- label: 통신
+  items: [CAN, RS-232, LTE 모뎀]
+- label: 업데이트 · 보안
+  items: [OTA, 보안]
+- label: 시험 · 자동화
+  items: [HIL, Python, pytest, GitHub Actions]
+- label: 작업실
+  items: [작업실]

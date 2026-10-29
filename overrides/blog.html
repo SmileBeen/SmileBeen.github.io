@@ -1,0 +1,27 @@
+{% extends "main.html" %}
+{% import "partials/hb.html" as ui with context %}
+{% block content %}
+<div class="hb">
+  {{ ui.crumbs([["홈", ""], ["블로그", none]]) }}
+  <h1 class="hb-h1 hb-h1--page">블로그</h1>
+  <p class="hb-lead hb-lead--page">작업실 세팅, 프로젝트 뒷이야기, 영상에 다 못 담은 내용을 적어요.</p>
+
+  <div class="hb-filter" role="group" aria-label="분류로 거르기" data-filter="cat" data-target="#hb-posts">
+    <button type="button" aria-pressed="true" data-v="all">전체 <span class="hb-mono">{{ hb.posts | length }}</span></button>
+    {% for c in hb.post_cats %}<button type="button" aria-pressed="false" data-v="{{ c.label }}">{{ c.label }} <span class="hb-mono">{{ c.count }}</span></button>{% endfor %}
+  </div>
+
+  <div id="hb-posts" class="hb-postlist">
+    {% for x in hb.posts %}
+    <a class="hb-postcard" href="{{ base_url }}/{{ x.url }}" data-status="post" data-cat="{{ x.category }}">
+      <span class="hb-postcard__meta"><span class="hb-mono hb-muted hb-xs">{{ x.date_str }}</span><span class="hb-pill hb-pill--todo">{{ x.category }}</span></span>
+      <b>{{ x.title }}</b>
+      <span class="hb-muted hb-small">{{ x.excerpt }}</span>
+    </a>
+    {% endfor %}
+  </div>
+  <div class="hb-empty" {% if hb.posts %}hidden{% endif %}>아직 이 분류의 글이 없어요.</div>
+
+  {{ ui.footer_links() }}
+</div>
+{% endblock %}

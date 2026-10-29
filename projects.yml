@@ -1,0 +1,26 @@
+# 프로젝트 목록. 새 프로젝트를 시작하면 항목을 하나 추가하세요.
+# status: 진행 중 | 준비 중 | 완료
+# 회차는 data/<slug>/episodes/epNN.md, 부품은 data/<slug>/parts.yml 에 둬요.
+
+- slug: stm32-ota-bench
+  name: STM32 서명 OTA 시험대
+  status: 진행 중
+  featured: true
+  updated: 2026-10-29
+  image: stm32-ota-bench.png          # docs/images/projects/ 안의 파일
+  image_alt: STM32 시험대 두 장을 나란히 놓은 3D 렌더링
+  summary: 현장 로그 → 연구소 재현 → 서명 OTA까지, 영상 보며 따라 하는 펌웨어 보안 프로젝트
+  tags: [STM32, CAN, OTA, 보안, HIL]  # 카드에 보일 대표 태그
+  repo: stm32-ota-bench               # github.com/<아이디>/<repo>
+  site: /stm32-ota-bench/             # 따라 하기 문서 사이트
+  playlist: ""                        # 유튜브 재생목록 주소
+  tech:
+    - { label: 펌웨어, items: [STM32, 부트로더, mbedTLS] }
+    - { label: 통신, items: [CAN, RS-232] }
+    - { label: 업데이트 · 보안, items: [OTA, 보안] }
+    - { label: 시험 · 자동화, items: [HIL, Python, pytest] }
+
+- slug: next
+  name: 다음 프로젝트
+  status: 준비 중
+  summary: projects.yml에 항목을 추가하면 이 자리에 카드가 생겨요.

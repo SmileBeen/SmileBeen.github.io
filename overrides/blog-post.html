@@ -1,0 +1,26 @@
+{% extends "main.html" %}
+{% import "partials/hb.html" as ui with context %}
+{% set x = hb_post %}
+{% block content %}
+<div class="hb hb-postpage">
+  <p class="hb-crumbs"><a href="{{ base_url }}/blog/">← 블로그 전체</a></p>
+  {% if x %}<p class="hb-postcard__meta"><span class="hb-mono hb-muted hb-small">{{ x.date_str }}</span><span class="hb-pill hb-pill--todo">{{ x.category }}</span></p>{% endif %}
+  <div class="hb-prose md-typeset hb-postbody">{{ page.content }}</div>
+
+  {% if x and x.project_obj %}
+  <div class="hb-related">
+    <p class="hb-xs hb-muted hb-b">이 글과 이어지는 프로젝트</p>
+    <a class="hb-copper hb-b" href="{{ ui.project_link(x.project_obj) }}">{{ x.project_obj.name }} →</a>
+  </div>
+  {% endif %}
+
+  {% if x %}
+  <nav class="hb-postnav" aria-label="이전·다음 글">
+    {% if x.older %}<a href="{{ base_url }}/{{ x.older.url }}"><span class="hb-xs hb-muted">이전 글</span><b>{{ x.older.title }}</b></a>{% else %}<span class="hb-muted hb-small">이전 글 없음</span>{% endif %}
+    {% if x.newer %}<a class="hb-postnav__next" href="{{ base_url }}/{{ x.newer.url }}"><span class="hb-xs hb-muted">다음 글</span><b>{{ x.newer.title }}</b></a>{% else %}<span class="hb-muted hb-small">다음 글 준비 중</span>{% endif %}
+  </nav>
+  {% endif %}
+
+  {{ ui.footer_links() }}
+</div>
+{% endblock %}

@@ -1,0 +1,48 @@
+{% extends "main.html" %}
+{% import "partials/hb.html" as ui with context %}
+{% block content %}
+<div class="hb">
+  {{ ui.crumbs([["홈", ""], ["부품", none]]) }}
+  <h1 class="hb-h1 hb-h1--page">부품</h1>
+  <p class="hb-lead hb-lead--page">모든 프로젝트에 쓴 보드 · 모듈 · 장비를 종류별로 모았어요. 부품마다 쓰인 프로젝트가 보여요.</p>
+
+  <div class="hb-filters">
+    <div class="hb-filter" role="group" aria-label="프로젝트로 거르기" data-filter="proj" data-target="#hb-parts">
+      <span class="hb-filter__k">프로젝트</span>
+      <button type="button" aria-pressed="true" data-v="all">전체</button>
+      {% for p in hb.projects if p.parts %}<button type="button" aria-pressed="false" data-v="{{ p.slug }}">{{ p.name }}</button>{% endfor %}
+    </div>
+    <div class="hb-filter" role="group" aria-label="상태로 거르기" data-filter="status" data-target="#hb-parts">
+      <span class="hb-filter__k">상태</span>
+      <button type="button" aria-pressed="true" data-v="all">전체 <span class="hb-mono">{{ hb.parts | length }}</span></button>
+      {% for s in hb.part_status %}<button type="button" aria-pressed="false" data-v="{{ s.key }}">{{ s.label }} <span class="hb-mono">{{ s.count }}</span></button>{% endfor %}
+    </div>
+  </div>
+
+  <div id="hb-parts">
+    {% for g in hb.part_cats %}
+    <section class="hb-pgroup">
+      <div class="hb-pgroup__head"><h2 class="hb-h3">{{ g.label }}</h2><span class="hb-mono hb-muted hb-small">{{ g["items"] | length }}</span></div>
+      <div class="hb-grid hb-grid--300">
+        {% for it in g["items"] %}
+        <article class="hb-part" data-status="{{ it.status_key }}" data-proj="{{ it.used | map(attribute='slug') | join(' ') }}">
+          <div class="hb-part__top"><b>{{ it.name }}</b>{{ ui.pill(it.status, it.status_key) }}</div>
+          <p class="hb-muted hb-small">{{ it.use }}</p>
+          <div class="hb-part__used"><span class="hb-xs hb-muted">쓰인 프로젝트</span>
+            {% for u in it.used %}<a class="hb-chip hb-chip--round" href="{{ base_url }}/projects/{{ u.slug }}/#bom">{{ u.name }} →</a>{% endfor %}
+          </div>
+          <div class="hb-part__links">
+            {% if it.buy %}<a class="hb-tag hb-tag--site" href="{{ it.buy }}">구매 ↗</a>{% else %}<span class="hb-tag hb-tag--dash">구매 링크</span>{% endif %}
+            {% if it.doc %}<a class="hb-tag hb-tag--code" href="{{ it.doc }}">제품 자료 ↗</a>{% else %}<span class="hb-tag hb-tag--dash">자료 링크</span>{% endif %}
+          </div>
+        </article>
+        {% endfor %}
+      </div>
+    </section>
+    {% endfor %}
+  </div>
+  <div class="hb-empty" hidden>조건에 맞는 부품이 없어요.</div>
+
+  {{ ui.footer_links() }}
+</div>
+{% endblock %}

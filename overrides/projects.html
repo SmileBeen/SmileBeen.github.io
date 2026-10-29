@@ -1,0 +1,23 @@
+{% extends "main.html" %}
+{% import "partials/hb.html" as ui with context %}
+{% block content %}
+<div class="hb">
+  {{ ui.crumbs([["홈", ""], ["프로젝트", none]]) }}
+  <h1 class="hb-h1 hb-h1--page">모든 프로젝트</h1>
+  <p class="hb-lead hb-lead--page">프로젝트마다 영상 여러 편과 회차별 문서·코드가 묶여 있어요.</p>
+
+  <div class="hb-filter" role="group" aria-label="상태로 거르기" data-filter="status" data-target="#hb-plist">
+    <button type="button" aria-pressed="true" data-v="all">전체 <span class="hb-mono">{{ hb.projects | length }}</span></button>
+    <button type="button" aria-pressed="false" data-v="wip">진행 중 <span class="hb-mono">{{ hb.counts.wip }}</span></button>
+    <button type="button" aria-pressed="false" data-v="todo">준비 중 <span class="hb-mono">{{ hb.counts.todo }}</span></button>
+    <button type="button" aria-pressed="false" data-v="done">완료 <span class="hb-mono">{{ hb.counts.done }}</span></button>
+  </div>
+
+  <div id="hb-plist" class="hb-grid hb-grid--420">
+    {% for p in hb.projects %}{{ ui.card(p) }}{% endfor %}
+  </div>
+  <div class="hb-empty" hidden>아직 이 상태의 프로젝트가 없어요.</div>
+
+  {{ ui.footer_links() }}
+</div>
+{% endblock %}

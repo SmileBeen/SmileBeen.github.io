@@ -1,0 +1,105 @@
+{% extends "main.html" %}
+{% import "partials/hb.html" as ui with context %}
+{% set p = hb_project %}
+{% block content %}
+<div class="hb">
+  {{ ui.crumbs([["홈", ""], ["프로젝트", "projects/"], [p.name, none]]) }}
+
+  <section class="hb-phero">
+    <div class="hb-phero__img">{{ ui.image(p) }}</div>
+    <div class="hb-phero__body">
+      {{ ui.pill(p.status, p.status_key) }}
+      <h1 class="hb-h1 hb-h1--proj">{{ p.name }}</h1>
+      <p class="hb-lead hb-lead--page">{{ p.summary }}</p>
+      {% if p.tech %}
+      <div class="hb-tech">
+        {% for g in p.tech %}
+        <div class="hb-tech__row"><span class="hb-tech__k">{{ g.label }}</span>
+          {% for t in g["items"] %}<a class="hb-chip hb-chip--round" href="{{ base_url }}/tags/#{{ t | urlencode }}">{{ t }}</a>{% endfor %}
+        </div>
+        {% endfor %}
+      </div>
+      {% endif %}
+      <div class="hb-btns">
+        {% if p.eps %}<a class="hb-btn hb-btn--copper" href="{{ p.eps[0].id }}/">{{ ui.play_icon() }}1화부터 보기</a>{% endif %}
+        {% if p.repo_url %}<a class="hb-btn" href="{{ p.repo_url }}">코드</a>{% else %}<span class="hb-btn hb-btn--dash">코드</span>{% endif %}
+        {% if p.playlist %}<a class="hb-btn" href="{{ p.playlist }}">재생목록</a>{% else %}<span class="hb-btn hb-btn--dash">재생목록</span>{% endif %}
+      </div>
+      <div class="hb-jumps">
+        {% if p.eps %}<a href="#eps">회차 {{ p.eps | length }}편 ↓</a>{% endif %}
+        {% if p.parts %}<a href="#bom">BOM {{ p.parts | length }}종 ↓</a>{% endif %}
+      </div>
+    </div>
+  </section>
+
+  {% if p.eps %}
+  <section id="eps" class="hb-sec hb-sec--flat" aria-labelledby="h-eps">
+    <div class="hb-sec__head">
+      <div>
+        <h2 id="h-eps" class="hb-h2">회차</h2>
+        <p class="hb-mono hb-muted hb-small">영상 {{ p.eps | length }}편 · 공개 {{ p.ep_on }} · 준비 중 {{ p.eps | length - p.ep_on }}</p>
+      </div>
+      <span class="hb-muted hb-small">순서대로 보면 그대로 따라 할 수 있어요</span>
+    </div>
+    <div class="hb-rail__head">{{ ui.chip_icon() }}<b>{{ p.name }}</b></div>
+    <ol class="hb-rail">
+      {% for e in p.eps %}
+      <li>
+        <a class="hb-ep" href="{{ e.id }}/">
+          <span class="hb-ep__n hb-mono">{{ e.n }}</span>
+          <span class="hb-ep__body">
+            <b>{{ e.title }}</b>
+            <span class="hb-muted hb-small">{{ e.summary }}</span>
+            <span class="hb-mono hb-muted hb-xs">{{ e.tags | join(" · ") }} · 코드 태그 {{ e.code_tag }}</span>
+          </span>
+          {{ ui.pill(e.status, e.status_key) }}
+          <span class="hb-copper hb-small hb-b">보기 →</span>
+        </a>
+      </li>
+      {% endfor %}
+      <li><div class="hb-ep hb-ep--next">다음 회차를 올리면 여기에 이어서 붙어요</div></li>
+    </ol>
+  </section>
+  {% endif %}
+
+  {% if p.parts %}
+  <section id="bom" class="hb-sec hb-sec--flat" aria-labelledby="h-bom">
+    <div class="hb-sec__head">
+      <div>
+        <h2 id="h-bom" class="hb-h2">BOM · 부품표</h2>
+        <p class="hb-mono hb-muted hb-small">{{ p.parts_summary }}</p>
+      </div>
+      <a class="hb-more" href="{{ base_url }}/parts/">전체 부품 보기 →</a>
+    </div>
+    <div class="hb-bom">
+      {% for g in p.part_groups %}
+      <div class="hb-bom__group"><b>{{ g.label }}</b><span class="hb-mono hb-muted hb-xs">{{ g["items"] | length }}</span></div>
+      {% for it in g["items"] %}
+      <div class="hb-bom__row">
+        <span class="hb-bom__name"><b>{{ it.name }}</b><span class="hb-muted hb-small">{{ it.use }}</span></span>
+        <span class="hb-bom__qty hb-mono">{{ it.qty_str }}</span>
+        <span class="hb-bom__st">{{ ui.pill(it.status, it.status_key) }}</span>
+        <span class="hb-bom__links">
+          {% if it.buy %}<a class="hb-tag hb-tag--site" href="{{ it.buy }}">구매 ↗</a>{% else %}<span class="hb-tag hb-tag--dash">구매</span>{% endif %}
+          {% if it.doc %}<a class="hb-tag hb-tag--code" href="{{ it.doc }}">자료 ↗</a>{% else %}<span class="hb-tag hb-tag--dash">자료</span>{% endif %}
+        </span>
+      </div>
+      {% endfor %}
+      {% endfor %}
+    </div>
+    <p class="hb-muted hb-xs hb-note">점선 칸은 아직 링크가 없는 곳이에요. <code>data/{{ p.slug }}/parts.yml</code>에 구매 · 자료 주소를 적으면 버튼으로 바뀌어요.</p>
+  </section>
+  {% endif %}
+
+  {% if p.posts %}
+  <section class="hb-sec hb-sec--flat" aria-labelledby="h-rel">
+    <h2 id="h-rel" class="hb-h3">이 프로젝트 관련 글</h2>
+    {% for x in p.posts %}
+    <a class="hb-row" href="{{ base_url }}/{{ x.url }}"><span class="hb-mono hb-muted hb-xs">{{ x.date_str }}</span><b>{{ x.title }}</b><span class="hb-muted hb-small">{{ x.excerpt }}</span></a>
+    {% endfor %}
+  </section>
+  {% endif %}
+
+  {{ ui.footer_links() }}
+</div>
+{% endblock %}

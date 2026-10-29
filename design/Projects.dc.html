@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>모든 프로젝트</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&amp;family=Noto+Sans+KR:wght@400;500;700;800&amp;display=swap">
+<style>
+body{margin:0}
+a{color:inherit;text-decoration:none}
+a:hover{text-decoration:underline;text-underline-offset:3px}
+button{font:inherit}
+</style>
+</helmet>
+<div style="min-height: 100vh; background: {{t.bg}}; color: {{t.text}}; font-family: 'Noto Sans KR', system-ui, sans-serif; font-size: 16px; line-height: 1.6">
+
+<header style="border-bottom: 1px solid {{t.line}}">
+<div style="max-width: 1120px; margin: 0 auto; padding: 0 24px; min-height: 64px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 24px">
+<a href="Gallery.dc.html" style="display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 16px"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="{{t.copper}}" stroke-width="1.8" aria-hidden="true"><rect x="6" y="6" width="12" height="12" rx="1.5"></rect><path d="M9 2v4M15 2v4M9 18v4M15 18v4M2 9h4M2 15h4M18 9h4M18 15h4"></path></svg><span>펌웨어 작업실</span></a>
+<nav aria-label="주 메뉴" style="display: flex; flex-wrap: wrap; gap: 2px; font-size: 15px; font-weight: 500; color: {{t.muted}}">
+<a href="Projects.dc.html" aria-current="page" style="padding: 10px 12px; color: {{t.text}}; font-weight: 700">프로젝트</a>
+<a href="Tags.dc.html" style="padding: 10px 12px">다루는 것</a>
+<a href="Parts.dc.html" style="padding: 10px 12px">부품</a>
+<a href="Blog.dc.html" style="padding: 10px 12px">블로그</a>
+<a href="About.dc.html" style="padding: 10px 12px">소개</a>
+</nav>
+</div>
+</header>
+
+<main style="max-width: 1120px; margin: 0 auto; padding: 56px 24px 72px">
+<p style="margin: 0 0 8px; font-size: 14px; color: {{t.muted}}"><a href="Gallery.dc.html">홈</a> / 프로젝트</p>
+<h1 style="margin: 0 0 6px; font-size: 40px; line-height: 1.2; font-weight: 800; letter-spacing: -0.02em">모든 프로젝트</h1>
+<p style="margin: 0 0 28px; font-size: 17px; color: {{t.muted}}">프로젝트마다 영상 여러 편과 회차별 문서·코드가 묶여 있어요.</p>
+
+<div role="group" aria-label="상태로 거르기" style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 26px">
+<sc-for list="{{filters}}" as="f" hint-placeholder-count="4">
+<button type="button" onClick="{{f.pick}}" aria-pressed="{{f.on}}" style="{{f.style}}">{{f.label}} <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; opacity: 0.8">{{f.count}}</span></button>
+</sc-for>
+</div>
+
+<sc-if value="{{empty}}" hint-placeholder-val="{{ false }}">
+<div style="padding: 48px 24px; border-radius: 14px; border: 1.5px dashed {{t.line}}; text-align: center; color: {{t.muted}}">아직 이 상태의 프로젝트가 없어요.</div>
+</sc-if>
+
+<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 420px), 1fr)); gap: 22px">
+<sc-for list="{{shown}}" as="p" hint-placeholder-count="2">
+<article style="display: flex; flex-direction: column; border-radius: 14px; overflow: hidden; background: {{t.surface}}; border: 1px solid {{p.edge}}">
+<sc-if value="{{p.hasImg}}" hint-placeholder-val="{{ true }}">
+<a href="{{p.href}}" aria-label="{{p.name}} 열기"><img src="/_blob/4cad174a4bc1549ab2bc7355b354505c" alt="STM32 시험대 두 장을 나란히 놓은 배선도 렌더링" style="display: block; width: 100%; aspect-ratio: 16 / 10; object-fit: cover"></a>
+</sc-if>
+<sc-if value="{{p.noImg}}" hint-placeholder-val="{{ false }}">
+<div style="aspect-ratio: 16 / 10; display: flex; align-items: center; justify-content: center; background: {{t.ph}}; color: {{t.muted}}; font-size: 14px">사진 준비 중</div>
+</sc-if>
+<div style="padding: 20px 22px 18px; display: flex; flex-direction: column; gap: 12px; flex: 1">
+<span style="{{p.pill}}">{{p.status}}</span>
+<h2 style="margin: 0; font-size: 21px; line-height: 1.35; font-weight: 800">{{p.name}}</h2>
+<p style="margin: 0; font-size: 15px; color: {{t.muted}}">{{p.summary}}</p>
+<p style="margin: 0; font-family: 'JetBrains Mono', monospace; font-size: 12px; color: {{t.muted}}">{{p.tags}}</p>
+<div style="display: flex; justify-content: space-between; gap: 12px; margin-top: auto; padding-top: 14px; border-top: 1px solid {{t.line}}; font-family: 'JetBrains Mono', monospace; font-size: 12px; color: {{t.muted}}">
+<span>{{p.updated}}</span><span>{{p.eps}}</span>
+</div>
+</div>
+</article>
+</sc-for>
+</div>
+</main>
+
+<footer style="border-top: 1px solid {{t.line}}">
+<div style="max-width: 1120px; margin: 0 auto; padding: 8px 24px; display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 0 4px; font-size: 13px; color: {{t.muted}}">
+<a href="https://github.com/USERNAME" style="display: inline-flex; align-items: center; gap: 6px; min-height: 44px; padding: 0 10px"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M8 7l-5 5 5 5M16 7l5 5-5 5"></path></svg>GitHub</a>
+<a href="https://www.youtube.com/" style="display: inline-flex; align-items: center; gap: 6px; min-height: 44px; padding: 0 10px"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M7 4l13 8-13 8z"></path></svg>유튜브</a>
+<a href="mailto:" style="display: inline-flex; align-items: center; gap: 6px; min-height: 44px; padding: 0 10px"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"></rect><path d="M3 7l9 6 9-6"></path></svg>이메일</a>
+</div>
+</footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"dark":{"editor":"boolean","default":true},"$preview":{"width":1280,"height":1500}}'>
+class Component extends DCLogic {
+constructor(props) { super(props); this.state = { sel: 'all' }; }
+renderVals() {
+const dark = this.props.dark ?? true;
+const t = dark ? {
+bg: '#0E182B', surface: '#15223A', line: '#283A5A', edge: 'rgba(208,138,82,0.45)', text: '#ECEFF5', muted: '#A4B1C7', copper: '#D08A52', copperText: '#E5A36E', ph: '#1B2B48',
+wipBg: '#3A2716', wipFg: '#F0B47F', todoBg: '#22324F', todoFg: '#B4C2D9', onBg: '#D08A52', onFg: '#1C1107'
+} : {
+bg: '#F4F5F7', surface: '#FFFFFF', line: '#DCE0E7', edge: 'rgba(181,103,47,0.45)', text: '#13213D', muted: '#535E76', copper: '#C8834D', copperText: '#93501E', ph: '#E9ECF1',
+wipBg: '#F6E8DA', wipFg: '#874716', todoBg: '#E7EBF2', todoFg: '#445069', onBg: '#C8834D', onFg: '#1C1107'
+};
+const pillBase = 'align-self: flex-start; font-size: 12px; font-weight: 700; padding: 3px 11px; border-radius: 999px; ';
+const all = [
+{ key: 'wip', name: 'STM32 서명 OTA 시험대', status: '진행 중', summary: '현장 로그 → 연구소 재현 → 서명 OTA까지, 영상 보며 따라 하는 펌웨어 보안 프로젝트', tags: 'STM32 · CAN · OTA · 보안 · HIL', updated: '2026.10.29 업데이트', eps: '영상 3편 (예정)', href: 'Project.dc.html', hasImg: true },
+{ key: 'todo', name: '[다음 프로젝트 이름]', status: '준비 중', summary: 'projects.yml에 항목을 추가하면 이 자리에 카드가 생겨요.', tags: '—', updated: '—', eps: '0편', href: 'Projects.dc.html', hasImg: false }
+];
+const defs = [['all', '전체'], ['wip', '진행 중'], ['todo', '준비 중'], ['done', '완료']];
+const sel = this.state.sel;
+const filters = defs.map(([key, label]) => {
+const on = sel === key;
+return {
+label, on,
+count: key === 'all' ? all.length : all.filter(p => p.key === key).length,
+pick: () => this.setState({ sel: key }),
+style: 'cursor: pointer; min-height: 40px; padding: 0 16px; border-radius: 999px; font-size: 14px; font-weight: 700; border: 1px solid ' + (on ? t.onBg : t.line) + '; background: ' + (on ? t.onBg : t.surface) + '; color: ' + (on ? t.onFg : t.text)
+};
+});
+const shown = all.filter(p => sel === 'all' || p.key === sel).map(p => ({
+...p, noImg: !p.hasImg,
+edge: p.key === 'wip' ? t.edge : t.line,
+pill: pillBase + (p.key === 'wip' ? 'background: ' + t.wipBg + '; color: ' + t.wipFg : 'background: ' + t.todoBg + '; color: ' + t.todoFg)
+}));
+return { t, filters, shown, empty: shown.length === 0 };
+}
+}
+</script>
+</body>
+</html>

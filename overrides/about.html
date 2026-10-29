@@ -1,0 +1,27 @@
+{% extends "main.html" %}
+{% import "partials/hb.html" as ui with context %}
+{% block content %}
+<div class="hb hb-aboutpage">
+  {{ ui.crumbs([["홈", ""], ["소개", none]]) }}
+  <h1 class="hb-h1 hb-h1--page">소개</h1>
+  <p class="hb-lead hb-lead--page">{{ page.meta.intro }}</p>
+
+  <section class="hb-sec hb-sec--flat" aria-labelledby="h-focus">
+    <h2 id="h-focus" class="hb-h3">지금 집중하는 것</h2>
+    <div class="hb-grid hb-grid--240">
+      {% for f in page.meta.focus or [] %}
+      <a class="hb-focus" href="{{ base_url }}/tags/#{{ f.tag | urlencode }}"><span class="hb-mono hb-copper hb-xs">{{ f.k }}</span><b>{{ f.v }}</b></a>
+      {% endfor %}
+    </div>
+  </section>
+
+  <section class="hb-sec hb-sec--flat" aria-labelledby="h-site">
+    <h2 id="h-site" class="hb-h3">이 사이트 보는 법</h2>
+    <p class="hb-muted">프로젝트 하나에 영상이 여러 편 이어져요. <a class="hb-copper hb-b" href="{{ base_url }}/projects/">프로젝트</a>에서 하나를 골라 1화부터 따라 하거나, <a class="hb-copper hb-b" href="{{ base_url }}/tags/">다루는 것</a>에서 궁금한 기술만 골라 보세요.</p>
+  </section>
+
+  {% if page.content and page.content | trim %}<div class="hb-prose md-typeset">{{ page.content }}</div>{% endif %}
+
+  {{ ui.footer_links() }}
+</div>
+{% endblock %}

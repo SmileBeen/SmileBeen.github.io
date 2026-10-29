@@ -1,0 +1,54 @@
+{% extends "main.html" %}
+{% import "partials/hb.html" as ui with context %}
+{% block content %}
+<div class="hb">
+  {{ ui.crumbs([["홈", ""], ["다루는 것", none]]) }}
+  <h1 class="hb-h1 hb-h1--page">다루는 것</h1>
+  <p class="hb-lead hb-lead--page">기술을 누르면 그 기술이 나오는 영상과 글이 모여요.</p>
+
+  <div class="hb-taggroups" id="hb-tagpick">
+    {% for g in hb.groups %}
+    <div class="hb-taggroup">
+      <p class="hb-mono hb-muted hb-label">{{ g.label }}</p>
+      <div class="hb-chips">
+        {% for name in g["items"] %}{% set tg = hb.tags | selectattr("name", "equalto", name) | first %}
+        <button type="button" class="hb-tagbtn{% if not tg.count %} hb-tagbtn--empty{% endif %}" data-tag="{{ name }}" aria-pressed="false">{{ name }} <span class="hb-mono">{{ tg.count }}</span></button>
+        {% endfor %}
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+  {% for tg in hb.tags %}
+  <section class="hb-tagpanel" data-tag="{{ tg.name }}" hidden>
+    <div class="hb-tagpanel__head">
+      <h2 class="hb-h2"><span class="hb-copper">#</span>{{ tg.name }}</h2>
+      <span class="hb-mono hb-muted hb-small">영상 {{ tg.videos | length }} · 글 {{ tg.posts | length }} · 프로젝트 {{ tg.projects | length }}</span>
+    </div>
+    <div class="hb-tagpanel__grid">
+      <section>
+        <h3 class="hb-h3">관련 영상</h3>
+        {% for v in tg.videos %}
+        <a class="hb-vrow" href="{{ base_url }}/projects/{{ v.project.slug }}/{{ v.ep.id }}/">
+          <span class="hb-vrow__thumb">{{ ui.play_icon(22) }}</span>
+          <span class="hb-vrow__body"><span class="hb-mono hb-muted hb-xs">{{ v.project.name }} · {{ v.ep.n }}화</span><b>{{ v.ep.title }}</b>{{ ui.pill(v.ep.status, v.ep.status_key) }}</span>
+        </a>
+        {% else %}<div class="hb-empty">아직 이 기술이 나오는 영상이 없어요.</div>{% endfor %}
+      </section>
+      <aside>
+        <h3 class="hb-h3">관련 글</h3>
+        {% for x in tg.posts %}
+        <a class="hb-row" href="{{ base_url }}/{{ x.url }}"><span class="hb-mono hb-muted hb-xs">{{ x.date_str }}</span><b>{{ x.title }}</b></a>
+        {% else %}<div class="hb-empty hb-empty--sm">아직 관련 글이 없어요.</div>{% endfor %}
+        <h3 class="hb-h3 hb-mt">관련 프로젝트</h3>
+        {% for pr in tg.projects %}
+        <a class="hb-row hb-row--proj" href="{{ ui.project_link(pr) }}">{{ ui.image(pr, "hb-row__img") }}<span><b>{{ pr.name }}</b>{{ ui.pill(pr.status, pr.status_key) }}</span></a>
+        {% else %}<div class="hb-empty hb-empty--sm">아직 관련 프로젝트가 없어요.</div>{% endfor %}
+      </aside>
+    </div>
+  </section>
+  {% endfor %}
+
+  {{ ui.footer_links() }}
+</div>
+{% endblock %}

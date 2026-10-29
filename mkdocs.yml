@@ -1,0 +1,72 @@
+site_name: 펌웨어 작업실
+site_description: 임베디드 펌웨어, 통신, OTA·디바이스 보안 프로젝트 모음
+site_url: https://smilebeen.github.io/      # ← 본인 아이디로 바꾸기
+repo_url: https://github.com/SmileBeen/SmileBeen.github.io
+
+extra:
+  # 사이트 전체에서 쓰는 내 정보 (홈·푸터·회차 페이지 링크)
+  github_user: SmileBeen
+  youtube: https://www.youtube.com/
+  email: ""                # 공개할 주소. 비워 두면 이메일 버튼이 안 보여요
+  generator: false         # 맨 아래 "Made with" 줄 숨김
+
+theme:
+  name: material
+  custom_dir: overrides
+  language: ko
+  font:
+    text: Noto Sans KR
+    code: JetBrains Mono
+  features:
+    - navigation.tabs
+    - navigation.top
+    - content.code.copy
+  palette:
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: custom
+      accent: custom
+      toggle: { icon: material/weather-sunny, name: 밝은 화면 }
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: custom
+      accent: custom
+      toggle: { icon: material/weather-night, name: 어두운 화면 }
+
+hooks:
+  - hooks/projects.py        # data/ · projects.yml → 프로젝트·회차·태그·부품 페이지 생성
+
+plugins:
+  - search
+  - blog:
+      blog_dir: blog
+      post_url_format: "{date}/{slug}"
+      archive: false
+      categories: false
+
+extra_css:
+  - stylesheets/extra.css
+extra_javascript:
+  - javascripts/extra.js
+
+markdown_extensions:
+  - admonition
+  - attr_list
+  - md_in_html
+  - tables
+  - toc: { permalink: true }
+  - pymdownx.details
+  - pymdownx.highlight
+  - pymdownx.superfences
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+
+nav:
+  - 홈: index.md
+  - 프로젝트: projects/index.md      # 자동 생성
+  - 다루는 것: tags/index.md         # 자동 생성
+  - 부품: parts/index.md             # 자동 생성
+  - 블로그:
+      - blog/index.md
+  - 소개: about.md

@@ -1,0 +1,63 @@
+{% extends "main.html" %}
+{% import "partials/hb.html" as ui with context %}
+{% set p = hb_project %}
+{% set e = hb_ep %}
+{% block content %}
+<div class="hb">
+  {{ ui.crumbs([["홈", ""], [p.name, "projects/" ~ p.slug ~ "/"], [e.n ~ "화", none]]) }}
+  <div class="hb-epwrap">
+    <article class="hb-epmain">
+      {% if e.video %}
+      <a class="hb-video" href="{{ e.video }}">{{ ui.play_icon(40) }}<span>유튜브에서 보기</span></a>
+      {% else %}
+      <div class="hb-video hb-video--off">{{ ui.play_icon(40) }}<span>영상 공개 전 · 유튜브 영상이 여기에 들어가요</span></div>
+      {% endif %}
+
+      <p class="hb-mono hb-muted hb-small">{{ e.n }}화 / {{ p.eps | length }} · 코드 태그 {{ e.code_tag }}{% if e.length %} · {{ e.length }}{% endif %} · {{ e.status }}</p>
+      <h1 class="hb-h1 hb-h1--ep">{{ e.title }}</h1>
+      <div class="hb-chips">{% for t in e.tags %}<a class="hb-chip hb-chip--round" href="{{ base_url }}/tags/#{{ t | urlencode }}">{{ t }}</a>{% endfor %}</div>
+
+      <div class="hb-prose md-typeset">{{ page.content }}</div>
+
+      <section class="hb-prose" aria-labelledby="h-code">
+        <h2 id="h-code">이 회차 코드 받기</h2>
+<pre class="hb-term"><span>$</span> git clone https://github.com/{{ hb.user }}/{{ p.repo }}
+<span>$</span> cd {{ p.repo }}
+<span>$</span> git checkout {{ e.code_tag }}-start   <span class="hb-term__c"># 정답은 {{ e.code_tag }}-end</span></pre>
+        {% if p.site and e.doc %}<p class="hb-small"><a class="hb-copper hb-b" href="{{ p.site }}{{ e.doc }}">자세한 따라 하기 문서 →</a></p>{% endif %}
+      </section>
+
+      <section class="hb-prose" aria-labelledby="h-ai">
+        <h2 id="h-ai">AI가 처음 제안한 것 / 내가 바꾼 것</h2>
+        <div class="hb-ai">
+          <div><p class="hb-ai__k">AI 제안</p><p class="{% if not e.ai_first %}hb-muted{% endif %}">{{ e.ai_first or "촬영 후 처음 받은 답과 코드 요약을 적어요." }}</p></div>
+          <div><p class="hb-ai__k">내가 바꾼 것 · 왜</p><p class="{% if not e.ai_changed %}hb-muted{% endif %}">{{ e.ai_changed or "바꾼 내용과 근거(데이터시트 · 측정값)를 적어요." }}</p></div>
+        </div>
+      </section>
+
+      {% if p.repo_url %}
+      <div class="hb-ask">
+        <span><b>막혔나요?</b> <span class="hb-muted">어디서 멈췄는지 로그와 함께 남겨 주세요.</span></span>
+        <a class="hb-btn hb-btn--sm" href="{{ p.repo_url }}/discussions">질문 게시판</a>
+      </div>
+      {% endif %}
+
+      <div class="hb-pager">
+        {% if hb_prev %}<a class="hb-btn" href="../{{ hb_prev.id }}/">← 이전 회차</a>{% else %}<span class="hb-btn hb-btn--off">← 이전 회차</span>{% endif %}
+        {% if hb_next %}<a class="hb-btn" href="../{{ hb_next.id }}/">다음 회차 →</a>{% else %}<span class="hb-btn hb-btn--off">다음 회차 →</span>{% endif %}
+      </div>
+    </article>
+
+    <aside class="hb-eplist" aria-label="회차 목록">
+      <a class="hb-copper hb-small hb-b" href="../">← 프로젝트로</a>
+      <b>{{ p.name }}</b>
+      <nav>
+        {% for x in p.eps %}
+        <a href="../{{ x.id }}/"{% if x.n == e.n %} aria-current="step"{% endif %}><span class="hb-mono">{{ x.n }}화</span><span>{{ x.short }}</span></a>
+        {% endfor %}
+      </nav>
+    </aside>
+  </div>
+  {{ ui.footer_links() }}
+</div>
+{% endblock %}

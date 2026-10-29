@@ -1,0 +1,229 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>펌웨어 작업실 — 솔더마스크 보드</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&amp;family=IBM+Plex+Sans+KR:wght@400;500;600;700&amp;display=swap">
+<style>
+body{margin:0}
+a{color:inherit;text-decoration:none}
+a:hover{text-decoration:underline}
+</style>
+</helmet>
+<div style="min-height: 100vh; background: {{t.bg}}; color: {{t.text}}; font-family: 'IBM Plex Sans KR', system-ui, sans-serif; font-size: 16px; line-height: 1.6">
+
+<header style="border-bottom: 1px solid {{t.line}}">
+<nav aria-label="주 메뉴" style="max-width: 1160px; margin: 0 auto; padding: 0 24px; min-height: 64px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 24px">
+<a href="#top" style="display: flex; align-items: center; gap: 10px; font-weight: 600; font-size: 15px">
+<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="{{t.copper}}" stroke-width="1.8" aria-hidden="true"><rect x="6" y="6" width="12" height="12" rx="1.5"></rect><path d="M9 2v4M15 2v4M9 18v4M15 18v4M2 9h4M2 15h4M18 9h4M18 15h4"></path></svg>
+<span>펌웨어 작업실</span>
+</a>
+<div style="display: flex; flex-wrap: wrap; gap: 4px; font-size: 14px; color: {{t.muted}}">
+<a href="#projects" style="padding: 10px 12px">프로젝트</a>
+<a href="#posts" style="padding: 10px 12px">블로그</a>
+<a href="about/" style="padding: 10px 12px">소개</a>
+</div>
+</nav>
+</header>
+
+<main id="top" style="max-width: 1160px; margin: 0 auto; padding: 0 24px">
+
+<section style="display: flex; flex-wrap: wrap; align-items: center; gap: 40px 56px; padding: 72px 0 64px">
+<div style="flex: 1 1 440px; min-width: 0">
+<p style="margin: 0 0 20px; font-family: 'IBM Plex Mono', monospace; font-size: 13px; letter-spacing: 0.08em; color: {{t.copperText}}">REV A · EMBEDDED FIRMWARE LAB</p>
+<h1 style="margin: 0 0 20px; font-size: clamp(40px, 6vw, 68px); line-height: 1.12; font-weight: 700; letter-spacing: -0.02em">펌웨어 작업실</h1>
+<p style="margin: 0 0 32px; font-size: 18px; color: {{t.muted}}; max-width: 34em">현장 장비 펌웨어를 만드는 임베디드 개발자예요. 통신, 원격 업데이트(OTA), 디바이스 보안을 직접 만들어 보면서 과정을 영상과 문서로 남겨요.</p>
+<div style="display: flex; flex-wrap: wrap; gap: 12px">
+<a href="https://www.youtube.com/" style="display: inline-flex; align-items: center; gap: 8px; min-height: 48px; padding: 0 22px; border-radius: 8px; background: {{t.copper}}; color: {{t.onCopper}}; font-weight: 600">
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="4"></rect><path d="M10 9l5 3-5 3z"></path></svg>유튜브</a>
+<a href="https://github.com/USERNAME" style="display: inline-flex; align-items: center; gap: 8px; min-height: 48px; padding: 0 22px; border-radius: 8px; border: 1px solid {{t.line}}; background: {{t.surface}}; font-weight: 600">
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M8 7l-5 5 5 5M16 7l5 5-5 5"></path></svg>GitHub</a>
+<a href="about/" style="display: inline-flex; align-items: center; gap: 8px; min-height: 48px; padding: 0 22px; border-radius: 8px; border: 1px solid {{t.line}}; background: {{t.surface}}; font-weight: 600">소개</a>
+</div>
+<p style="margin: 28px 0 0; font-size: 14px; color: {{t.muted}}"><span style="color: {{t.copperText}}; font-weight: 600">지금 집중하는 것</span> — 서명 검증 부트로더 · A/B OTA · 기기 인증서/TLS · HIL 자동 시험</p>
+</div>
+
+<div style="flex: 1 1 420px; min-width: 0">
+<svg viewBox="0 0 480 360" style="display: block; width: 100%; height: auto" aria-hidden="true">
+<rect x="6" y="6" width="468" height="348" rx="20" fill="{{t.board}}" stroke="{{t.boardEdge}}" stroke-width="2"></rect>
+<circle cx="34" cy="34" r="9" fill="none" stroke="{{t.copper}}" stroke-width="4"></circle>
+<circle cx="446" cy="34" r="9" fill="none" stroke="{{t.copper}}" stroke-width="4"></circle>
+<circle cx="34" cy="326" r="9" fill="none" stroke="{{t.copper}}" stroke-width="4"></circle>
+<circle cx="446" cy="326" r="9" fill="none" stroke="{{t.copper}}" stroke-width="4"></circle>
+<g fill="none" stroke="{{t.copper}}" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+<path d="M170 141 H118 L98 121 H70"></path>
+<path d="M170 161 H90 L80 151 H70"></path>
+<path d="M170 181 H70"></path>
+<path d="M310 141 H356 L386 111 H410"></path>
+<path d="M310 161 H376 L396 141 H410"></path>
+<path d="M310 181 H366 L376 171 H410"></path>
+<path d="M201 250 V300"></path>
+<path d="M241 250 V300"></path>
+<path d="M281 250 V300"></path>
+<path d="M221 110 V76 L241 56 H332"></path>
+<path d="M261 110 V90 L271 80 H300 L320 100 H392 V180" opacity="0.55"></path>
+<path d="M170 221 H140 L120 241 V280 H150" opacity="0.55"></path>
+</g>
+<g fill="{{t.copper}}">
+<circle cx="70" cy="121" r="8"></circle><circle cx="70" cy="151" r="8"></circle><circle cx="70" cy="181" r="8"></circle>
+<circle cx="410" cy="111" r="8"></circle><circle cx="410" cy="141" r="8"></circle><circle cx="410" cy="171" r="8"></circle>
+<rect x="193" y="296" width="16" height="22" rx="2"></rect><rect x="233" y="296" width="16" height="22" rx="2"></rect><rect x="273" y="296" width="16" height="22" rx="2"></rect>
+<circle cx="392" cy="180" r="5"></circle><circle cx="150" cy="280" r="5"></circle><circle cx="98" cy="121" r="3.5"></circle><circle cx="386" cy="111" r="3.5"></circle>
+</g>
+<g fill="{{t.copper}}">
+<rect x="166" y="136" width="14" height="6"></rect><rect x="166" y="156" width="14" height="6"></rect><rect x="166" y="176" width="14" height="6"></rect><rect x="166" y="196" width="14" height="6"></rect><rect x="166" y="216" width="14" height="6"></rect>
+<rect x="300" y="136" width="14" height="6"></rect><rect x="300" y="156" width="14" height="6"></rect><rect x="300" y="176" width="14" height="6"></rect><rect x="300" y="196" width="14" height="6"></rect><rect x="300" y="216" width="14" height="6"></rect>
+<rect x="198" y="106" width="6" height="14"></rect><rect x="218" y="106" width="6" height="14"></rect><rect x="238" y="106" width="6" height="14"></rect><rect x="258" y="106" width="6" height="14"></rect><rect x="278" y="106" width="6" height="14"></rect>
+<rect x="198" y="240" width="6" height="14"></rect><rect x="218" y="240" width="6" height="14"></rect><rect x="238" y="240" width="6" height="14"></rect><rect x="258" y="240" width="6" height="14"></rect><rect x="278" y="240" width="6" height="14"></rect>
+</g>
+<rect x="178" y="118" width="124" height="124" rx="6" fill="#0A0E16"></rect>
+<circle cx="194" cy="134" r="4" fill="#2A3240"></circle>
+<g fill="none" stroke="{{t.silk}}" stroke-width="1.5">
+<rect x="50" y="100" width="40" height="102" rx="3"></rect>
+<rect x="390" y="90" width="40" height="102" rx="3"></rect>
+<rect x="182" y="290" width="118" height="34" rx="3"></rect>
+<rect x="336" y="46" width="26" height="20" rx="2"></rect>
+</g>
+<rect x="342" y="51" width="14" height="10" rx="2" fill="{{t.copper}}"></rect>
+<g font-family="IBM Plex Mono, monospace" font-size="12" fill="{{t.silk}}" letter-spacing="1">
+<text x="210" y="186" font-size="15" fill="#C9CED8">STM32</text>
+<text x="178" y="98">U1</text>
+<text x="50" y="222">J1 CAN</text>
+<text x="380" y="214">J2 LTE</text>
+<text x="200" y="342">J3 RS-232</text>
+<text x="368" y="61">D1</text>
+<text x="30" y="72" font-size="10" opacity="0.7">FW-LAB REV A</text>
+</g>
+</svg>
+</div>
+</section>
+
+<section aria-labelledby="h-stack" style="padding: 48px 0; border-top: 1px solid {{t.line}}">
+<div style="display: flex; align-items: center; gap: 14px; margin-bottom: 28px">
+<span style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; font-weight: 600; padding: 4px 10px; border: 1.5px solid {{t.copper}}; border-radius: 4px; color: {{t.copperText}}">J1</span>
+<h2 id="h-stack" style="margin: 0; font-size: 26px; font-weight: 700">다루는 것</h2>
+</div>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px">
+<sc-for list="{{groups}}" as="g" hint-placeholder-count="3">
+<div style="padding: 22px; border-radius: 12px; background: {{t.surface}}; border: 1px solid {{t.line}}">
+<p style="margin: 0 0 14px; font-family: 'IBM Plex Mono', monospace; font-size: 13px; letter-spacing: 0.06em; color: {{t.muted}}">{{g.label}}</p>
+<div style="display: flex; flex-wrap: wrap; gap: 8px">
+<sc-for list="{{g.items}}" as="it" hint-placeholder-count="4">
+<span style="display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; border-radius: 6px; background: {{t.surface2}}; font-size: 14px; font-weight: 500"><span style="width: 8px; height: 8px; border-radius: 2px; background: {{t.copper}}"></span>{{it}}</span>
+</sc-for>
+</div>
+</div>
+</sc-for>
+</div>
+</section>
+
+<section id="projects" aria-labelledby="h-proj" style="padding: 48px 0; border-top: 1px solid {{t.line}}">
+<div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 28px">
+<div style="display: flex; align-items: center; gap: 14px">
+<span style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; font-weight: 600; padding: 4px 10px; border: 1.5px solid {{t.copper}}; border-radius: 4px; color: {{t.copperText}}">J2</span>
+<h2 id="h-proj" style="margin: 0; font-size: 26px; font-weight: 700">대표 프로젝트</h2>
+</div>
+<a href="projects/" style="display: inline-flex; align-items: center; min-height: 44px; font-size: 15px; font-weight: 600; color: {{t.copperText}}">모든 프로젝트 →</a>
+</div>
+
+<article style="display: flex; flex-wrap: wrap; border-radius: 16px; overflow: hidden; background: {{t.surface}}; border: 1px solid {{t.line}}">
+<div style="flex: 1 1 520px; min-width: 0; padding: 16px; background: {{t.surface2}}">
+<img src="/_blob/4cad174a4bc1549ab2bc7355b354505c" alt="STM32 시험대 두 장을 나란히 놓은 배선도 렌더링" style="display: block; width: 100%; aspect-ratio: 16 / 10; object-fit: cover; border-radius: 8px">
+</div>
+<div style="flex: 1 1 340px; min-width: 0; padding: 32px; display: flex; flex-direction: column; gap: 16px">
+<span style="align-self: flex-start; display: inline-flex; align-items: center; gap: 8px; padding: 4px 12px; border-radius: 999px; font-size: 13px; font-weight: 600; background: {{t.wipBg}}; color: {{t.wipFg}}"><span style="width: 8px; height: 8px; border-radius: 50%; background: {{t.wipFg}}"></span>진행 중</span>
+<h3 style="margin: 0; font-size: 26px; line-height: 1.3; font-weight: 700">STM32 서명 OTA 시험대</h3>
+<p style="margin: 0; color: {{t.muted}}">현장 로그 → 연구소 재현 → 서명 OTA까지, 영상 보며 따라 하는 펌웨어 보안 프로젝트</p>
+<div style="display: flex; flex-wrap: wrap; gap: 6px">
+<sc-for list="{{ptags}}" as="tg" hint-placeholder-count="5">
+<span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; padding: 3px 9px; border-radius: 4px; border: 1px solid {{t.line}}; color: {{t.muted}}">{{tg}}</span>
+</sc-for>
+</div>
+<div style="margin-top: auto; padding-top: 12px; display: flex; flex-wrap: wrap; gap: 10px">
+<a href="/stm32-ota-bench/" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 18px; border-radius: 8px; background: {{t.copper}}; color: {{t.onCopper}}; font-weight: 600; font-size: 15px">따라 하기 사이트</a>
+<a href="https://github.com/USERNAME/stm32-ota-bench" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 18px; border-radius: 8px; border: 1px solid {{t.line}}; font-weight: 600; font-size: 15px">코드</a>
+<span style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 6px; font-size: 14px; color: {{t.muted}}">영상 준비 중</span>
+</div>
+</div>
+</article>
+
+<div style="margin-top: 16px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; padding: 22px 26px; border-radius: 12px; border: 1.5px dashed {{t.line}}">
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px">
+<span style="padding: 4px 12px; border-radius: 999px; font-size: 13px; font-weight: 600; background: {{t.surface2}}; color: {{t.muted}}">준비 중</span>
+<b style="font-size: 17px">[다음 프로젝트 이름]</b>
+</div>
+<span style="font-size: 14px; color: {{t.muted}}">projects.yml에 항목을 추가하면 여기에 카드가 생겨요</span>
+</div>
+</section>
+
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 0 48px; border-top: 1px solid {{t.line}}">
+<section id="posts" aria-labelledby="h-posts" style="padding: 48px 0">
+<div style="display: flex; align-items: center; gap: 14px; margin-bottom: 24px">
+<span style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; font-weight: 600; padding: 4px 10px; border: 1.5px solid {{t.copper}}; border-radius: 4px; color: {{t.copperText}}">J3</span>
+<h2 id="h-posts" style="margin: 0; font-size: 26px; font-weight: 700">최근 글</h2>
+</div>
+<a href="blog/2026/10/29/workspace/" style="display: flex; gap: 20px; align-items: baseline; padding: 18px 0; border-bottom: 1px solid {{t.line}}">
+<span style="flex: none; font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: {{t.muted}}">2026.10.29</span>
+<span style="display: flex; flex-direction: column; gap: 4px"><b style="font-size: 17px">작업실을 꾸렸어요</b><span style="font-size: 14px; color: {{t.muted}}">2.4m 방에 흰 책상 하나를 벽에 붙이고, 가운데를 시험대 자리로 비웠어요.</span></span>
+</a>
+<a href="blog/" style="display: inline-flex; align-items: center; min-height: 44px; margin-top: 12px; font-size: 15px; font-weight: 600; color: {{t.copperText}}">블로그 전체 →</a>
+</section>
+
+<section aria-labelledby="h-follow" style="padding: 48px 0">
+<div style="display: flex; align-items: center; gap: 14px; margin-bottom: 24px">
+<span style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; font-weight: 600; padding: 4px 10px; border: 1.5px solid {{t.copper}}; border-radius: 4px; color: {{t.copperText}}">J4</span>
+<h2 id="h-follow" style="margin: 0; font-size: 26px; font-weight: 700">따라 하기</h2>
+</div>
+<p style="margin: 0; color: {{t.muted}}">각 프로젝트는 회차별 문서와 코드 태그가 있어서 영상을 보며 그대로 따라 할 수 있어요. 막히면 프로젝트 레포의 질문 게시판에 남겨 주세요.</p>
+</section>
+</div>
+
+</main>
+
+<footer id="contact" style="border-top: 1px solid {{t.line}}; margin-top: 24px">
+<div style="max-width: 1160px; margin: 0 auto; padding: 12px 24px; display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 0 4px; font-size: 13px; color: {{t.muted}}">
+<a href="https://github.com/USERNAME" style="display: inline-flex; align-items: center; gap: 6px; min-height: 44px; padding: 0 10px"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M8 7l-5 5 5 5M16 7l5 5-5 5"></path></svg>GitHub</a>
+<a href="https://www.youtube.com/" style="display: inline-flex; align-items: center; gap: 6px; min-height: 44px; padding: 0 10px"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="4"></rect><path d="M10 9l5 3-5 3z"></path></svg>유튜브</a>
+<a href="mailto:" style="display: inline-flex; align-items: center; gap: 6px; min-height: 44px; padding: 0 10px"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"></rect><path d="M3 7l9 6 9-6"></path></svg>이메일</a>
+</div>
+</footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"dark":{"editor":"boolean","default":true},"$preview":{"width":1280,"height":2150}}'>
+class Component extends DCLogic {
+renderVals() {
+const dark = this.props.dark ?? true;
+const t = dark ? {
+bg: '#0D1830', surface: '#13223F', surface2: '#1A2C4E', line: '#2B4068', text: '#E9EDF4', muted: '#A2B0C8',
+copper: '#D08A52', copperText: '#E5A36E', onCopper: '#1C1107', board: '#15305A', boardEdge: '#2E4C7E', silk: '#E6E9EE',
+wipBg: '#3A2716', wipFg: '#F0B47F'
+} : {
+bg: '#F6F5F1', surface: '#FFFFFF', surface2: '#ECEDEA', line: '#D7DAE0', text: '#13213D', muted: '#545F78',
+copper: '#C8834D', copperText: '#93501E', onCopper: '#1C1107', board: '#17305A', boardEdge: '#0F2140', silk: '#E6E9EE',
+wipBg: '#F6E8DA', wipFg: '#874716'
+};
+return {
+t,
+groups: [
+{ label: '펌웨어', items: ['C/C++', 'STM32', '부트로더', 'mbedTLS'] },
+{ label: '통신', items: ['CAN/FDCAN', 'RS-232', 'LTE 모뎀'] },
+{ label: '시험 · 자동화', items: ['Python', 'pytest', 'GitHub Actions', 'HIL'] }
+],
+ptags: ['STM32', 'CAN', 'OTA', '보안', 'HIL'],
+pins: [
+{ n: 1, label: 'GitHub', value: 'github.com/USERNAME', href: 'https://github.com/USERNAME' },
+{ n: 2, label: '유튜브', value: '[채널 링크]', href: 'https://www.youtube.com/' },
+{ n: 3, label: '이메일', value: '[공개할 주소]', href: 'mailto:' }
+]
+};
+}
+}
+</script>
+</body>
+</html>
