@@ -4,24 +4,31 @@
 <div class="hb hb-aboutpage">
   {{ ui.crumbs([["홈", ""], ["소개", none]]) }}
   <h1 class="hb-h1 hb-h1--page">소개</h1>
-  <p class="hb-lead hb-lead--page">{{ page.meta.intro }}</p>
+  <div class="hb-lead hb-lead--page">{% for l in page.meta.intro or [] %}<p class="hb-about__p">{{ l }}</p>{% endfor %}</div>
 
   <section class="hb-sec hb-sec--flat" aria-labelledby="h-focus">
-    <h2 id="h-focus" class="hb-h3">지금 집중하는 것</h2>
+    <div class="hb-sec__head hb-sec__head--tight">
+      <h2 id="h-focus" class="hb-h3">지금 넓히는 영역</h2>
+      <a class="hb-more" href="{{ base_url }}/map/">로드맵에서 보기 →</a>
+    </div>
     <div class="hb-grid hb-grid--240">
       {% for f in page.meta.focus or [] %}
-      <a class="hb-focus" href="{{ base_url }}/tags/#{{ f.tag | urlencode }}"><span class="hb-mono hb-copper hb-xs">{{ f.k }}</span><b>{{ f.v }}</b></a>
+      <a class="hb-focus" href="{{ base_url }}/tags/#{{ f.tag | urlencode }}"><b>{{ f.k }}</b><span class="hb-muted hb-small">{{ f.v }}</span></a>
       {% endfor %}
     </div>
   </section>
 
   <section class="hb-sec hb-sec--flat" aria-labelledby="h-site">
-    <h2 id="h-site" class="hb-h3">이 사이트 보는 법</h2>
-    <p class="hb-muted">프로젝트 하나에 영상이 여러 편 이어져요. <a class="hb-copper hb-b" href="{{ base_url }}/projects/">프로젝트</a>에서 하나를 골라 1화부터 따라 하거나, <a class="hb-copper hb-b" href="{{ base_url }}/tags/">다루는 것</a>에서 궁금한 기술만 골라 보세요.</p>
+    <h2 id="h-site" class="hb-h3">이 사이트 쓰는 법</h2>
+    <ol class="rm-sel">
+      <li><span class="hb-num">1</span><span><b>홈</b><span class="hb-muted hb-small">로드맵에서 지금 어디를 채우고 있는지 본다</span></span></li>
+      <li><span class="hb-num">2</span><span><b>기초</b><span class="hb-muted hb-small">개발 환경을 갖추고 짧은 예제로 손을 푼다</span></span></li>
+      <li><span class="hb-num">3</span><span><b>프로젝트</b><span class="hb-muted hb-small">1화부터 영상과 문서를 보며 따라 만든다</span></span></li>
+      <li><span class="hb-num">4</span><span><b>질문</b><span class="hb-muted hb-small">막히면 프로젝트 레포의 질문 게시판에 남긴다</span></span></li>
+    </ol>
   </section>
 
   {% if page.content and page.content | trim %}<div class="hb-prose md-typeset">{{ page.content }}</div>{% endif %}
-
   {{ ui.footer_links() }}
 </div>
 {% endblock %}

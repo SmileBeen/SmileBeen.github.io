@@ -63,12 +63,11 @@ markdown_extensions:
       emoji_generator: !!python/name:material.extensions.emoji.to_svg
 
 nav:
-  - 홈: index.md
+  - 홈: index.md                     # 대시보드 (소개 · 진행 중 · 로드맵)
   - 프로젝트: projects/index.md      # 자동 생성
-  - 개발 환경: setup/index.md         # 자동 생성 (data/setup/_toc.yml)
-  - 예제: examples/index.md          # 자동 생성 (data/examples/)
-  - 다루는 것: tags/index.md         # 자동 생성
-  - 부품: parts/index.md             # 자동 생성
+  - 기초: basics/index.md            # 자동 생성 (개발 환경 + 예제)
   - 블로그:
       - blog/index.md
-  - 소개: about.md
+# 메뉴에 없는 페이지 (홈 · 맨 아래 줄에서 연결): 소개 about.md, 로드맵 /map/, 개발 환경 /setup/, 예제 /examples/, 다루는 것 /tags/, 부품 /parts/
+not_in_nav: |
+  about.md

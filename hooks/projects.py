@@ -392,6 +392,8 @@ def on_files(files, config):
     if HB.get("map"):
         files.append(_page(config, "map/index.md",
                            {"title": "다루는 영역", "template": "map.html", "hide": hide}))
+    files.append(_page(config, "basics/index.md",
+                       {"title": "기초", "template": "basics.html", "hide": hide}))
     files.append(_page(config, "setup/index.md",
                        {"title": "개발 환경", "template": "setup.html", "hide": hide}))
     for g in HB["setup_groups"]:
