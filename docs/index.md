@@ -1,5 +1,5 @@
 ---
 template: home.html
-title: 펌웨어 작업실
-hide: [navigation, toc]
+title: 임베디드 작업실
+hide: [toc]
 ---

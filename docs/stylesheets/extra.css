@@ -1,4 +1,4 @@
-/* 펌웨어 작업실 · D 시안 (남색 + 구리색)
+/* 임베디드 작업실 · D 시안 (남색 + 구리색)
    - 밝은 화면: Material "default", 어두운 화면: "slate"
    - .hb 안은 홈·목록·상세 커스텀 페이지, 그 밖(문서·블로그)은 Material 레이아웃에 색만 맞춤 */
 
@@ -234,7 +234,8 @@
 }
 
 /* ---------- 블로그 · 글 · 소개 (HANDOFF 반영) ---------- */
-.md-main:has(.hb) .md-sidebar { display: none; }
+@media (min-width: 76.25em) { .md-main:has(.hb) .md-sidebar { display: none; } }
+@media (max-width: 76.234375em) { .md-main:has(.hb) .md-sidebar--secondary { display: none; } }
 .md-main:has(.hb) + .md-footer .md-footer__inner { display: none; }
 .md-main:has(.hb-postpage) .md-grid { max-width: 52rem; }
 .hb-btn--dash { border-style: dashed !important; color: var(--hb-muted) !important; font-weight: 500 !important; background: transparent !important; }
@@ -369,20 +370,15 @@
 .rm-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 8px; }
 .rm-list__row { display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 10px 14px; border-radius: 10px; border: 1px solid var(--hb-line); background: var(--hb-surface); }
 .rm-list__row > span { display: flex; flex-wrap: wrap; gap: 4px; justify-content: flex-end; }
+.rm-zoombar { display: none; }
 @media (max-width: 1000px) {
-  .rm-map { display: flex; flex-direction: column; gap: 14px; }
-  .rm-bg, .rm-box, .rm-vl { display: none; }
-  .md-typeset .hb .rm-mh { display: block; margin: 10px 0 0; font-size: 13px; font-weight: 800; letter-spacing: .12em; }
-  .md-typeset .hb .rm-mh--sw { color: var(--rm-sw); } .md-typeset .hb .rm-mh--hw { color: var(--rm-hw); } .md-typeset .hb .rm-mh--soft { color: var(--rm-soft); }
-  .md-typeset .hb .rm-mh--box { letter-spacing: 0; font-size: 13px; color: var(--hb-muted); margin: 4px 0 -6px; }
-  .rm-c--os, .rm-c--mcu, .rm-c--fpga, .rm-c--hwrow, .rm-c--fpga.rm-c--hwrow { padding-top: 0; }
-  .rm-rtos { margin: 0; padding: 0; border: 0; background: none; }
-  .rm-c--mcu.rm-box--mcu { border: 0; margin: 0; padding: 0; }
-  .rm-c--mcu > .rm-box__title { display: none; }
-  .rm-c--if { grid-template-columns: repeat(2, minmax(0, 1fr)); display: grid; }
-  .rm-ifcol { display: contents; }
+  .rm-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; margin: 0 -16px; padding: 0 16px; }
+  .rm-map { width: 1180px; }
+  .rm[data-fit="1"] .rm-scroll { overflow: hidden; }
+  .rm-zoombar { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin: 0 0 8px; font-size: 13px; color: var(--hb-muted); }
+  .rm-zoombar button { cursor: pointer; min-height: 36px; padding: 0 14px; border-radius: 999px; font: inherit; font-size: 13px; font-weight: 700; border: 1px solid var(--hb-line); background: var(--hb-surface); color: var(--hb-text); }
+  .rm-cov { grid-template-columns: minmax(0, 1fr); }
 }
-@media (max-width: 600px) { .rm-cols-3 { --c: 2; } .rm-c--if { grid-template-columns: minmax(0, 1fr); } .rm-c--if .rm-cols-1, .rm-c--hwrow .rm-cols-1 { --c: 2; } }
 
 .rm-mk--gap { background: transparent; border: 2px dashed var(--hb-muted); border-radius: 3px; }
 .rm[data-view="gap"] .rm-item:not(.is-gap) { opacity: .18; }
@@ -394,6 +390,7 @@
 .rm-cov__fill { display: block; height: 100%; border-radius: 999px; border: 0 !important; }
 .rm-cov__n { font-size: 13px; font-weight: 700; }
 @media (max-width: 760px) { .rm-cov { grid-template-columns: minmax(0, 1fr); } }
+.md-typeset .hb .rm-mh { display: none; }
 .md-typeset .hb ol.rm-sel { list-style: none; padding: 0; margin: 0 0 10px; display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 8px; }
 .md-typeset .hb ol.rm-sel li { display: flex; gap: 12px; align-items: flex-start; margin: 0; padding: 12px 14px; border-radius: 12px; border: 1px solid var(--hb-line); background: var(--hb-surface); }
 .rm-sel li > span:last-child { display: flex; flex-direction: column; }

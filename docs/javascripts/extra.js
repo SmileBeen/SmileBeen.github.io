@@ -75,6 +75,19 @@
         rm.querySelectorAll("[data-rm-lang]").forEach(function (b) { b.setAttribute("aria-pressed", b.getAttribute("data-rm-lang") === v ? "true" : "false"); });
       }
       if (saved === "en") lang("en");
+      // 좁은 화면: 지도 전체를 화면 폭에 맞춰 축소, 버튼으로 원래 크기(옆으로 스크롤)
+      var map = rm.querySelector(".rm-map"), sc = rm.querySelector(".rm-scroll"), zb = rm.querySelector("[data-rm-zoom]");
+      function fit(on) {
+        if (!map || !sc) return;
+        var narrow = window.matchMedia("(max-width: 1000px)").matches;
+        if (!narrow) { map.style.zoom = ""; rm.removeAttribute("data-fit"); return; }
+        if (on) { map.style.zoom = String(Math.min(1, (sc.clientWidth - 32) / 1180)); rm.setAttribute("data-fit", "1"); }
+        else { map.style.zoom = ""; rm.removeAttribute("data-fit"); }
+        if (zb) zb.innerHTML = on ? '<span class="rm-ko">크게 보기</span><span class="rm-en" lang="en">Enlarge</span>' : '<span class="rm-ko">한눈에 보기</span><span class="rm-en" lang="en">Fit</span>';
+      }
+      fit(true);
+      window.addEventListener("resize", function () { fit(rm.getAttribute("data-fit") === "1" || !window.matchMedia("(max-width: 1000px)").matches); });
+      if (zb) zb.addEventListener("click", function () { fit(rm.getAttribute("data-fit") !== "1"); });
       rm.addEventListener("click", function (ev) {
         var b = ev.target.closest("[data-rm-lang]");
         if (b) {

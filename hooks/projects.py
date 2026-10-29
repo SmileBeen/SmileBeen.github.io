@@ -380,7 +380,7 @@ def _page(config, uri: str, meta: dict, body: str = "") -> File:
 
 
 def on_files(files, config):
-    hide = ["navigation", "toc"]
+    hide = ["toc"]  # 왼쪽 메뉴는 CSS로 큰 화면에서만 숨김 (휴대폰 메뉴 유지)
     files.append(_page(config, "projects/index.md",
                        {"title": "모든 프로젝트", "template": "projects.html", "hide": hide}))
     files.append(_page(config, "tags/index.md",

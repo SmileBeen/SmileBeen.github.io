@@ -58,6 +58,8 @@
     {% endfor %}
   </div>
 
+  <div class="rm-zoombar"><span class="rm-ko">화면에 맞춘 전체 지도 · 크게 보면 옆으로 밀어 본다</span><span class="rm-en" lang="en">Fitted to screen · enlarge and swipe sideways</span><button type="button" data-rm-zoom><span class="rm-ko">크게 보기</span><span class="rm-en" lang="en">Enlarge</span></button></div>
+  <div class="rm-scroll">
   <div class="rm-map">
     {# 바탕: 영역 · 박스 #}
     <div class="rm-bg rm-bg--sw" style="grid-area: 1 / 1 / 10 / -1;"></div>
@@ -105,6 +107,7 @@
     {# 소프트 스킬 #}
     <p class="rm-mh rm-mh--soft">{{ t(R.soft) }}</p>
     {{ cell("14 / 2 / 15 / 7") }}{{ grp(m, "soft") }}</div>
+  </div>
   </div>
 
   <p class="rm-credit">

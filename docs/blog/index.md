@@ -1,4 +1,4 @@
 ---
-hide: [navigation, toc]
+hide: [toc]
 ---
 # 블로그
