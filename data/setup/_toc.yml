@@ -1,0 +1,25 @@
+# 개발 환경 목차. 순서를 바꾸면 사이트 목차도 바뀌어요.
+# items 의 slug 와 같은 이름의 파일(data/setup/<slug>.md)이 있으면 페이지가 생기고,
+# 없으면 목차에 '계획'으로만 보여요. (title 은 파일이 생기기 전 임시 제목)
+- label: 기본 도구
+  desc: 어떤 프로젝트든 먼저 깔아 두는 것
+  items:
+    - vscode
+    - git
+    - python
+- label: STM32 개발
+  desc: 펌웨어 만들고 굽고 디버깅하기
+  items:
+    - stm32cube
+    - { slug: stlink, title: ST-LINK 드라이버와 펌웨어 업데이트 }
+- label: 통신 · 계측 도구
+  desc: 보드와 PC 사이 신호를 보고 넣는 도구
+  items:
+    - { slug: serial-terminal, title: 시리얼 터미널 (Tera Term) }
+    - { slug: canable, title: CANable로 PC에서 CAN 보기 }
+    - { slug: logic-analyzer, title: 로직분석기 (PulseView) }
+- label: 사이트 · 촬영
+  desc: 기록하고 공유하는 도구
+  items:
+    - { slug: site-preview, title: 사이트 내 PC에서 미리 보기 }
+    - { slug: obs, title: OBS 화면 · 카메라 녹화 }

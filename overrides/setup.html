@@ -1,0 +1,31 @@
+{% extends "main.html" %}
+{% import "partials/hb.html" as ui with context %}
+{% block content %}
+<div class="hb">
+  {{ ui.crumbs([["홈", ""], ["개발 환경", none]]) }}
+  <h1 class="hb-h1 hb-h1--page">개발 환경</h1>
+  <p class="hb-lead hb-lead--page">설치와 설정은 한 번 해 두면 모든 프로젝트 · 예제에서 같이 써요. 처음이라면 1장부터 순서대로, 이미 깔려 있으면 필요한 것만 골라 보세요.</p>
+
+  <ol class="hb-toc">
+    {% for g in hb.setup_groups %}
+    <li class="hb-toc__group">
+      <div class="hb-toc__head"><span class="hb-num">{{ g.num }}</span><span><b>{{ g.label }}</b>{% if g.desc %}<span class="hb-muted hb-small">{{ g.desc }}</span>{% endif %}</span></div>
+      <ol class="hb-toc__items">
+        {% for x in g["items"] %}
+        <li>
+          {% if x.has_page %}<a class="hb-toc__item" href="{{ base_url }}/setup/{{ x.slug }}/">
+          {% else %}<span class="hb-toc__item hb-toc__item--plan">{% endif %}
+            <span class="hb-mono hb-muted hb-xs">{{ x.num }}</span>
+            <span class="hb-toc__t"><b>{{ x.title }}</b>{% if x.summary %}<span class="hb-muted hb-small">{{ x.summary }}</span>{% endif %}</span>
+            <span class="hb-toc__m">{% if x.time %}<span class="hb-mono hb-muted hb-xs">{{ x.time }}</span>{% endif %}{% if x.has_page %}{{ ui.pill(x.status, x.status_key) }}{% else %}<span class="hb-kind">계획</span>{% endif %}</span>
+          {% if x.has_page %}</a>{% else %}</span>{% endif %}
+        </li>
+        {% endfor %}
+      </ol>
+    </li>
+    {% endfor %}
+  </ol>
+
+  {{ ui.footer_links() }}
+</div>
+{% endblock %}

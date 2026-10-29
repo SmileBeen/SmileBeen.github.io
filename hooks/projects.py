@@ -8,6 +8,8 @@ docs/blog/posts/*.md 를 읽어서
   /projects/<slug>/epNN/          회차            (overrides/episode.html)
   /tags/                          다루는 것       (overrides/tags.html)
   /parts/                         부품 전체 BOM   (overrides/parts.html)
+  /setup/                         개발 환경 목차   (overrides/setup.html)
+  /setup/<slug>/                  설치 하나       (overrides/setup-page.html)
   /examples/                      예제 목록       (overrides/examples.html)
   /examples/exNN/                 예제 하나       (overrides/example.html)
 
@@ -94,35 +96,83 @@ def _load_episodes(slug: str) -> list[dict]:
     return eps
 
 
+EX_KIND = {"ex": ("lab", "예제")}
+
+
 def _load_examples() -> list[dict]:
+    """data/examples/envNN.md = 개발 환경 설치, exNN.md = 실습 예제"""
     exs = []
-    for p in sorted((DATA / "examples").glob("ex*.md")):
-        body, meta = get_data(p.read_text(encoding="utf-8"))
-        n = int(meta.get("n") or re.sub(r"\D", "", p.stem)[:2] or 0)
-        st = meta.get("status") or "준비 중"
-        rel = meta.get("related") or {}
-        exs.append({
-            "n": n,
-            "id": f"ex{n:02d}",
-            "title": meta.get("title", f"예제 {n}"),
-            "summary": meta.get("summary", ""),
-            "board": meta.get("board", ""),
-            "time": meta.get("time", ""),
-            "tools": list(meta.get("tools") or []),
-            "tags": list(meta.get("tags") or []),
-            "dir": meta.get("dir") or "",
-            "status": st,
-            "status_key": EX_STATUS.get(st, "todo"),
-            "video": meta.get("video") or "",
-            "related_slug": rel.get("project") or "",
-            "related_ep": rel.get("ep"),
-            "body": body,
-        })
-    exs.sort(key=lambda e: e["n"])
-    for i, x in enumerate(exs):
-        x["prev"] = exs[i - 1] if i > 0 else None
-        x["next"] = exs[i + 1] if i + 1 < len(exs) else None
+    for prefix, (kind, word) in EX_KIND.items():
+        for p in sorted((DATA / "examples").glob(f"{prefix}[0-9]*.md")):
+            body, meta = get_data(p.read_text(encoding="utf-8"))
+            n = int(meta.get("n") or re.sub(r"\D", "", p.stem) or 0)
+            st = meta.get("status") or "준비 중"
+            rel = meta.get("related") or {}
+            exs.append({
+                "n": n,
+                "id": f"{prefix}{n:02d}",
+                "kind": kind,
+                "label": f"{word} {n:02d}",
+                "title": meta.get("title", f"{word} {n}"),
+                "summary": meta.get("summary", ""),
+                "board": meta.get("board", ""),
+                "time": meta.get("time", ""),
+                "tools": list(meta.get("tools") or []),
+                "tags": list(meta.get("tags") or []),
+                "dir": meta.get("dir") or "",
+                "needs_ids": list(meta.get("needs") or []),
+                "status": st,
+                "status_key": EX_STATUS.get(st, "todo"),
+                "video": meta.get("video") or "",
+                "related_slug": rel.get("project") or "",
+                "related_ep": rel.get("ep"),
+                "body": body,
+            })
+    for kind in ("setup", "lab"):
+        group = sorted([x for x in exs if x["kind"] == kind], key=lambda e: e["n"])
+        for i, x in enumerate(group):
+            x["prev"] = group[i - 1] if i > 0 else None
+            x["next"] = group[i + 1] if i + 1 < len(group) else None
+    exs.sort(key=lambda e: (e["kind"] != "setup", e["n"]))
     return exs
+
+
+def _load_setup() -> list[dict]:
+    """data/setup/_toc.yml 이 목차, data/setup/<slug>.md 가 본문. 파일이 없으면 '준비 중'으로만 보여요."""
+    toc = _yaml(DATA / "setup" / "_toc.yml", [])
+    groups = []
+    for gi, g in enumerate(toc, 1):
+        items = []
+        for ii, it in enumerate(g.get("items") or [], 1):
+            it = {"slug": it} if isinstance(it, str) else dict(it)
+            path = DATA / "setup" / f"{it['slug']}.md"
+            body, meta = get_data(path.read_text(encoding="utf-8")) if path.exists() else ("", {})
+            st = meta.get("status") or ("준비 중" if path.exists() else "계획")
+            items.append({
+                "slug": it["slug"],
+                "num": f"{gi}-{ii}",
+                "title": meta.get("title") or it.get("title") or it["slug"],
+                "summary": meta.get("summary") or it.get("summary", ""),
+                "time": meta.get("time", ""),
+                "tools": list(meta.get("tools") or []),
+                "tags": list(meta.get("tags") or []),
+                "video": meta.get("video") or "",
+                "status": st,
+                "status_key": EX_STATUS.get(st, "todo"),
+                "has_page": path.exists(),
+                "needs_ids": list(meta.get("needs") or []),
+                "group": g.get("label", ""),
+                "body": body,
+            })
+        groups.append({"num": gi, "label": g.get("label", ""), "desc": g.get("desc", ""), "items": items})
+    flat = [x for g in groups for x in g["items"] if x["has_page"]]
+    by = {x["slug"]: x for g in groups for x in g["items"]}
+    for i, x in enumerate(flat):
+        x["prev"] = flat[i - 1] if i > 0 else None
+        x["next"] = flat[i + 1] if i + 1 < len(flat) else None
+    for x in by.values():
+        x["needs"] = [by[n] for n in x["needs_ids"] if n in by]
+    return groups
 
 
 def _load_posts(docs_dir: Path) -> list[dict]:
@@ -161,6 +211,10 @@ def _build(config) -> dict:
     groups = _yaml(DATA / "tags.yml", [])
     posts = _load_posts(Path(config["docs_dir"]))
     examples = _load_examples()
+    setup_groups = _load_setup()
+    setups = {x["slug"]: x for g in setup_groups for x in g["items"]}
+    for x in examples:
+        x["needs"] = [setups[n] for n in x["needs_ids"] if n in setups]
 
     all_parts: dict[str, dict] = {}
     for p in projects:
@@ -200,9 +254,10 @@ def _build(config) -> dict:
         tposts = [x for x in posts if name in x["tags"]]
         tprojects = [p for p in projects if name in p["tags"]]
         texs = [x for x in examples if name in x["tags"]]
+        tsets = [x for x in setups.values() if x["has_page"] and name in x["tags"]]
         return {"name": name, "group": label, "videos": videos, "posts": tposts,
-                "projects": tprojects, "examples": texs,
-                "count": len(videos) + len(tposts) + len(tprojects) + len(texs)}
+                "projects": tprojects, "examples": texs, "setups": tsets,
+                "count": len(videos) + len(tposts) + len(tprojects) + len(texs) + len(tsets)}
 
     tags = [tag_entry(n, g["label"]) for g in groups for n in g.get("items", [])]
 
@@ -245,6 +300,8 @@ def _build(config) -> dict:
         "counts": {k: sum(1 for p in projects if p["status_key"] == k) for k in ("wip", "todo", "done")},
         "kind_counts": {k: sum(1 for p in projects if p["kind"] == k) for k in KIND},
         "examples": examples,
+        "setup_groups": setup_groups,
+        "setup_count": sum(1 for x in setups.values() if x["has_page"]),
         "groups": groups,
         "posts": posts,
         "tags": tags,
@@ -276,10 +333,18 @@ def on_files(files, config):
                        {"title": "부품", "template": "parts.html", "hide": hide}))
     files.append(_page(config, "examples/index.md",
                        {"title": "예제", "template": "examples.html", "hide": hide}))
+    files.append(_page(config, "setup/index.md",
+                       {"title": "개발 환경", "template": "setup.html", "hide": hide}))
+    for g in HB["setup_groups"]:
+        for x in g["items"]:
+            if x["has_page"]:
+                files.append(_page(config, f"setup/{x['slug']}.md",
+                                   {"title": x["title"], "template": "setup-page.html",
+                                    "hide": hide, "hb_setup": x["slug"]}, x["body"]))
     for x in HB["examples"]:
         files.append(_page(config, f"examples/{x['id']}.md",
-                           {"title": f"예제 {x['n']:02d} {x['title']}", "template": "example.html",
-                            "hide": hide, "hb_ex": x["n"]}, x["body"]))
+                           {"title": f"{x['label']} {x['title']}", "template": "example.html",
+                            "hide": hide, "hb_ex": x["id"]}, x["body"]))
     for p in HB["projects"]:
         if not p.get("eps") and not p.get("parts") and not p.get("repo"):
             continue  # 자리만 잡아 둔 프로젝트는 상세 페이지를 만들지 않아요
@@ -300,9 +365,12 @@ def on_page_context(context, page, config, nav):
     src = Path(page.file.src_uri).name if page.file else ""
     if page.file and page.file.src_uri.startswith("blog/posts/"):
         context["hb_post"] = next((x for x in HB["posts"] if x["src"] == src), None)
+    su = page.meta.get("hb_setup")
+    if su:
+        context["hb_s"] = next(x for g in HB["setup_groups"] for x in g["items"] if x["slug"] == su)
     xn = page.meta.get("hb_ex")
     if xn:
-        context["hb_x"] = next(x for x in HB["examples"] if x["n"] == xn)
+        context["hb_x"] = next(x for x in HB["examples"] if x["id"] == xn)
     slug = page.meta.get("hb_slug")
     if slug:
         proj = next(p for p in HB["projects"] if p["slug"] == slug)

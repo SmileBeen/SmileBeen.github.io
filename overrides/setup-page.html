@@ -1,0 +1,50 @@
+{% extends "main.html" %}
+{% import "partials/hb.html" as ui with context %}
+{% set x = hb_s %}
+{% block content %}
+<div class="hb">
+  {{ ui.crumbs([["홈", ""], ["개발 환경", "setup/"], [x.num, none]]) }}
+  <div class="hb-epwrap">
+    <article class="hb-epmain">
+      {% if x.video %}
+      <a class="hb-video" href="{{ x.video }}">{{ ui.play_icon(40) }}<span>유튜브에서 보기</span></a>
+      {% else %}
+      <div class="hb-video hb-video--off hb-video--slim">{{ ui.play_icon(22) }}<span>영상 공개 전 · 올리면 여기에 들어가요</span></div>
+      {% endif %}
+
+      <p class="hb-mono hb-muted hb-small">{{ x.num }} · {{ x.group }} · {{ x.status }}{% if x.time %} · {{ x.time }}{% endif %}</p>
+      <h1 class="hb-h1 hb-h1--ep">{{ x.title }}</h1>
+      {% if x.summary %}<p class="hb-lead hb-lead--page">{{ x.summary }}</p>{% endif %}
+      {% if x.tags %}<div class="hb-chips">{% for t in x.tags %}<a class="hb-chip hb-chip--round" href="{{ base_url }}/tags/#{{ t | urlencode }}">{{ t }}</a>{% endfor %}</div>{% endif %}
+
+      {% if x.needs %}
+      <div class="hb-related">
+        <p class="hb-xs hb-muted hb-b">먼저 해 둘 것</p>
+        <span>{% for n in x.needs %}{% if n.has_page %}<a class="hb-copper hb-b" href="../{{ n.slug }}/">{{ n.num }} {{ n.title }}</a>{% else %}<span class="hb-muted">{{ n.num }} {{ n.title }}</span>{% endif %}{% if not loop.last %} · {% endif %}{% endfor %}</span>
+      </div>
+      {% endif %}
+
+      <div class="hb-prose md-typeset">{{ page.content }}</div>
+
+      <div class="hb-pager">
+        {% if x.prev %}<a class="hb-btn" href="../{{ x.prev.slug }}/">← {{ x.prev.num }}</a>{% else %}<span class="hb-btn hb-btn--off">← 이전</span>{% endif %}
+        {% if x.next %}<a class="hb-btn" href="../{{ x.next.slug }}/">{{ x.next.num }} →</a>{% else %}<span class="hb-btn hb-btn--off">다음 →</span>{% endif %}
+      </div>
+    </article>
+
+    <aside class="hb-eplist" aria-label="개발 환경 목차">
+      <a class="hb-copper hb-small hb-b" href="../">← 전체 목차</a>
+      {% for g in hb.setup_groups %}
+      <b class="hb-small">{{ g.num }}. {{ g.label }}</b>
+      <nav>
+        {% for it in g["items"] %}
+        {% if it.has_page %}<a href="../{{ it.slug }}/"{% if it.slug == x.slug %} aria-current="step"{% endif %}><span class="hb-mono">{{ it.num }}</span><span>{{ it.title }}</span></a>
+        {% else %}<span class="hb-eplist__plan"><span class="hb-mono">{{ it.num }}</span><span>{{ it.title }}</span></span>{% endif %}
+        {% endfor %}
+      </nav>
+      {% endfor %}
+    </aside>
+  </div>
+  {{ ui.footer_links() }}
+</div>
+{% endblock %}

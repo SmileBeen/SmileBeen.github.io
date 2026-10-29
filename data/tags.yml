@@ -7,5 +7,7 @@
   items: [OTA, 보안]
 - label: 시험 · 자동화
   items: [HIL, Python, pytest, GitHub Actions]
+- label: 개발 환경
+  items: [STM32CubeMX, STM32CubeIDE, VS Code, Git, Python]
 - label: 작업실
-  items: [작업실, 개발 환경]
+  items: [작업실]

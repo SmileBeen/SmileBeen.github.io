@@ -23,7 +23,7 @@
   <section class="hb-tagpanel" data-tag="{{ tg.name }}" hidden>
     <div class="hb-tagpanel__head">
       <h2 class="hb-h2"><span class="hb-copper">#</span>{{ tg.name }}</h2>
-      <span class="hb-mono hb-muted hb-small">영상 {{ tg.videos | length }} · 글 {{ tg.posts | length }} · 프로젝트 {{ tg.projects | length }} · 예제 {{ tg.examples | length }}</span>
+      <span class="hb-mono hb-muted hb-small">영상 {{ tg.videos | length }} · 글 {{ tg.posts | length }} · 프로젝트 {{ tg.projects | length }} · 예제 {{ tg.examples | length }} · 개발 환경 {{ tg.setups | length }}</span>
     </div>
     <div class="hb-tagpanel__grid">
       <section>
@@ -44,8 +44,10 @@
         {% for pr in tg.projects %}
         <a class="hb-row hb-row--proj" href="{{ ui.project_link(pr) }}">{{ ui.image(pr, "hb-row__img") }}<span><b>{{ pr.name }}</b>{{ ui.pill(pr.status, pr.status_key) }}</span></a>
         {% else %}<div class="hb-empty hb-empty--sm">아직 관련 프로젝트가 없어요.</div>{% endfor %}
+        {% if tg.setups %}<h3 class="hb-h3 hb-mt">관련 개발 환경</h3>
+        {% for x in tg.setups %}<a class="hb-row" href="{{ base_url }}/setup/{{ x.slug }}/"><span class="hb-mono hb-muted hb-xs">{{ x.num }}</span><b>{{ x.title }}</b></a>{% endfor %}{% endif %}
         {% if tg.examples %}<h3 class="hb-h3 hb-mt">관련 예제</h3>
-        {% for x in tg.examples %}<a class="hb-row" href="{{ base_url }}/examples/{{ x.id }}/"><span class="hb-mono hb-muted hb-xs">예제 {{ "%02d" | format(x.n) }}</span><b>{{ x.title }}</b></a>{% endfor %}{% endif %}
+        {% for x in tg.examples %}<a class="hb-row" href="{{ base_url }}/examples/{{ x.id }}/"><span class="hb-mono hb-muted hb-xs">{{ x.label }}</span><b>{{ x.title }}</b></a>{% endfor %}{% endif %}
       </aside>
     </div>
   </section>

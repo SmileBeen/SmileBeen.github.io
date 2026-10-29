@@ -46,7 +46,23 @@ content:
       - { name: time, label: 걸리는 시간, type: string }
       - { name: tags, label: 태그, type: string, list: true }
       - { name: dir, label: embedded-examples 폴더 이름, type: string }
+      - { name: needs, label: 먼저 해 둘 설치 (예 env01), type: string, list: true }
       - { name: status, label: 상태, type: select, options: { values: [공개, 편집 중, 촬영 준비, 준비 중] } }
       - { name: video, label: 유튜브 주소, type: string }
       - { name: related, label: 이어지는 회차, type: object, fields: [ { name: project, label: 프로젝트 slug, type: string }, { name: ep, label: 회차 번호, type: number } ] }
+      - { name: body, label: 본문, type: rich-text }
+  - name: setup
+    label: 개발 환경
+    type: collection
+    path: data/setup
+    exclude: [_toc.yml]
+    fields:
+      - { name: title, label: 제목, type: string, required: true }
+      - { name: summary, label: 한 줄 설명, type: string }
+      - { name: tools, label: 도구, type: string, list: true }
+      - { name: time, label: 걸리는 시간, type: string }
+      - { name: tags, label: 태그, type: string, list: true }
+      - { name: needs, label: 먼저 해 둘 것 (slug 예 vscode), type: string, list: true }
+      - { name: status, label: 상태, type: select, options: { values: [공개, 편집 중, 촬영 준비, 준비 중] } }
+      - { name: video, label: 유튜브 주소, type: string }
       - { name: body, label: 본문, type: rich-text }

@@ -65,6 +65,7 @@ markdown_extensions:
 nav:
   - 홈: index.md
   - 프로젝트: projects/index.md      # 자동 생성
+  - 개발 환경: setup/index.md         # 자동 생성 (data/setup/_toc.yml)
   - 예제: examples/index.md          # 자동 생성 (data/examples/)
   - 다루는 것: tags/index.md         # 자동 생성
   - 부품: parts/index.md             # 자동 생성

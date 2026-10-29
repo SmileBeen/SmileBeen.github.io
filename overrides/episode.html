@@ -20,7 +20,7 @@
       {% if e.examples %}
       <div class="hb-related">
         <p class="hb-xs hb-muted hb-b">먼저 해 보면 좋은 예제</p>
-        <span>{% for x in e.examples %}<a class="hb-copper hb-b" href="{{ base_url }}/examples/{{ x.id }}/">예제 {{ "%02d" | format(x.n) }} {{ x.title }}</a>{% if not loop.last %} · {% endif %}{% endfor %}</span>
+        <span>{% for x in e.examples %}<a class="hb-copper hb-b" href="{{ base_url }}/examples/{{ x.id }}/">{{ x.label }} {{ x.title }}</a>{% if not loop.last %} · {% endif %}{% endfor %}</span>
       </div>
       {% endif %}
 
