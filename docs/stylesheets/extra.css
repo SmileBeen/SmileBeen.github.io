@@ -545,3 +545,24 @@
 .hb-sec--first { padding-top: 8px; border-top: 0 !important; }
 .hb-feature--dash .hb-feature__body { gap: 12px; }
 .hb-feature--dash .hb-feature__img img, .hb-feature--dash .hb-feature__img .hb-ph { min-height: 300px; }
+
+/* 프로젝트 가지 트리: 뿌리(프로젝트) → 줄기(회차) → 가지(로드맵 칸 · 예제) */
+.hb-tree__legend { display: flex; flex-wrap: wrap; gap: 6px 16px; margin: 0 0 10px; }
+.hb-tree__legend span { display: inline-flex; align-items: center; gap: 6px; }
+.hb-tree__sw { display: inline-block; width: 12px; height: 12px; border-radius: 50%; }
+.hb-tree__sw--ep { background: var(--hb-wip-bg); border: 2px solid var(--hb-copper); }
+.hb-tree__sw--map { background: var(--rm-req-bg); border: 1px solid var(--rm-req-bd); border-radius: 4px; }
+.hb-tree__sw--ex { background: var(--hb-chip-bg); border: 1px solid var(--hb-line); border-radius: 4px; }
+.hb-rail__head .hb-muted { margin-left: auto; }
+.md-typeset .hb .hb-tree { border-left-width: 3px; border-left-color: var(--hb-edge); }
+.md-typeset .hb .hb-tree li::before { background: var(--hb-edge); }
+.hb-branch { position: relative; display: flex; flex-wrap: wrap; gap: 6px; margin: 10px 0 2px 44px; padding: 8px 0 0 22px; }
+.hb-branch::before { content: ""; position: absolute; left: 0; top: -10px; width: 18px; height: 26px; border-left: 2px solid var(--hb-edge); border-bottom: 2px solid var(--hb-edge); border-bottom-left-radius: 12px; }
+.md-typeset .hb .hb-leaf { display: inline-flex; align-items: center; min-height: 28px; padding: 0 10px; border-radius: 999px; font-size: 12px; font-weight: 700; border: 1px dashed; }
+.md-typeset .hb .hb-leaf:hover { text-decoration: none; filter: brightness(1.06); }
+.hb-leaf--req { background: var(--rm-req-bg); color: var(--rm-req-fg) !important; border-color: var(--rm-req-bd); }
+.hb-leaf--rec { background: var(--rm-rec-bg); color: var(--rm-rec-fg) !important; border-color: var(--rm-rec-bd); }
+.hb-leaf--opt { background: var(--rm-opt-bg); color: var(--rm-opt-fg) !important; border-color: var(--rm-opt-bd); }
+.hb-leaf--ex { background: var(--hb-chip-bg); color: var(--hb-chip-fg) !important; border-color: var(--hb-line); }
+.md-typeset .hb .hb-leaf.is-on { border-style: solid; }
+@media (max-width: 600px) { .hb-branch { margin-left: 10px; } }

@@ -41,8 +41,9 @@
       </div>
       <span class="hb-muted hb-small">순서대로 보면 그대로 따라 할 수 있어요</span>
     </div>
-    <div class="hb-rail__head">{{ ui.chip_icon() }}<b>{{ p.name }}</b></div>
-    <ol class="hb-rail">
+    <div class="hb-tree__legend hb-xs hb-muted"><span><i class="hb-tree__sw hb-tree__sw--ep"></i>회차 (줄기)</span><span><i class="hb-tree__sw hb-tree__sw--map"></i>채우는 로드맵 칸 (가지)</span><span><i class="hb-tree__sw hb-tree__sw--ex"></i>이어지는 예제</span></div>
+    <div class="hb-rail__head">{{ ui.chip_icon() }}<b>{{ p.name }}</b><span class="hb-muted hb-small">뿌리</span></div>
+    <ol class="hb-rail hb-tree">
       {% for e in p.eps %}
       <li>
         <a class="hb-ep" href="{{ e.id }}/">
@@ -55,6 +56,12 @@
           {{ ui.pill(e.status, e.status_key) }}
           <span class="hb-copper hb-small hb-b">보기 →</span>
         </a>
+        {% if e.map_items or e.examples %}
+        <div class="hb-branch">
+          {% for it in e.map_items %}<a class="hb-leaf hb-leaf--{{ it.p or 'opt' }}{% if e.status_key == 'on' %} is-on{% endif %}" href="{{ base_url }}/map/#rm-{{ it.id }}" title="{{ it.g_ko }} · {{ it.p_ko }}">{{ it.ko }}</a>{% endfor %}
+          {% for x in e.examples or [] %}<a class="hb-leaf hb-leaf--ex" href="{{ base_url }}/examples/{{ x.id }}/">{{ x.label }}</a>{% endfor %}
+        </div>
+        {% endif %}
       </li>
       {% endfor %}
       <li><div class="hb-ep hb-ep--next">다음 회차를 올리면 여기에 이어서 붙어요</div></li>
