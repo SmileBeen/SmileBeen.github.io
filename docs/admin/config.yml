@@ -1,0 +1,111 @@
+# Sveltia CMS 설정 — https://smilebeen.github.io/admin/ 에서 글을 쓰고 고친다.
+# 처음 한 번: GitHub 토큰(이 레포 Contents 읽기 · 쓰기)으로 로그인.
+backend:
+  name: github
+  repo: SmileBeen/SmileBeen.github.io
+  branch: main
+  commit_messages:
+    create: "글 추가: {{slug}}"
+    update: "글 수정: {{slug}}"
+    delete: "글 삭제: {{slug}}"
+    uploadMedia: "사진 추가: {{path}}"
+    deleteMedia: "사진 삭제: {{path}}"
+
+locale: ko
+site_url: https://smilebeen.github.io
+display_url: https://smilebeen.github.io
+media_folder: docs/images
+public_folder: /images
+
+collections:
+  - name: blog
+    label: 블로그
+    label_singular: 글
+    folder: docs/blog/posts
+    create: true
+    slug: "{{year}}-{{month}}-{{day}}-{{fields.slug}}"
+    media_folder: /docs/images/blog
+    public_folder: /images/blog
+    sortable_fields: [date, title]
+    summary: "{{date}} · {{title}}"
+    fields:
+      - { name: title, label: 제목, widget: string }
+      - { name: date, label: 날짜, widget: datetime, time_format: false, date_format: "YYYY-MM-DD", format: "YYYY-MM-DD" }
+      - { name: slug, label: 주소 이름, widget: string, hint: "영문 소문자 · 하이픈 (예: desk-setup). 글 주소가 된다", pattern: ['^[a-z0-9-]+$', "영문 소문자 · 숫자 · 하이픈만"] }
+      - { name: category, label: 분류, widget: select, options: [작업실, 프로젝트 기록], default: 작업실 }
+      - { name: tags, label: 태그, widget: list, required: false }
+      - { name: project, label: 이어지는 프로젝트, widget: select, options: ["", field-ota-pipeline], default: "", required: false }
+      - { name: description, label: 목록에 보일 한 줄 요약, widget: string, required: false }
+      - { name: body, label: 본문, widget: markdown, hint: "맨 위에 # 제목은 쓰지 않는다 (제목 칸이 제목이 된다)" }
+
+  - name: episodes
+    label: 회차 (원격 업데이트 파이프라인)
+    label_singular: 회차
+    folder: data/field-ota-pipeline/episodes
+    create: true
+    slug: "ep{{fields.n}}"
+    summary: "{{n}}화 · {{title}} · {{status}}"
+    sortable_fields: [n]
+    fields:
+      - { name: parent, label: 프로젝트, widget: hidden, default: field-ota-pipeline }
+      - { name: n, label: 회차 번호, widget: number, value_type: int }
+      - { name: title, label: 제목, widget: string }
+      - { name: short, label: 목록용 짧은 이름, widget: string }
+      - { name: summary, label: 한 줄 설명, widget: string }
+      - { name: tags, label: 태그, widget: list, required: false }
+      - { name: map, label: 채우는 로드맵 칸, widget: list, required: false, hint: "지도에서 칸을 누르면 나오는 주소 (예: automotive.can)" }
+      - { name: code_tag, label: 코드 태그, widget: string }
+      - { name: status, label: 상태, widget: select, options: [공개, 편집 중, 촬영 준비, 준비 중], default: 준비 중 }
+      - { name: video, label: 유튜브 주소, widget: string, required: false }
+      - { name: length, label: 영상 길이, widget: string, required: false }
+      - { name: ai_first, label: AI가 처음 제안한 것, widget: text, required: false }
+      - { name: ai_changed, label: 내가 바꾼 것 · 왜, widget: text, required: false }
+      - { name: doc, label: 프로젝트 사이트 문서 경로, widget: string, required: false }
+      - { name: body, label: 본문, widget: markdown }
+
+  - name: examples
+    label: 예제
+    label_singular: 예제
+    folder: data/examples
+    create: true
+    slug: "ex{{fields.n}}"
+    summary: "예제 {{n}} · {{title}}"
+    fields:
+      - { name: n, label: 예제 번호, widget: number, value_type: int }
+      - { name: title, label: 제목, widget: string }
+      - { name: summary, label: 한 줄 설명, widget: string }
+      - { name: board, label: 보드, widget: string }
+      - { name: tools, label: 도구, widget: list, required: false }
+      - { name: time, label: 걸리는 시간, widget: string, required: false }
+      - { name: tags, label: 태그, widget: list, required: false }
+      - { name: map, label: 채우는 로드맵 칸, widget: list, required: false }
+      - { name: dir, label: embedded-examples 폴더, widget: string, required: false }
+      - { name: needs, label: 먼저 해 둘 개발 환경 (slug), widget: list, required: false }
+      - { name: status, label: 상태, widget: select, options: [공개, 편집 중, 촬영 준비, 준비 중], default: 준비 중 }
+      - { name: video, label: 유튜브 주소, widget: string, required: false }
+      - name: related
+        label: 이어지는 회차
+        widget: object
+        required: false
+        fields:
+          - { name: project, label: 프로젝트, widget: string, default: field-ota-pipeline }
+          - { name: ep, label: 회차 번호, widget: number, value_type: int }
+      - { name: body, label: 본문, widget: markdown }
+
+  - name: setup
+    label: 개발 환경
+    label_singular: 개발 환경 글
+    folder: data/setup
+    create: false      # 새 항목은 data/setup/_toc.yml 목차와 같이 추가해야 해서 여기선 고치기만
+    extension: md
+    summary: "{{title}}"
+    fields:
+      - { name: title, label: 제목, widget: string }
+      - { name: summary, label: 한 줄 설명, widget: string, required: false }
+      - { name: tools, label: 도구, widget: list, required: false }
+      - { name: time, label: 걸리는 시간, widget: string, required: false }
+      - { name: tags, label: 태그, widget: list, required: false }
+      - { name: needs, label: 먼저 해 둘 것 (slug), widget: list, required: false }
+      - { name: status, label: 상태, widget: select, options: [공개, 편집 중, 촬영 준비, 준비 중], default: 준비 중 }
+      - { name: video, label: 유튜브 주소, widget: string, required: false }
+      - { name: body, label: 본문, widget: markdown }
