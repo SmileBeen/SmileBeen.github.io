@@ -5,25 +5,25 @@
 - { cat: MCU · 보드, name: STM32H743I-EVAL, use: 게이트웨이 · 로그 수집과 업데이트 배포, qty: 1, status: 보유, doc: "https://www.st.com/en/evaluation-tools/stm32h743i-eval.html" }
 - { cat: MCU · 보드, name: STM32F746G-DISCO, use: HIL 시험대 · 전원 차단 · 리셋 · UART 콘솔, qty: 1, status: 보유, doc: "https://www.st.com/en/evaluation-tools/32f746gdiscovery.html" }
 - { cat: MCU · 보드, name: NUCLEO-F103RB, use: 업데이트가 어려운 옛 장비 역할 · RS-232 콘솔, qty: 1, status: 보유, doc: "https://www.st.com/en/evaluation-tools/nucleo-f103rb.html" }
-- { cat: 통신 모듈, name: CAN Pal (CAN 트랜시버), use: 노드의 CAN 로직 신호 ↔ CANH/CANL, qty: 3, status: 보유 }
-- { cat: 통신 모듈, name: CANable 2.0, use: PC에서 CAN 버스 보기 · 메시지 넣기, qty: 1, status: 보유 }
-- { cat: 통신 모듈, name: MAX3232 모듈, use: 3.3V UART ↔ RS-232, qty: 1, status: 보유 }
+- { cat: 통신 모듈, name: CAN Pal (CAN 트랜시버), use: 노드의 CAN 로직 신호 ↔ CANH/CANL, qty: 3, status: 보유, doc: "https://learn.adafruit.com/adafruit-can-pal" }
+- { cat: 통신 모듈, name: CANable 2.0, use: PC에서 CAN 버스 보기 · 메시지 넣기, qty: 1, status: 보유, doc: "https://canable.io/" }
+- { cat: 통신 모듈, name: MAX3232 모듈, use: 3.3V UART ↔ RS-232, qty: 1, status: 보유, doc: "https://www.ti.com/product/MAX3232" }
 - { cat: 통신 모듈, name: DB9 나사단자 어댑터, use: EVAL CN2 · CN3 신호를 나사단자로, qty: 2, status: 보유 }
 - { cat: 통신 모듈, name: IDC 2x5 어댑터 + 리본 케이블, use: 시험대(J2) ↔ DUT(J1) 표준 연결, qty: 2, status: 보유 }
 - { cat: 전원 · 제어, name: DC 어댑터 (5V 4A · 5V 3A · 12V 2A ×2), use: 판 전원 · 모터 전원, qty: 4, status: 보유 }
 - { cat: 전원 · 제어, name: 전원 입구 (DC 잭 + 퓨즈), use: 어댑터 → 퓨즈 → 단자대, qty: 2, status: 보유 }
 - { cat: 전원 · 제어, name: 배리어 단자대 12P, use: 판별 전원 분배 버스, qty: 2, status: 보유 }
-- { cat: 전원 · 제어, name: 릴레이 4ch (HK4100F), use: DUT 5V · 모터 12V 전원 차단, qty: 1, status: 보유 }
+- { cat: 전원 · 제어, name: 릴레이 4ch (HK4100F), use: DUT 5V · 모터 12V 전원 차단, qty: 1, status: 보유, doc: "https://www.lcsc.com/product-detail/C12072.html" }
 - { cat: 전원 · 제어, name: 릴레이 2ch, use: 현장 노드 원격 리셋, qty: 1, status: 보유 }
-- { cat: 전원 · 제어, name: D4184 MOSFET 모듈, use: 모터 PWM 로우사이드 스위치, qty: 2, status: 보유 }
+- { cat: 전원 · 제어, name: D4184 MOSFET 모듈, use: 모터 PWM 로우사이드 스위치, qty: 2, status: 보유, doc: "https://aosmd.com/products/mosfets/medium-voltage-mosfets-40v-400v/aod4184a" }
 - { cat: 전원 · 제어, name: USB 허브 7포트, use: 연구소 판 보드 · 도구 연결, qty: 1, status: 보유 }
 - { cat: 전원 · 제어, name: 개별 스위치 멀티탭, use: 어댑터 전원 일괄 차단, qty: 1, status: 보유 }
-- { cat: 센서, name: INA226 전류 센서, use: 노드 · DUT 5V 전류와 전압, qty: 3, status: 보유 }
-- { cat: 센서, name: INA240 전류 증폭기 + 션트, use: 모터 전류 파형 → ADC, qty: 2, status: 보유 }
-- { cat: 기타, name: OLED 0.96" (SSD1306), use: 노드2 상태 표시, qty: 1, status: 보유 }
+- { cat: 센서, name: INA226 전류 센서, use: 노드 · DUT 5V 전류와 전압, qty: 3, status: 보유, doc: "https://www.ti.com/product/INA226" }
+- { cat: 센서, name: INA240 전류 증폭기 + 션트, use: 모터 전류 파형 → ADC, qty: 2, status: 보유, doc: "https://www.ti.com/product/INA240" }
+- { cat: 기타, name: OLED 0.96" (SSD1306), use: 노드2 상태 표시, qty: 1, status: 보유, doc: "https://www.crystalfontz.com/controllers/SSD1306" }
 - { cat: 기타, name: 택트 버튼, use: 고장 일부러 일으키기, qty: 2, status: 보유 }
 - { cat: 기타, name: 12V 감속 모터 + 브래킷, use: 재현 대상 부하 (막힘 · 과전류), qty: 2, status: 보유 }
-- { cat: 계측 장비, name: 로직분석기 24MHz 8ch, use: UART · NRST · BOOT0 · CAN 타이밍 확인, qty: 1, status: 보유 }
+- { cat: 계측 장비, name: 로직분석기 24MHz 8ch, use: UART · NRST · BOOT0 · CAN 타이밍 확인, qty: 1, status: 보유, doc: "https://sigrok.org/wiki/Fx2lafw" }
 - { cat: 계측 장비, name: STLINK-V3SET, use: 누클레오가 아닌 보드 굽기 · 디버깅, qty: 1, status: 보유, doc: "https://www.st.com/en/development-tools/stlink-v3set.html" }
 - { cat: 계측 장비, name: 멀티미터, use: 전압 · 도통 확인, qty: 1, status: 보유 }
 - { cat: 기타, name: MDF 9mm (900×600 재단), use: 현장 판 420×297 · 연구소 판 400×250, qty: 1, status: 구매 예정 }
