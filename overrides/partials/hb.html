@@ -39,6 +39,9 @@
 {%- endmacro %}
 
 {% macro footer_links() -%}
+<nav class="hb-sitemap" aria-label="사이트 지도">
+  <a href="{{ base_url }}/about/">소개</a><a href="{{ base_url }}/map/">로드맵</a><a href="{{ base_url }}/setup/">개발 환경</a><a href="{{ base_url }}/examples/">예제</a><a href="{{ base_url }}/tags/">다루는 것</a><a href="{{ base_url }}/parts/">부품</a>
+</nav>
 <div class="hb-foot">
   {% if hb.user %}<a href="https://github.com/{{ hb.user }}"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M8 7l-5 5 5 5M16 7l5 5-5 5"/></svg>GitHub</a>{% endif %}
   {% if hb.youtube %}<a href="{{ hb.youtube }}">{{ play_icon(15) }}유튜브</a>{% endif %}

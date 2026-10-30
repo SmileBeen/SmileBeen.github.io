@@ -1,0 +1,46 @@
+{% extends "main.html" %}
+{% import "partials/hb.html" as ui with context %}
+{% block content %}
+<div class="hb">
+  {{ ui.crumbs([["홈", ""], ["기초", none]]) }}
+  <h1 class="hb-h1 hb-h1--page">기초</h1>
+  <p class="hb-lead hb-lead--page">프로젝트에 들어가기 전에 갖춰 둘 것. 개발 환경은 한 번만 설치하면 되고, 예제는 보드 하나로 30분 안에 끝난다.</p>
+
+  <div class="hb-basics">
+    <section id="setup" aria-labelledby="h-setup">
+      <div class="hb-sec__head hb-sec__head--tight">
+        <h2 id="h-setup" class="hb-h2">개발 환경</h2>
+        <a class="hb-more" href="{{ base_url }}/setup/">목차 전체 →</a>
+      </div>
+      {% for g in hb.setup_groups %}
+      <p class="hb-xs hb-muted hb-b hb-basics__g">{{ g.num }}. {{ g.label }}</p>
+      {% for x in g["items"] %}
+      {% if x.has_page %}<a class="hb-toc__item hb-toc__item--sm" href="{{ base_url }}/setup/{{ x.slug }}/">{% else %}<span class="hb-toc__item hb-toc__item--sm hb-toc__item--plan">{% endif %}
+        <span class="hb-mono hb-muted hb-xs">{{ x.num }}</span>
+        <span class="hb-toc__t"><b>{{ x.title }}</b></span>
+        <span class="hb-toc__m">{% if x.time %}<span class="hb-mono hb-muted hb-xs">{{ x.time }}</span>{% endif %}{% if not x.has_page %}<span class="hb-kind">계획</span>{% endif %}</span>
+      {% if x.has_page %}</a>{% else %}</span>{% endif %}
+      {% endfor %}
+      {% endfor %}
+    </section>
+
+    <section id="examples" aria-labelledby="h-ex">
+      <div class="hb-sec__head hb-sec__head--tight">
+        <h2 id="h-ex" class="hb-h2">예제</h2>
+        <a class="hb-more" href="{{ base_url }}/examples/">전체 →</a>
+      </div>
+      <div class="hb-postlist">
+        {% for x in hb.examples %}
+        <a class="hb-postcard" href="{{ base_url }}/examples/{{ x.id }}/">
+          <span class="hb-postcard__meta"><span class="hb-mono hb-copper hb-xs">{{ x.label }}</span>{{ ui.pill(x.status, x.status_key) }}{% if x.time %}<span class="hb-mono hb-muted hb-xs">{{ x.time }}</span>{% endif %}</span>
+          <b>{{ x.title }}</b>
+          <span class="hb-muted hb-small">{{ x.summary }}</span>
+        </a>
+        {% else %}<div class="hb-empty">아직 예제가 없다.</div>{% endfor %}
+      </div>
+    </section>
+  </div>
+
+  {{ ui.footer_links() }}
+</div>
+{% endblock %}
