@@ -23,6 +23,15 @@
 {% else %}<div class="{{ cls }} hb-ph">{{ chip_icon() }}<span>사진 준비 중</span></div>{% endif %}
 {%- endmacro %}
 
+{# 갤러리 칸: 썸네일 + 제목 + 상태만 #}
+{% macro thumb(p) -%}
+{% if p.has_page %}<a class="hb-thumb{% if p.status_key == 'wip' %} hb-thumb--hot{% endif %}" href="{{ project_link(p) }}" data-status="{{ p.status_key }}" data-kind="{{ p.kind }}">
+{% else %}<div class="hb-thumb hb-thumb--plan" data-status="{{ p.status_key }}" data-kind="{{ p.kind }}">{% endif %}
+  <span class="hb-thumb__img">{{ image(p) }}</span>
+  <span class="hb-thumb__body"><b>{{ p.name }}</b><span class="hb-thumb__meta">{{ pill(p.status, p.status_key) }}{% if p.kind == "side" %}<span class="hb-kind">사이드</span>{% endif %}{% if p.eps %}<span class="hb-mono hb-muted hb-xs">{{ p.eps | length }}화</span>{% endif %}</span></span>
+{% if p.has_page %}</a>{% else %}</div>{% endif %}
+{%- endmacro %}
+
 {# 작은 프로젝트 카드 (목록 · 홈의 나머지) #}
 {% macro card(p, big=false) -%}
 <article class="hb-card{% if p.status_key == 'wip' %} hb-card--hot{% endif %}" data-status="{{ p.status_key }}" data-kind="{{ p.kind }}">

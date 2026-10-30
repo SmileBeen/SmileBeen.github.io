@@ -3,8 +3,8 @@
 {% block content %}
 <div class="hb">
   {{ ui.crumbs([["홈", ""], ["프로젝트", none]]) }}
-  <h1 class="hb-h1 hb-h1--page">모든 프로젝트</h1>
-  <p class="hb-lead hb-lead--page">메인은 영상 여러 편이 이어지는 큰 프로젝트, 사이드는 한두 편으로 끝나는 작은 만들기예요. 짧은 실습은 <a class="hb-copper hb-b" href="{{ base_url }}/examples/">예제</a>에 따로 모아요.</p>
+  <h1 class="hb-h1 hb-h1--page">프로젝트</h1>
+  
 
   <div class="hb-filter" role="group" aria-label="종류로 거르기" data-filter="kind" data-target="#hb-plist">
     <button type="button" aria-pressed="true" data-v="all">모든 종류</button>
@@ -18,8 +18,8 @@
     <button type="button" aria-pressed="false" data-v="done">완료 <span class="hb-mono">{{ hb.counts.done }}</span></button>
   </div>
 
-  <div id="hb-plist" class="hb-grid hb-grid--420">
-    {% for p in hb.projects %}{{ ui.card(p) }}{% endfor %}
+  <div id="hb-plist" class="hb-gallery">
+    {% for p in hb.projects %}{{ ui.thumb(p) }}{% endfor %}
   </div>
   <div class="hb-empty" hidden>아직 이 상태의 프로젝트가 없어요.</div>
 

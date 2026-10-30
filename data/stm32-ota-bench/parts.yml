@@ -1,6 +1,6 @@
 # 종류: MCU · 보드 | 통신 모듈 | 전원 · 제어 | 센서 | 계측 장비 | 기타 (이 순서로 보여요)
 # 상태: 보유 | 구매 예정 | 나중
-# buy: 구매 링크, doc: 제품 자료 링크 (비우면 점선 칸으로 보여요)
+# doc: 제품 자료 링크 (데이터시트 · 공식 페이지)
 - { cat: MCU · 보드, name: NUCLEO-G474RE, use: 재현 노드(DUT) · 현장 노드 2대, qty: 3, status: 보유, doc: "https://www.st.com/en/evaluation-tools/nucleo-g474re.html" }
 - { cat: MCU · 보드, name: STM32H743I-EVAL, use: 게이트웨이 · 로그 수집과 업데이트 배포, qty: 1, status: 보유, doc: "https://www.st.com/en/evaluation-tools/stm32h743i-eval.html" }
 - { cat: MCU · 보드, name: STM32F746G-DISCO, use: HIL 시험대 · 전원 차단 · 리셋 · UART 콘솔, qty: 1, status: 보유, doc: "https://www.st.com/en/evaluation-tools/32f746gdiscovery.html" }

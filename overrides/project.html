@@ -87,14 +87,13 @@
         <span class="hb-bom__qty hb-mono">{{ it.qty_str }}</span>
         <span class="hb-bom__st">{{ ui.pill(it.status, it.status_key) }}</span>
         <span class="hb-bom__links">
-          {% if it.buy %}<a class="hb-tag hb-tag--site" href="{{ it.buy }}">구매 ↗</a>{% else %}<span class="hb-tag hb-tag--dash">구매</span>{% endif %}
-          {% if it.doc %}<a class="hb-tag hb-tag--code" href="{{ it.doc }}">자료 ↗</a>{% else %}<span class="hb-tag hb-tag--dash">자료</span>{% endif %}
+          {% if it.doc %}<a class="hb-tag hb-tag--code" href="{{ it.doc }}">자료 ↗</a>{% endif %}
         </span>
       </div>
       {% endfor %}
       {% endfor %}
     </div>
-    <p class="hb-muted hb-xs hb-note">점선 칸은 아직 링크가 없는 곳이에요. <code>data/{{ p.slug }}/parts.yml</code>에 구매 · 자료 주소를 적으면 버튼으로 바뀌어요.</p>
+    
   </section>
   {% endif %}
 

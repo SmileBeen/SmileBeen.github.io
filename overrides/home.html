@@ -6,93 +6,38 @@
 {% set m = hb.map %}
 <div class="hb hb-dash">
 
-{# 1. 프로젝트 #}
+{# 1. 프로젝트 갤러리 #}
 <section class="hb-sec hb-sec--first" aria-labelledby="h-proj">
   <div class="hb-sec__head">
-    <div>
-      <h1 id="h-proj" class="hb-h2">프로젝트</h1>
-      <p class="hb-mono hb-muted hb-small">진행 중 <b class="hb-copper">{{ hb.counts.wip }}</b> · 준비 중 <b>{{ hb.counts.todo }}</b> · 완료 <b>{{ hb.counts.done }}</b></p>
-    </div>
-    <a class="hb-more" href="{{ base_url }}/projects/">모든 프로젝트 {{ hb.projects | length }}개 →</a>
+    <h1 id="h-proj" class="hb-h2">프로젝트</h1>
+    <a class="hb-more" href="{{ base_url }}/projects/">전체 →</a>
   </div>
-
-  {% if fp %}
-  {% set nxt = (fp.eps | rejectattr("status_key", "equalto", "on") | first) if fp.eps else none %}
-  <article class="hb-feature hb-feature--dash">
-    <a class="hb-feature__img" href="{{ ui.project_link(fp) }}" aria-label="{{ fp.name }} 열기">{{ ui.image(fp) }}</a>
-    <div class="hb-feature__body">
-      <div class="hb-now__head"><span class="hb-xs hb-muted hb-b">지금 만드는 것</span>{{ ui.pill(fp.status, fp.status_key) }}</div>
-      <h2 class="hb-card__title"><a href="{{ ui.project_link(fp) }}">{{ fp.name }}</a></h2>
-      <p class="hb-muted">{{ fp.summary }}</p>
-      <div class="hb-now__prog">
-        <span class="hb-xs hb-muted">영상 공개</span>
-        <span class="rm-cov__bar"><span class="rm-cov__fill hb-now__fill" style="width: {{ (100 * fp.ep_on / (fp.eps | length)) | round | int if fp.eps else 0 }}%;"></span></span>
-        <span class="hb-mono hb-small hb-b">{{ fp.ep_on }} / {{ fp.eps | length }}화</span>
-      </div>
-      {% if nxt %}<a class="hb-now__next" href="{{ ui.project_link(fp) }}{{ nxt.id }}/"><span class="hb-xs hb-muted">다음 회차</span><b>{{ nxt.n }}화 {{ nxt.title }}</b></a>{% endif %}
-      <div class="hb-actions">
-        <a class="hb-tag hb-tag--site" href="{{ ui.project_link(fp) }}">회차 · 부품</a>
-        {% if fp.site %}<a class="hb-tag hb-tag--code" href="{{ fp.site }}">따라 하기 문서</a>{% endif %}
-        {% if fp.repo_url %}<a class="hb-tag hb-tag--code" href="{{ fp.repo_url }}">코드</a>{% endif %}
-        {% if fp.playlist %}<a class="hb-tag hb-tag--code" href="{{ fp.playlist }}">재생목록</a>{% else %}<span class="hb-tag hb-tag--dash">영상 준비 중</span>{% endif %}
-      </div>
-    </div>
-  </article>
-  {% endif %}
-
-  {% set real = hb.others | selectattr("has_page") | list %}
-  {% if real %}<div class="hb-grid hb-grid--300 hb-mt">{% for p in real[:3] %}{{ ui.card(p) }}{% endfor %}</div>{% endif %}
-  {% for p in hb.others if not p.has_page %}{% if loop.first %}<div class="hb-ep hb-ep--next hb-mt">다음 프로젝트 준비 중 — 로드맵의 다음 후보 칸에서 고른다</div>{% endif %}{% endfor %}
+  <div class="hb-gallery">{% for p in hb.projects %}{{ ui.thumb(p) }}{% endfor %}</div>
 </section>
 
 {# 3. 로드맵 #}
 {% if m %}
 <section class="hb-sec hb-sec--dash" aria-labelledby="h-map">
   <div class="hb-sec__head">
-    <div><h2 id="h-map" class="hb-h2">로드맵</h2><p class="hb-mono hb-muted hb-small">임베디드 엔지니어링 로드맵 위에 지금 업무 · 이 프로젝트가 채우는 칸</p></div>
-    <a class="hb-more" href="{{ base_url }}/map/">항목별 회차 · 고르는 기준 →</a>
+    <h2 id="h-map" class="hb-h2">로드맵</h2>
+    <a class="hb-more" href="{{ base_url }}/map/">자세히 →</a>
   </div>
   {{ mp.grid(m) }}
 </section>
 {% endif %}
 
-{# 4. 다음 할 일 · 최근 글 · 따라 하는 법 #}
-<div class="hb-dash__cols">
-  {% if m %}
-  {% set nx = (m.coverage | selectattr("key", "equalto", "req") | first).next %}
-  <section class="hb-box hb-box--pad" aria-labelledby="h-next">
-    <div class="hb-sec__head hb-sec__head--tight">
-      <h2 id="h-next" class="hb-h3">다음에 채울 필수 칸</h2>
-      <span class="hb-mono hb-muted hb-small">{{ nx | length }}개</span>
-    </div>
-    <div class="hb-nextchips">{% for it in nx[:10] %}<span class="rm-item rm-item--req">{{ it.ko }}</span>{% endfor %}</div>
-    <a class="hb-more" href="{{ base_url }}/map/#h-sel">고르는 기준 →</a>
-  </section>
-  {% endif %}
-
-  <section class="hb-box hb-box--pad" aria-labelledby="h-posts">
-    <div class="hb-sec__head hb-sec__head--tight">
-      <h2 id="h-posts" class="hb-h3">최근 글</h2>
-      <a class="hb-more" href="{{ base_url }}/blog/">전체 →</a>
-    </div>
-    {% for x in hb.posts[:3] %}
-    <a class="hb-post" href="{{ base_url }}/{{ x.url }}">
-      <span class="hb-mono hb-muted hb-small">{{ x.date_str }}</span>
-      <b>{{ x.title }}</b>
-    </a>
-    {% else %}<p class="hb-muted">아직 글이 없다.</p>{% endfor %}
-  </section>
-
-  <section class="hb-box hb-box--pad" aria-labelledby="h-follow">
-    <h2 id="h-follow" class="hb-h3">따라 하는 법</h2>
-    <ol class="hb-steps">
-      <li><span class="hb-num">1</span><span><b>개발 환경 갖추기</b><span class="hb-muted hb-small">기초 → 개발 환경 1장부터</span></span></li>
-      <li><span class="hb-num">2</span><span><b>예제로 몸풀기</b><span class="hb-muted hb-small">보드 하나, 30분</span></span></li>
-      <li><span class="hb-num">3</span><span><b>프로젝트 1화부터</b><span class="hb-muted hb-small">회차별 코드 태그로 그 시점 코드를 받는다</span></span></li>
-    </ol>
-    <a class="hb-more" href="{{ base_url }}/basics/">기초부터 시작 →</a>
-  </section>
-</div>
+{# 3. 최근 글 #}
+{% if hb.posts %}
+<section class="hb-sec hb-sec--dash" aria-labelledby="h-posts">
+  <div class="hb-sec__head">
+    <h2 id="h-posts" class="hb-h2">최근 글</h2>
+    <a class="hb-more" href="{{ base_url }}/blog/">전체 →</a>
+  </div>
+  <div class="hb-postrows">
+    {% for x in hb.posts[:4] %}<a class="hb-postrow" href="{{ base_url }}/{{ x.url }}"><span class="hb-mono hb-muted hb-small">{{ x.date_str }}</span><b>{{ x.title }}</b></a>{% endfor %}
+  </div>
+</section>
+{% endif %}
 
 {{ ui.footer_links() }}
 </div>

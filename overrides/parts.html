@@ -32,8 +32,7 @@
             {% for u in it.used %}<a class="hb-chip hb-chip--round" href="{{ base_url }}/projects/{{ u.slug }}/#bom">{{ u.name }} →</a>{% endfor %}
           </div>
           <div class="hb-part__links">
-            {% if it.buy %}<a class="hb-tag hb-tag--site" href="{{ it.buy }}">구매 ↗</a>{% else %}<span class="hb-tag hb-tag--dash">구매 링크</span>{% endif %}
-            {% if it.doc %}<a class="hb-tag hb-tag--code" href="{{ it.doc }}">제품 자료 ↗</a>{% else %}<span class="hb-tag hb-tag--dash">자료 링크</span>{% endif %}
+            {% if it.doc %}<a class="hb-tag hb-tag--code" href="{{ it.doc }}">제품 자료 ↗</a>{% endif %}
           </div>
         </article>
         {% endfor %}
