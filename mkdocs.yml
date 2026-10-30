@@ -6,8 +6,8 @@ repo_url: https://github.com/SmileBeen/SmileBeen.github.io
 extra:
   # 사이트 전체에서 쓰는 내 정보 (홈·푸터·회차 페이지 링크)
   github_user: SmileBeen
-  youtube: https://www.youtube.com/
-  email: ""                # 공개할 주소. 비워 두면 이메일 버튼이 안 보여요
+  youtube: https://www.youtube.com/channel/UCxlkiu9_aWijoD7BannNM7w
+  email: qodj6909@gmail.com
   generator: false         # 맨 아래 "Made with" 줄 숨김
 
 theme:
