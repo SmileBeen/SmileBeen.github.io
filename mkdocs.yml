@@ -19,6 +19,7 @@ theme:
     code: JetBrains Mono
   features:
     - navigation.tabs
+    - navigation.tabs.sticky   # 내려도 위쪽 메뉴 유지
     - navigation.top
     - content.code.copy
   palette:

@@ -6,52 +6,50 @@
 {% set m = hb.map %}
 <div class="hb hb-dash">
 
-{# 1. 소개 + 진행 중 프로젝트 #}
-<section class="hb-dash__top">
-  <div class="hb-dash__intro">
-    <p class="hb-eyebrow">EMBEDDED · 로드맵 기반 프로젝트 · 따라 하는 구현</p>
-    <h1 class="hb-h1">임베디드 작업실</h1>
-    <p class="hb-lead">프로젝트를 통해 임베디드를 공부한다.<br>로드맵의 필수 · 권장 칸을 기준으로 프로젝트를 고르고, 한 칸씩 채운다.<br>모르면 계속 막히는 문제를 정리하고, 영상을 보며 그대로 따라 구현할 수 있게 기록한다.</p>
-    <div class="hb-btns">
-      {% if hb.youtube %}<a class="hb-btn hb-btn--copper" href="{{ hb.youtube }}">{{ ui.play_icon(18) }}유튜브</a>{% endif %}
-      {% if hb.user %}<a class="hb-btn" href="https://github.com/{{ hb.user }}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M8 7l-5 5 5 5M16 7l5 5-5 5"/></svg>GitHub</a>{% endif %}
-      <a class="hb-btn" href="{{ base_url }}/about/">소개</a>
+{# 1. 프로젝트 #}
+<section class="hb-sec hb-sec--first" aria-labelledby="h-proj">
+  <div class="hb-sec__head">
+    <div>
+      <h1 id="h-proj" class="hb-h2">프로젝트</h1>
+      <p class="hb-mono hb-muted hb-small">진행 중 <b class="hb-copper">{{ hb.counts.wip }}</b> · 준비 중 <b>{{ hb.counts.todo }}</b> · 완료 <b>{{ hb.counts.done }}</b></p>
     </div>
+    <a class="hb-more" href="{{ base_url }}/projects/">모든 프로젝트 {{ hb.projects | length }}개 →</a>
   </div>
 
   {% if fp %}
   {% set nxt = (fp.eps | rejectattr("status_key", "equalto", "on") | first) if fp.eps else none %}
-  <article class="hb-now">
-    <div class="hb-now__head"><span class="hb-xs hb-muted hb-b">지금 만드는 것</span>{{ ui.pill(fp.status, fp.status_key) }}</div>
-    <a class="hb-now__img" href="{{ ui.project_link(fp) }}">{{ ui.image(fp) }}</a>
-    <h2 class="hb-h3"><a href="{{ ui.project_link(fp) }}">{{ fp.name }}</a></h2>
-    <div class="hb-now__prog">
-      <span class="hb-xs hb-muted">영상 공개</span>
-      <span class="rm-cov__bar"><span class="rm-cov__fill hb-now__fill" style="width: {{ (100 * fp.ep_on / (fp.eps | length)) | round | int if fp.eps else 0 }}%;"></span></span>
-      <span class="hb-mono hb-small hb-b">{{ fp.ep_on }} / {{ fp.eps | length }}화</span>
-    </div>
-    {% if nxt %}<a class="hb-now__next" href="{{ ui.project_link(fp) }}{{ nxt.id }}/"><span class="hb-xs hb-muted">다음 회차</span><b>{{ nxt.n }}화 {{ nxt.title }}</b></a>{% endif %}
-    <div class="hb-now__links">
-      <a class="hb-more" href="{{ ui.project_link(fp) }}">회차 · 부품 →</a>
-      <a class="hb-more" href="{{ base_url }}/projects/">모든 프로젝트 {{ hb.projects | length }}개 →</a>
+  <article class="hb-feature hb-feature--dash">
+    <a class="hb-feature__img" href="{{ ui.project_link(fp) }}" aria-label="{{ fp.name }} 열기">{{ ui.image(fp) }}</a>
+    <div class="hb-feature__body">
+      <div class="hb-now__head"><span class="hb-xs hb-muted hb-b">지금 만드는 것</span>{{ ui.pill(fp.status, fp.status_key) }}</div>
+      <h2 class="hb-card__title"><a href="{{ ui.project_link(fp) }}">{{ fp.name }}</a></h2>
+      <p class="hb-muted">{{ fp.summary }}</p>
+      <div class="hb-now__prog">
+        <span class="hb-xs hb-muted">영상 공개</span>
+        <span class="rm-cov__bar"><span class="rm-cov__fill hb-now__fill" style="width: {{ (100 * fp.ep_on / (fp.eps | length)) | round | int if fp.eps else 0 }}%;"></span></span>
+        <span class="hb-mono hb-small hb-b">{{ fp.ep_on }} / {{ fp.eps | length }}화</span>
+      </div>
+      {% if nxt %}<a class="hb-now__next" href="{{ ui.project_link(fp) }}{{ nxt.id }}/"><span class="hb-xs hb-muted">다음 회차</span><b>{{ nxt.n }}화 {{ nxt.title }}</b></a>{% endif %}
+      <div class="hb-actions">
+        <a class="hb-tag hb-tag--site" href="{{ ui.project_link(fp) }}">회차 · 부품</a>
+        {% if fp.site %}<a class="hb-tag hb-tag--code" href="{{ fp.site }}">따라 하기 문서</a>{% endif %}
+        {% if fp.repo_url %}<a class="hb-tag hb-tag--code" href="{{ fp.repo_url }}">코드</a>{% endif %}
+        {% if fp.playlist %}<a class="hb-tag hb-tag--code" href="{{ fp.playlist }}">재생목록</a>{% else %}<span class="hb-tag hb-tag--dash">영상 준비 중</span>{% endif %}
+      </div>
     </div>
   </article>
   {% endif %}
-</section>
 
-{# 2. 숫자 한 줄 #}
-<section class="hb-stats" aria-label="현황">
-  <a class="hb-stat" href="{{ base_url }}/projects/"><b>{{ hb.counts.wip }}</b><span>진행 중 프로젝트</span></a>
-  <a class="hb-stat" href="{{ base_url }}/basics/#setup"><b>{{ hb.setup_count }}</b><span>개발 환경 정리</span></a>
-  <a class="hb-stat" href="{{ base_url }}/basics/#examples"><b>{{ hb.examples | length }}</b><span>짧은 예제</span></a>
-  <a class="hb-stat" href="{{ base_url }}/blog/"><b>{{ hb.posts | length }}</b><span>블로그 글</span></a>
+  {% set real = hb.others | selectattr("has_page") | list %}
+  {% if real %}<div class="hb-grid hb-grid--300 hb-mt">{% for p in real[:3] %}{{ ui.card(p) }}{% endfor %}</div>{% endif %}
+  {% for p in hb.others if not p.has_page %}{% if loop.first %}<div class="hb-ep hb-ep--next hb-mt">다음 프로젝트 준비 중 — 로드맵의 다음 후보 칸에서 고른다</div>{% endif %}{% endfor %}
 </section>
 
 {# 3. 로드맵 #}
 {% if m %}
 <section class="hb-sec hb-sec--dash" aria-labelledby="h-map">
   <div class="hb-sec__head">
-    <h2 id="h-map" class="hb-h2">임베디드 로드맵 위의 진행 상황</h2>
+    <div><h2 id="h-map" class="hb-h2">로드맵</h2><p class="hb-mono hb-muted hb-small">임베디드 엔지니어링 로드맵 위에 지금 업무 · 이 프로젝트가 채우는 칸</p></div>
     <a class="hb-more" href="{{ base_url }}/map/">항목별 회차 · 고르는 기준 →</a>
   </div>
   {{ mp.grid(m) }}

@@ -432,3 +432,11 @@
 @media (max-width: 900px) { .hb-basics { grid-template-columns: minmax(0, 1fr); } }
 .md-typeset .hb .hb-about__p { margin: 0 0 6px; }
 .md-typeset .hb .hb-focus { display: flex; flex-direction: column; gap: 4px; }
+
+/* 헤더: 스크롤해도 사이트 이름 고정 (페이지 제목으로 바뀌지 않게) */
+.md-header__title--active .md-header__topic:first-child { opacity: 1; transform: none; pointer-events: auto; z-index: 0; transition: none; }
+.md-header__topic + .md-header__topic { display: none; }
+/* 홈: 프로젝트가 맨 위 */
+.hb-sec--first { padding-top: 8px; border-top: 0 !important; }
+.hb-feature--dash .hb-feature__body { gap: 12px; }
+.hb-feature--dash .hb-feature__img img, .hb-feature--dash .hb-feature__img .hb-ph { min-height: 300px; }
