@@ -6,7 +6,7 @@
 <div class="hb">
   {{ ui.crumbs([["홈", ""], ["다루는 영역", none]]) }}
   <h1 class="hb-h1 hb-h1--page">다루는 영역</h1>
-  <p class="hb-lead hb-lead--page">임베디드 엔지니어링 로드맵 위에 지금 업무와 이 프로젝트가 다루는 칸을 표시한다.<br>리눅스 애플리케이션에서 출발해 마이크로컨트롤러 · 부트로더 · 보안 · 시험 자동화로 넓힌다.<br>점선은 다룰 예정, 실선은 영상이 공개된 칸이다.</p>
+  <p class="hb-lead hb-lead--page">임베디드 엔지니어링 로드맵 위에 지금 업무와 이 프로젝트가 다루는 칸을 표시한다.<br>리눅스 애플리케이션에서 출발해 마이크로컨트롤러 · 부트로더 · 보안 · 시험 자동화로 넓힌다.<br>칸 오른쪽 위 숫자는 연결된 회차 수다. 눌러서 회차 목록을 연다.</p>
 
   {{ mp.grid(m) }}
 
@@ -19,11 +19,16 @@
 
   <section class="hb-sec hb-sec--flat" aria-labelledby="h-proj-items">
     <h2 id="h-proj-items" class="hb-h3">이 프로젝트에서 다루는 항목</h2>
+    <p class="hb-small hb-muted">영상이 공개된 회차는 채워진 칩, 다룰 예정은 테두리만. 칸 이름을 누르면 지도에서 그 자리로 갑니다.</p>
     <div class="rm-list">
       {% for it in m.proj_items %}
       <div class="rm-list__row">
-        <b>{{ it.ko }}</b>
-        <span>{% for r in it.refs %}<a class="hb-map__ref hb-map__ref--{{ r.kind }}" href="{{ base_url }}/{{ r.url }}" title="{{ r.title }}">{{ r.label }}</a>{% endfor %}</span>
+        <span class="rm-list__k">
+          <i class="rm-sw rm-item--{{ it.p }}"></i>
+          <a href="#rm-{{ it.id }}"><b>{{ it.ko }}</b></a>
+          <span class="hb-muted hb-xs">{{ it.g_ko }}</span>
+        </span>
+        <span>{% for r in it.refs %}<a class="hb-map__ref hb-map__ref--{{ r.kind }}{% if r.on %} is-on{% endif %}" href="{{ base_url }}/{{ r.url }}" title="{{ r.title }} · {{ r.status }}">{{ r.label }}</a>{% endfor %}</span>
       </div>
       {% endfor %}
     </div>

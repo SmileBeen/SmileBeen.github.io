@@ -18,6 +18,7 @@ docs/blog/posts/*.md 를 읽어서
 from __future__ import annotations
 
 import datetime as dt
+import logging
 import re
 from pathlib import Path
 
@@ -27,6 +28,8 @@ from mkdocs.utils.meta import get_data
 
 ROOT = Path(__file__).resolve().parent.parent
 DATA = ROOT / "data"
+
+log = logging.getLogger("mkdocs.hooks.projects")
 
 PROJ_STATUS = {"진행 중": "wip", "준비 중": "todo", "완료": "done"}
 EP_STATUS = {"공개": "on", "편집 중": "wip", "촬영 준비": "wip", "준비 중": "todo"}
@@ -90,6 +93,7 @@ def _load_episodes(slug: str) -> list[dict]:
             "parent": meta.get("parent") or slug,
             "ai_first": meta.get("ai_first") or "",
             "ai_changed": meta.get("ai_changed") or "",
+            "map_ids": [str(x) for x in (meta.get("map") or [])],
             "body": body,
         })
     eps.sort(key=lambda e: e["n"])
@@ -126,6 +130,7 @@ def _load_examples() -> list[dict]:
                 "video": meta.get("video") or "",
                 "related_slug": rel.get("project") or "",
                 "related_ep": rel.get("ep"),
+                "map_ids": [str(x) for x in (meta.get("map") or [])],
                 "body": body,
             })
     for kind in ("setup", "lab"):
@@ -178,55 +183,158 @@ def _load_setup() -> list[dict]:
 MAP_LEVEL = {"core": "직접 다룸", "part": "일부", "none": "다루지 않음"}
 
 
+PRI = [("req", "필수", "Required"), ("rec", "권장", "Recommended"), ("opt", "선택", "Optional")]
+PRI_KO = dict((k, ko) for k, ko, _ in PRI)
+REF_ORDER = {"ep": 0, "ex": 1, "setup": 2}
+
+
+def _mslug(s) -> str:
+    """지도 칸 주소를 만드는 규칙. C++ → cpp · C# → csharp · 'JTAG / SWD' → jtag-swd"""
+    s = str(s or "").strip().lower().replace("++", "pp").replace("#", "sharp")
+    return re.sub(r"[^a-z0-9가-힣]+", "-", s).strip("-")
+
+
 def _build_map(projects, examples, setups) -> dict:
+    """로드맵 지도. 연결은 두 방향으로 적을 수 있어요.
+
+    1. data/map.yml 의 칸에  links: [ep:<프로젝트>:<회차>, ex:exNN, setup:<slug>]
+    2. 회차 · 예제 파일 머리말에  map: [<칸 주소>, ...]   ← 영상 찍고 이쪽만 고치면 돼요
+
+    칸 주소는 `<그룹>.<영문 이름 slug>` 예: lang.c · fund.memory-management.
+    map.yml 의 칸에 id: 를 직접 적으면 그게 주소가 돼요. 머리말에는 앞의 그룹을
+    빼고 뒷부분만 (memory-management) 적어도 되고, 한글 이름으로도 찾아요.
+    못 찾거나 여러 칸에 맞으면 빌드할 때 경고가 떠요.
+    """
     m = _yaml(DATA / "map.yml", {})
     if not m:
         return {}
 
-    def ref(r: str):
-        kind, _, rest = r.partition(":")
-        if kind == "ep":
-            slug, _, n = rest.rpartition(":")
-            p = next((x for x in projects if x["slug"] == slug), None)
-            e = next((x for x in p["eps"] if x["n"] == int(n)), None) if p else None
-            if e:
-                return {"label": f"{e['n']}화", "title": e["title"], "url": f"projects/{slug}/{e['id']}/", "kind": "ep", "on": e["status_key"] == "on"}
-        elif kind == "ex":
-            x = next((x for x in examples if x["id"] == rest), None)
-            if x:
-                return {"label": x["label"], "title": x["title"], "url": f"examples/{x['id']}/", "kind": "ex", "on": x["status_key"] == "on"}
-        elif kind == "setup":
-            x = setups.get(rest)
-            if x and x["has_page"]:
-                return {"label": x["num"], "title": x["title"], "url": f"setup/{x['slug']}/", "kind": "setup", "on": x["status_key"] == "on"}
-        return None
-
-    counts = {"now": 0, "proj": 0, "all": 0}
+    # 1) 칸마다 주소를 붙인다
     allitems = []
     for gid, g in (m.get("groups") or {}).items():
         g["id"] = gid
         for it in g.get("items") or []:
-            it["refs"] = [r for r in (ref(x) for x in it.get("links") or []) if r]
-            it["proj"] = bool(it["refs"])
-            it["done"] = any(r["on"] for r in it["refs"])
-            it["now"] = bool(it.get("now"))
-            it["tip"] = " · ".join(f"{r['label']} {r['title']}" for r in it["refs"])
-            it["gap"] = it.get("p") in ("req", "rec") and not it["now"] and not it["proj"]
-            counts["all"] += 1
-            counts["now"] += it["now"]
-            counts["proj"] += it["proj"]
-            counts["gap"] = counts.get("gap", 0) + it["gap"]
+            it["gid"] = gid
+            it["g_ko"] = g.get("ko") or g.get("en") or gid
+            it["g_en"] = g.get("en") or gid
+            it["id"] = it.get("id") or f"{gid}.{_mslug(it.get('en') or it.get('ko'))}"
+            it["p_ko"] = PRI_KO.get(it.get("p"), "")
+            it["refs"] = []
             allitems.append(it)
+
+    by_id: dict[str, dict] = {}
+    for it in allitems:
+        if it["id"] in by_id:
+            log.warning("map.yml: 칸 주소가 겹쳐요 — %r. 한쪽 항목에 id: 를 직접 적어 주세요.", it["id"])
+        by_id[it["id"]] = it
+
+    def find(key):
+        """머리말의 map: 값으로 칸을 찾아요. 전체 주소 · 뒷부분 · 한글/영문 이름 다 됩니다."""
+        k = str(key or "").strip()
+        if k in by_id:
+            return by_id[k], ""
+        s = _mslug(k)
+        if s in by_id:
+            return by_id[s], ""
+        for pool in ([it for it in allitems if it["id"].partition(".")[2] == s],
+                     [it for it in allitems if s in (_mslug(it.get("ko")), _mslug(it.get("en")))]):
+            if len(pool) == 1:
+                return pool[0], ""
+            if pool:
+                return None, "여러 칸에 맞아요 — 앞에 그룹까지 붙여 주세요: " + " · ".join(x["id"] for x in pool)
+        return None, "그런 칸이 없어요"
+
+    def mkref(label, title, url, kind, obj):
+        return {"label": label, "title": title, "url": url, "kind": kind,
+                "on": obj["status_key"] == "on", "status": obj.get("status") or "",
+                "skey": obj["status_key"], "n": obj.get("n") or 0}
+
+    # 2) map.yml 의 links: — 칸에서 회차로
+    def ref(raw: str):
+        kind, _, rest = raw.partition(":")
+        if kind == "ep":
+            slug, _, n = rest.rpartition(":")
+            p = next((x for x in projects if x["slug"] == slug), None)
+            if not p:
+                return None, f"프로젝트 {slug!r} 가 projects.yml 에 없어요"
+            if not n.isdigit():
+                return None, "회차 번호가 숫자가 아니에요 (ep:<프로젝트>:<번호>)"
+            e = next((x for x in p["eps"] if x["n"] == int(n)), None)
+            if not e:
+                return None, f"{slug} 에 {n}화가 없어요"
+            return mkref(f"{e['n']}화", e["title"], f"projects/{slug}/{e['id']}/", "ep", e), ""
+        if kind == "ex":
+            x = next((x for x in examples if x["id"] == rest), None)
+            if not x:
+                return None, f"예제 {rest!r} 가 data/examples/ 에 없어요"
+            return mkref(x["label"], x["title"], f"examples/{x['id']}/", "ex", x), ""
+        if kind == "setup":
+            x = setups.get(rest)
+            if not x:
+                return None, f"개발 환경 {rest!r} 가 data/setup/_toc.yml 에 없어요"
+            if not x["has_page"]:
+                return None, ""  # 아직 글이 없는 항목은 조용히 넘어가요
+            return mkref(x["num"], x["title"], f"setup/{x['slug']}/", "setup", x), ""
+        return None, "ep: · ex: · setup: 중 하나로 시작해 주세요"
+
+    for it in allitems:
+        for raw in it.get("links") or []:
+            r, why = ref(str(raw))
+            if r:
+                it["refs"].append(r)
+            elif why:
+                log.warning("map.yml: 칸 %s 의 연결 %r — %s", it["id"], raw, why)
+
+    # 3) 회차 · 예제 머리말의 map: — 회차에서 칸으로
+    sources = [(e, f"projects/{p['slug']}/{e['id']}/", f"{e['n']}화", "ep", f"{p['slug']} {e['n']}화")
+               for p in projects for e in p["eps"]]
+    sources += [(x, f"examples/{x['id']}/", x["label"], "ex", x["label"]) for x in examples]
+    for obj, url, label, kind, where in sources:
+        obj["map_items"] = []
+        for raw in obj.get("map_ids") or []:
+            it, why = find(raw)
+            if not it:
+                log.warning("%s 의 map: %r — %s", where, raw, why)
+                continue
+            if not any(r["url"] == url for r in it["refs"]):
+                it["refs"].append(mkref(label, obj["title"], url, kind, obj))
+            obj["map_items"].append({"id": it["id"], "ko": it.get("ko") or it.get("en"),
+                                     "en": it.get("en") or "", "p": it.get("p"),
+                                     "p_ko": it["p_ko"], "g_ko": it["g_ko"], "g_en": it["g_en"]})
+
+    # 4) 칸마다 상태를 센다. '예정'과 '영상 공개됨'을 따로 셉니다.
+    counts = {"all": 0, "now": 0, "proj": 0, "on": 0, "gap": 0}
+    for it in allitems:
+        it["refs"].sort(key=lambda r: (REF_ORDER.get(r["kind"], 9), r["n"]))
+        it["n_refs"] = len(it["refs"])
+        it["n_on"] = sum(1 for r in it["refs"] if r["on"])
+        it["proj"] = bool(it["refs"])
+        it["done"] = it["n_on"] > 0
+        it["now"] = bool(it.get("now"))
+        it["tip"] = " · ".join(f"{r['label']} {r['title']}" for r in it["refs"])
+        it["gap"] = it.get("p") in ("req", "rec") and not it["now"] and not it["proj"]
+        counts["all"] += 1
+        counts["now"] += it["now"]
+        counts["proj"] += it["proj"]
+        counts["on"] += it["done"]
+        counts["gap"] += it["gap"]
     m["counts"] = counts
-    m["proj_items"] = [it for it in allitems if it["proj"]]
-    pri = [("req", "필수", "Required"), ("rec", "권장", "Recommended"), ("opt", "선택", "Optional")]
+    m["proj_items"] = sorted([it for it in allitems if it["proj"]],
+                             key=lambda it: (not it["done"], it["gid"], it["id"]))
     m["coverage"] = []
-    for key, ko, en in pri:
+    for key, ko, en in PRI:
         xs = [it for it in allitems if it.get("p") == key]
-        done = [it for it in xs if it["now"] or it["proj"]]
-        m["coverage"].append({"key": key, "ko": ko, "en": en, "total": len(xs), "done": len(done),
-                              "pct": round(100 * len(done) / len(xs)) if xs else 0,
-                              "next": [it for it in xs if it["gap"]]})
+        n_on = sum(1 for it in xs if it["done"])
+        n_plan = sum(1 for it in xs if (it["proj"] or it["now"]) and not it["done"])
+        n = len(xs)
+        m["coverage"].append({
+            "key": key, "ko": ko, "en": en, "total": n,
+            "on": n_on, "planned": n_plan, "done": n_on + n_plan,
+            "pct_on": round(100 * n_on / n) if n else 0,
+            "pct_plan": round(100 * n_plan / n) if n else 0,
+            "pct": round(100 * (n_on + n_plan) / n) if n else 0,
+            "next": [it for it in xs if it["gap"]],
+        })
     return m
 
 

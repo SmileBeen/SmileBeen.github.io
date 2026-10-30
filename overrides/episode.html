@@ -17,6 +17,19 @@
       <h1 class="hb-h1 hb-h1--ep">{{ e.title }}</h1>
       <div class="hb-chips">{% for t in e.tags %}<a class="hb-chip hb-chip--round" href="{{ base_url }}/tags/#{{ t | urlencode }}">{{ t }}</a>{% endfor %}</div>
 
+      {% if e.map_items %}
+      <div class="hb-epmap">
+        <p class="hb-xs hb-muted hb-b">이 회차가 채우는 칸</p>
+        <span class="hb-epmap__refs">
+          {%- for mi in e.map_items %}
+          <a class="hb-epmap__ref" href="{{ base_url }}/map/#rm-{{ mi.id }}" title="{{ mi.g_ko }} · {{ mi.p_ko }}">
+            <i class="rm-sw rm-item--{{ mi.p }}"></i>{{ mi.ko }}</a>
+          {%- endfor %}
+        </span>
+        <a class="hb-xs hb-copper hb-b" href="{{ base_url }}/map/">다루는 영역에서 보기 →</a>
+      </div>
+      {% endif %}
+
       {% if e.examples %}
       <div class="hb-related">
         <p class="hb-xs hb-muted hb-b">먼저 해 보면 좋은 예제</p>

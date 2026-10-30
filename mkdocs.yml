@@ -36,6 +36,13 @@ theme:
 hooks:
   - hooks/projects.py        # data/ · projects.yml → 프로젝트·회차·태그·부품 페이지 생성
 
+# mkdocs serve 가 docs/ 밖도 보게 해요. 없으면 회차·지도·템플릿을 고쳐도 새로고침이 안 돼요.
+watch:
+  - data
+  - hooks
+  - overrides
+  - projects.yml
+
 plugins:
   - search
   - blog:

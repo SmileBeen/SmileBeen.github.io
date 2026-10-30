@@ -88,6 +88,38 @@
       fit(true);
       window.addEventListener("resize", function () { fit(rm.getAttribute("data-fit") === "1" || !window.matchMedia("(max-width: 1000px)").matches); });
       if (zb) zb.addEventListener("click", function () { fit(rm.getAttribute("data-fit") !== "1"); });
+      // 칸을 누르면 연결된 회차 목록이 펼쳐져요. 지도가 옆으로 밀리거나 축소돼도 안 잘리게 fixed 로 띄워요.
+      var pop = rm.querySelector("[data-rm-pop]"), body = pop && pop.querySelector(".rm-pop__body"), open = null;
+      function place() {
+        if (!open || !pop) return;
+        var r = open.getBoundingClientRect();
+        if (r.bottom < 0 || r.top > window.innerHeight) { close(); return; }
+        var w = pop.offsetWidth, h = pop.offsetHeight, pad = 8;
+        var left = Math.min(Math.max(pad, r.left + r.width / 2 - w / 2), window.innerWidth - w - pad);
+        var top = r.bottom + 10;
+        if (top + h > window.innerHeight - pad) top = Math.max(pad, r.top - h - 10);
+        pop.style.left = left + "px";
+        pop.style.top = top + "px";
+      }
+      function close() {
+        if (!open || !pop) return;
+        open.setAttribute("aria-expanded", "false");
+        open = null;
+        pop.hidden = true;
+      }
+      function show(btn) {
+        if (!pop || !body) return;
+        if (open === btn) { close(); return; }
+        close();
+        var tpl = btn.querySelector(".rm-item__data");
+        if (!tpl) return;
+        body.innerHTML = "";
+        body.appendChild(tpl.content.cloneNode(true));
+        open = btn;
+        btn.setAttribute("aria-expanded", "true");
+        pop.hidden = false;
+        place();
+      }
       rm.addEventListener("click", function (ev) {
         var b = ev.target.closest("[data-rm-lang]");
         if (b) {
@@ -100,8 +132,38 @@
         if (w) {
           rm.setAttribute("data-view", w.getAttribute("data-rm-view"));
           rm.querySelectorAll("[data-rm-view]").forEach(function (x) { x.setAttribute("aria-pressed", x === w ? "true" : "false"); });
+          close();
+          return;
         }
+        if (ev.target.closest("[data-rm-pop-close]")) { close(); return; }
+        var it = ev.target.closest("[data-rm-item]");
+        if (it && rm.contains(it)) { show(it); return; }
       });
+      document.addEventListener("keydown", function (ev) { if (ev.key === "Escape") close(); });
+      document.addEventListener("click", function (ev) {
+        if (!open) return;
+        if (ev.target.closest("[data-rm-pop]") || ev.target.closest("[data-rm-item]")) return;
+        close();
+      });
+      window.addEventListener("resize", place);
+      window.addEventListener("scroll", place, true);
+
+      // 주소에 #rm-<칸 주소> 로 오면 그 칸을 찾아 펼쳐요 (회차 페이지의 '채우는 칸' 칩이 이렇게 보냅니다).
+      // 칸 주소에 점이 들어가서 querySelector 의 #id 로는 못 찾아요 — id 를 직접 맞춰 봐요.
+      function fromHash() {
+        var id = "";
+        try { id = decodeURIComponent((location.hash || "").slice(1)); } catch (e) { return; }
+        if (id.indexOf("rm-") !== 0) return;
+        var el = null;
+        rm.querySelectorAll("[id]").forEach(function (x) { if (x.id === id) el = x; });
+        if (!el) return;
+        rm.querySelectorAll(".is-hit").forEach(function (x) { x.classList.remove("is-hit"); });
+        if (el.scrollIntoView) el.scrollIntoView({ block: "center", inline: "center" });
+        el.classList.add("is-hit");
+        if (el.hasAttribute("data-rm-item")) setTimeout(function () { show(el); }, 80);
+      }
+      fromHash();
+      window.addEventListener("hashchange", fromHash);
     });
   }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", setup); else setup();
