@@ -76,7 +76,7 @@ groups:
     ko: "디버깅"
     items:
       - { en: JTAG / SWD, ko: JTAG / SWD, p: req, links: [ex:ex01] }
-      - { en: GDB, ko: GDB, p: req, now: true, links: [ex:ex01] }
+      - { en: GDB, ko: GDB, p: req, links: [ex:ex01] }
       - { en: OpenOCD, ko: OpenOCD, p: opt }
   sdlc:
     en: "SDLC Models"
@@ -84,7 +84,7 @@ groups:
     cols: 2
     items:
       - { en: Agile / SCRUM, ko: 애자일 / 스크럼, p: rec }
-      - { en: V-Model, ko: V 모델, p: rec }
+      - { en: V-Model, ko: V 모델, p: rec, now: true }
   vcs:
     en: "Version Control"
     ko: "버전 관리"
@@ -106,8 +106,8 @@ groups:
     items:
       - { en: TDD & Unit Testing, ko: TDD · 단위 테스트, p: req }
       - { en: CI/CD Pipelines, ko: CI/CD 파이프라인, p: rec }
-      - { en: SIL / HIL Testing, ko: SIL / HIL 시험, p: opt }
-      - { en: Standards & Certifications, ko: 표준 · 인증, p: opt }
+      - { en: SIL / HIL Testing, ko: SIL / HIL 시험, p: opt, now: true }
+      - { en: Standards & Certifications, ko: 표준 · 인증, p: opt, now: true }
   spec:
     en: "Specializations"
     ko: "전문 분야"
@@ -241,7 +241,7 @@ groups:
     en: "Using Test Equipment"
     ko: "계측 장비"
     items:
-      - { en: Multimeter, ko: 멀티미터, p: req, now: true }
+      - { en: Multimeter, ko: 멀티미터, p: req }
       - { en: Logic / Protocol Analyzer, ko: 로직 · 프로토콜 분석기, p: req }
       - { en: Oscilloscope, ko: 오실로스코프, p: rec }
   proto:
