@@ -11,7 +11,7 @@
 # ── 영상 찍고 칸에 표시하는 더 쉬운 방법 ──────────────────────────────
 # 여기를 고치지 않고, 그 회차 파일 머리말에 적어도 돼요. 둘 다 같이 써도 됩니다.
 #
-#   data/stm32-ota-bench/episodes/ep07.md
+#   data/field-ota-pipeline/episodes/ep07.md
 #   ---
 #   title: 부트로더 올리기
 #   status: 공개

@@ -13,13 +13,13 @@ content:
       - { name: slug, label: 주소 이름 (영문 소문자·하이픈. 예 lighting-setup), type: string, required: true }
       - { name: category, label: 분류, type: select, options: { values: [작업실, 프로젝트 기록] } }
       - { name: tags, label: 태그 (다루는 것), type: string, list: true }
-      - { name: project, label: 이어지는 프로젝트 slug (예 stm32-ota-bench), type: string }
+      - { name: project, label: 이어지는 프로젝트 slug (예 field-ota-pipeline), type: string }
       - { name: description, label: 목록에 보일 한 줄 요약, type: string }
       - { name: body, label: 본문, type: rich-text }
   - name: episodes
-    label: 회차 (STM32 서명 OTA 시험대)
+    label: 회차 (원격 업데이트 파이프라인)
     type: collection
-    path: data/stm32-ota-bench/episodes
+    path: data/field-ota-pipeline/episodes
     fields:
       - { name: n, label: 회차 번호, type: number }
       - { name: title, label: 제목, type: string }

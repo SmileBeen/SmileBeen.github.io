@@ -4,7 +4,7 @@ date: 2026-10-29
 slug: workspace
 category: 작업실
 tags: [작업실]
-project: stm32-ota-bench
+project: field-ota-pipeline
 description: 2.4m 방에 흰 책상 하나를 벽에 붙이고, 가운데를 시험대 자리로 비웠어요.
 ---
 # 작업실을 꾸렸어요
