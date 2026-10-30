@@ -18,10 +18,13 @@
 {% if hb.map %}
 <section class="hb-sec" aria-labelledby="h-map">
   <div class="hb-sec__head">
-    <h2 id="h-map" class="hb-h2">다루는 영역</h2>
-    <a class="hb-more" href="{{ base_url }}/map/">항목별 회차 · 직군 보기 →</a>
+    <div>
+      <h2 id="h-map" class="hb-h2">다루는 영역</h2>
+      <p class="hb-mono hb-muted hb-small">임베디드 로드맵 위에서 한 칸씩 채운다</p>
+    </div>
+    <a class="hb-more" href="{{ base_url }}/map/">전체 지도 보기 →</a>
   </div>
-  {{ mp.grid(hb.map) }}
+  {{ mp.summary(hb.map) }}
 </section>
 {% endif %}
 
@@ -78,6 +81,29 @@
   {% endif %}
 </section>
 
+{% if hb.examples %}
+{% set ex_on = hb.examples | selectattr("status_key", "equalto", "on") | list %}
+<section id="examples" class="hb-sec" aria-labelledby="h-ex">
+  <div class="hb-sec__head">
+    <div>
+      <h2 id="h-ex" class="hb-h2">예제</h2>
+      <p class="hb-mono hb-muted hb-small">보드 하나로 30분 안에 끝나는 짧은 실습 · 공개 <b class="hb-copper">{{ ex_on | length }}</b> / {{ hb.examples | length }}</p>
+    </div>
+    <a class="hb-more" href="{{ base_url }}/examples/">모든 예제 {{ hb.examples | length }}개 →</a>
+  </div>
+  <div class="hb-grid hb-grid--300">
+    {% for x in (ex_on + hb.examples | reject("in", ex_on) | list)[:3] %}
+    <a class="hb-postcard" href="{{ base_url }}/examples/{{ x.id }}/">
+      <span class="hb-postcard__meta"><span class="hb-mono hb-copper hb-xs">{{ x.label }}</span>{{ ui.pill(x.status, x.status_key) }}{% if x.time %}<span class="hb-mono hb-muted hb-xs">{{ x.time }}</span>{% endif %}</span>
+      <b>{{ x.title }}</b>
+      <span class="hb-muted hb-small">{{ x.summary }}</span>
+      <span class="hb-mono hb-muted hb-xs">{% if x.board %}{{ x.board }} · {% endif %}{{ x.tags | join(" · ") }}</span>
+    </a>
+    {% endfor %}
+  </div>
+</section>
+{% endif %}
+
 <div class="hb-grid hb-grid--320 hb-pb">
   <section id="posts" class="hb-box hb-box--pad" aria-labelledby="h-posts">
     <div class="hb-sec__head hb-sec__head--tight">
@@ -105,6 +131,20 @@
     {% set fp = hb.featured[0] if hb.featured else none %}
     {% if fp and fp.eps %}<a class="hb-more" href="{{ ui.project_link(fp) }}{{ fp.eps[0].id }}/">1화부터 따라 하기 →</a>{% endif %}
   </section>
+
+  {% if hb.parts %}
+  <section class="hb-box hb-box--pad" aria-labelledby="h-parts">
+    <div class="hb-sec__head hb-sec__head--tight">
+      <h2 id="h-parts" class="hb-h3">부품</h2>
+      <a class="hb-more" href="{{ base_url }}/parts/">전체 →</a>
+    </div>
+    <p class="hb-muted hb-small">프로젝트에 쓰는 부품과 지금 가진 상태예요.</p>
+    <div class="hb-chips hb-mt">
+      {% for s in hb.part_status if s.count %}<span class="hb-pill hb-pill--{{ s.key }}">{{ s.label }} {{ s.count }}</span>{% endfor %}
+    </div>
+    <p class="hb-mono hb-muted hb-xs hb-mt">전체 {{ hb.parts | length }}종 · 개발 환경 {{ hb.setup_count }}개</p>
+  </section>
+  {% endif %}
 </div>
 
 {{ ui.footer_links() }}
