@@ -241,7 +241,7 @@ groups:
     en: "Using Test Equipment"
     ko: "계측 장비"
     items:
-      - { en: Multimeter, ko: 멀티미터, p: req }
+      - { en: Multimeter, ko: 멀티미터, p: req, now: true }
       - { en: Logic / Protocol Analyzer, ko: 로직 · 프로토콜 분석기, p: req }
       - { en: Oscilloscope, ko: 오실로스코프, p: rec }
   proto:
